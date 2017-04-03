@@ -27,6 +27,20 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        public IActionResult Member()
+        {
+            ViewData["Message"] = "Your member page.";
+
+            return View();
+        }
+
+        public IActionResult Test()
+        {
+            ViewData["Message"] = "Your test page.";
+
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
