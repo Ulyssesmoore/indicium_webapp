@@ -13,6 +13,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/about")]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -20,6 +21,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/contact")]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -27,6 +29,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/member")]
         public IActionResult Member()
         {
             ViewData["Message"] = "Your member page.";
@@ -34,6 +37,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/test")]
         public IActionResult Test()
         {
             ViewData["Message"] = "Your test page.";
