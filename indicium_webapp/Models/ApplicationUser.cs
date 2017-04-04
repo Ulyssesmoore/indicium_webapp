@@ -68,7 +68,7 @@ namespace indicium_webapp.Models
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Startdatum van de studie")]
+        [Display(Name = "Startdatum studie")]
         public DateTime StartdateStudy { get; set; }
 
         [Display(Name = "Studietype")]
