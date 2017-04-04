@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170404085004_applicationuser")]
+    partial class applicationuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -106,6 +107,67 @@ namespace indicium_webapp.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("indicium_webapp.Models.Member", b =>
+                {
+                    b.Property<int>("MemberID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AddressCity")
+                        .IsRequired();
+
+                    b.Property<string>("AddressCountry")
+                        .IsRequired();
+
+                    b.Property<string>("AddressNumber")
+                        .IsRequired();
+
+                    b.Property<string>("AddressPostalCode")
+                        .IsRequired();
+
+                    b.Property<string>("AddressStreet")
+                        .IsRequired();
+
+                    b.Property<DateTime>("Birthday");
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Iban");
+
+                    b.Property<int>("IsActive");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("MemberAccountId");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired();
+
+                    b.Property<DateTime>("RegistrationDate");
+
+                    b.Property<int>("Role");
+
+                    b.Property<int>("Sex");
+
+                    b.Property<DateTime>("StartdateStudy");
+
+                    b.Property<int>("StudentNumber");
+
+                    b.Property<string>("StudyType");
+
+                    b.HasKey("MemberID");
+
+                    b.HasIndex("MemberAccountId");
+
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -213,6 +275,13 @@ namespace indicium_webapp.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("indicium_webapp.Models.Member", b =>
+                {
+                    b.HasOne("indicium_webapp.Models.ApplicationUser", "MemberAccount")
+                        .WithMany()
+                        .HasForeignKey("MemberAccountId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
