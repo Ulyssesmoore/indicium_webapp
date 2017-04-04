@@ -12,12 +12,6 @@ namespace indicium_webapp.Models
         M, V, O
     }
 
-    public enum Role
-    {
-        Lid,
-        Bestuur
-    }
-
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
@@ -61,6 +55,7 @@ namespace indicium_webapp.Models
 
         [RegularExpression(@"^(NL([0-9]{2})([A-Z]{4})([0-9]{10}))$")]
         [Display(Name = "IBAN nummer")]
+
         public string Iban { get; set; }
 
         [Display(Name = "Student nummer")]
@@ -73,9 +68,6 @@ namespace indicium_webapp.Models
 
         [Display(Name = "Studietype")]
         public string StudyType { get; set; }
-
-        [Display(Name = "Rol")]
-        public Role Role { get; set; }
 
         [Display(Name = "Registratiedatum")]
         public DateTime RegistrationDate { get; set; }
