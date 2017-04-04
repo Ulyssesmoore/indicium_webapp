@@ -1,0 +1,198 @@
+@model indicium_webapp.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ApplicationUser</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Sex)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sex)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Birthday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressStreet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressStreet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressPostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressPostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressCountry)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddressCountry)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Iban)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Iban)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StudentNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartdateStudy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartdateStudy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StudyType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StudyType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RegistrationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RegistrationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NormalizedUserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NormalizedUserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NormalizedEmail)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NormalizedEmail)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PasswordHash)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PasswordHash)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SecurityStamp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SecurityStamp)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ConcurrencyStamp)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TwoFactorEnabled)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEnd)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEnd)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEnabled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEnabled)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AccessFailedCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AccessFailedCount)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
