@@ -7,11 +7,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace indicium_webapp.Models
 {
-    public enum Sex
-    {
-        M, V, O
-    }
-
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
@@ -26,6 +21,7 @@ namespace indicium_webapp.Models
         public string LastName { get; set; }
 
         [Display(Name = "Geslacht")]
+        [RegularExpression(@"^(M|V|O)$")]
         public string Sex { get; set; }
 
         [DataType(DataType.Date)]
