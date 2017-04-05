@@ -110,9 +110,27 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            Console.Write(true);
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    StudentNumber = Convert.ToInt32(model.StudentNumber),
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Sex = model.Sex,
+                    Birthday = DateTime.Today,
+                    AddressCity = model.AddressCity,
+                    AddressStreet = model.AddressStreet,
+                    AddressNumber = model.AddressNumber,
+                    AddressPostalCode = model.AddressPostalCode,
+                    AddressCountry ="Nederland",
+                    StartdateStudy = DateTime.Today,
+                    RegistrationDate = DateTime.Today
+                };
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
