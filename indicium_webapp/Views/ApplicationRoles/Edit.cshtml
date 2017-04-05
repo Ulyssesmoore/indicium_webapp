@@ -1,14 +1,14 @@
 @model indicium_webapp.Data.ApplicationRole
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Aanpassen";
 }
 
-<h2>Edit</h2>
+<h2>Aanpassen</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>ApplicationRole</h4>
+        <h4>Rol</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -27,20 +27,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="NormalizedName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="NormalizedName" class="form-control" />
-                <span asp-validation-for="NormalizedName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ConcurrencyStamp" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ConcurrencyStamp" class="form-control" />
-                <span asp-validation-for="ConcurrencyStamp" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
@@ -49,7 +35,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug</a>
 </div>
 
 @section Scripts {
