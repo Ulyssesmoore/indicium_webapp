@@ -29,14 +29,6 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        [Route("/member")]
-        public IActionResult Member()
-        {
-            ViewData["Message"] = "Your member page.";
-
-            return View();
-        }
-
         [Route("/test")]
         public IActionResult Test()
         {

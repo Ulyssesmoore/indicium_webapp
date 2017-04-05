@@ -26,7 +26,7 @@ namespace indicium_webapp.Models
         public string LastName { get; set; }
 
         [Display(Name = "Geslacht")]
-        public Sex Sex { get; set; }
+        public string Sex { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
