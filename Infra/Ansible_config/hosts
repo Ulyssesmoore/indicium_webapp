@@ -1,1 +1,5 @@
-#hostfile, add ansible hosts here:
+[development]
+217.182.128.238
+
+[web]
+217.182.128.238
