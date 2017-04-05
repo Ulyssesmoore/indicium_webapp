@@ -64,7 +64,7 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,Role,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
         {
             if (id != applicationUser.Id)
             {
