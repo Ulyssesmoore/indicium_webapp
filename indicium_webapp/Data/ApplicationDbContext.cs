@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Models;
+using indicium_webapp.Data;
 
 namespace indicium_webapp.Data
 {
@@ -24,5 +25,7 @@ namespace indicium_webapp.Data
         }
 
         public DbSet<indicium_webapp.Models.ApplicationUser> ApplicationUser { get; set; }
+
+        public DbSet<indicium_webapp.Data.ApplicationRole> ApplicationRole { get; set; }
     }
 }

@@ -1,0 +1,47 @@
+@model indicium_webapp.Data.ApplicationRole
+
+@{
+    ViewData["Title"] = "Verwijderen";
+}
+
+<h2>Verwijderen</h2>
+
+<h3>Weet je zeker dat je de rol wilt verwijderen?</h3>
+<div>
+    <h4>Rol</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <input type="hidden" asp-for="Id" />
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NormalizedName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NormalizedName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ConcurrencyStamp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ConcurrencyStamp)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Verwijderen" class="btn btn-default" /> |
+            <a asp-action="Index">Terug</a>
+        </div>
+    </form>
+</div>
