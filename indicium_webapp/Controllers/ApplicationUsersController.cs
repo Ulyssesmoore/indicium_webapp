@@ -50,7 +50,7 @@ namespace indicium_webapp.Controllers
 
         // POST: ApplicationUsers/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Details(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,IsApproved,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
         {
             /*
             db.
@@ -68,13 +68,16 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine("Updating IsApproved");
-                    applicationUser.IsApproved = 1;
-                    System.Diagnostics.Debug.WriteLine("Updated IsApproved");
-                    _context.Update(applicationUser);
-                    System.Diagnostics.Debug.WriteLine("Next step worked");
-                    await _context.SaveChangesAsync();
-                    System.Diagnostics.Debug.WriteLine("Final step worked");
+                    if (applicationUser.IsApproved == 1)
+                    {
+                        _context.Update(applicationUser);
+                        System.Diagnostics.Debug.WriteLine("Next step worked");
+                        await _context.SaveChangesAsync();
+                        System.Diagnostics.Debug.WriteLine("Final step worked");
+                    } else if (applicationUser.IsApproved == 2 ){
+                        _context.Remove(applicationUser);
+                        _context.SaveChanges();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
