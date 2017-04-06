@@ -71,5 +71,9 @@ namespace indicium_webapp.Models
         [Range(0, 1)]
         [Display(Name = "Is Actief")]
         public int IsActive { get; set; }
+
+        [Range(0, 1)]
+        [Display(Name = "Is Goedgekeurd")]
+        public int IsApproved { get; set; }
     }
 }
