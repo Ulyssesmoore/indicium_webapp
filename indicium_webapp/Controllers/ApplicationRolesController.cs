@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
+using indicium_webapp.Models;
 
 namespace indicium_webapp.Controllers
 {
+    [Authorize(Roles = "Bestuur")]
     public class ApplicationRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

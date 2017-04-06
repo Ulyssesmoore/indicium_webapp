@@ -12,6 +12,7 @@ using indicium_webapp.Models;
 
 namespace indicium_webapp.Controllers
 {
+    [Authorize(Roles = "Bestuur")]
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -104,6 +105,12 @@ namespace indicium_webapp.Controllers
             {
                 return NotFound();
             }
+
+            //ViewData["allroles"] = _userManager.GetRolesAsync(applicationUser);
+            IList<string> roles = new List<string>();
+            ViewData["allroles"] = _context.ApplicationRole.ToListAsync().Result;
+            ViewData["currentrole"] = _userManager.GetRolesAsync(applicationUser).Result[0];
+            
             return View(applicationUser);
         }
 
@@ -131,7 +138,10 @@ namespace indicium_webapp.Controllers
                     if (!string.IsNullOrEmpty(Request.Form["userrole"]))
                     {
                         roleValue = Request.Form["userrole"];
+
+                        await _userManager.RemoveFromRoleAsync(applicationUser, _userManager.GetRolesAsync(applicationUser).Result[0]);
                         await _userManager.AddToRoleAsync(applicationUser, roleValue);
+                        
                     }
                 }
                 catch (DbUpdateConcurrencyException)
