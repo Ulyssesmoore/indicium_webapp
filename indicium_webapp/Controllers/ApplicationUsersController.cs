@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,10 +15,12 @@ namespace indicium_webapp.Controllers
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ApplicationUsersController(ApplicationDbContext context)
+        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: ApplicationUsers
@@ -77,6 +81,14 @@ namespace indicium_webapp.Controllers
                 {
                     _context.Update(applicationUser);
                     await _context.SaveChangesAsync();
+
+                    string roleValue;
+
+                    if (!string.IsNullOrEmpty(Request.Form["userrole"]))
+                    {
+                        roleValue = Request.Form["userrole"];
+                        await _userManager.AddToRoleAsync(applicationUser, roleValue);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
