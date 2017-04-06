@@ -51,8 +51,10 @@ namespace indicium_webapp.Controllers
         [HttpPost]
         public async Task<IActionResult> Details(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
         {
-            _userManager Request.Form["UserName"]
-
+            /*
+            db.
+            _userManager.GetUserId Request.Form["UserName"];
+            */
             if (id != applicationUser.Id)
             {
                 System.Diagnostics.Debug.WriteLine("This is that one error, to rule them all.");
@@ -60,31 +62,33 @@ namespace indicium_webapp.Controllers
                 System.Diagnostics.Debug.WriteLine(applicationUser.Id);
                 return NotFound();
             }
-                        
-            try
-            {
-                System.Diagnostics.Debug.WriteLine("Updating IsApproved");
-                applicationUser.IsApproved = 1;
-                System.Diagnostics.Debug.WriteLine("Updated IsApproved");
-                _context.Update(applicationUser);
-                System.Diagnostics.Debug.WriteLine("Next step worked");
-                await _context.SaveChangesAsync();
-                System.Diagnostics.Debug.WriteLine("Final step worked");
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ApplicationUserExists(applicationUser.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction("Index");
-            
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("Updating IsApproved");
+                    applicationUser.IsApproved = 1;
+                    System.Diagnostics.Debug.WriteLine("Updated IsApproved");
+                    _context.Update(applicationUser);
+                    System.Diagnostics.Debug.WriteLine("Next step worked");
+                    await _context.SaveChangesAsync();
+                    System.Diagnostics.Debug.WriteLine("Final step worked");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicationUserExists(applicationUser.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(applicationUser);
         }
 
         // GET: ApplicationUsers/Edit/5
@@ -102,7 +106,7 @@ namespace indicium_webapp.Controllers
             }
             return View(applicationUser);
         }
-        
+
         // POST: ApplicationUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

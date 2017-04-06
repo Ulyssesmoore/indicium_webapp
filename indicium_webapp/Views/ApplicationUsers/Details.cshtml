@@ -131,16 +131,46 @@
     {
         <form>
             <div>
-                <input type="hidden" asp-for="UserName" name="UserName" />
+                <input type="hidden" asp-for="FirstName" />
+                <input type="hidden" asp-for="LastName" />
+                <input type="hidden" asp-for="Sex" />
+                <input type="hidden" asp-for="Birthday" />
+                <input type="hidden" asp-for="AddressStreet" />
+                <input type="hidden" asp-for="AddressNumber" />
+                <input type="hidden" asp-for="AddressPostalCode" />
+                <input type="hidden" asp-for="AddressCity" />
+                <input type="hidden" asp-for="AddressCountry" />
+                <input type="hidden" asp-for="Iban" />
+                <input type="hidden" asp-for="StudentNumber" />
+                <input type="hidden" asp-for="StartdateStudy" />
+                <input type="hidden" asp-for="StudyType" />
+                <input type="hidden" asp-for="RegistrationDate" />
+                <input type="hidden" asp-for="IsActive" />
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Email" />
+                <input type="hidden" asp-for="ConcurrencyStamp" />
+                <input type="hidden" asp-for="PhoneNumber" />
+                <div class="form-group">
+                    <label asp-for="IsApproved" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="StudyType" class="form-control">
+                            <option value="1">Goed</option>
+                            <option value="2">Fout</option>
+                        </select>
+                        <span asp-validation-for="StudyType" class="text-danger"></span>
+                    </div>
+                </div> 
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Goedkeuren" class="btn btn-default" formmethod="post"/>
+                    <input type="submit" value="Keur" class="btn btn-default" formmethod="post" />
                 </div>
             </div>
         </form>
+
     }
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Bewerk</a> |
     <a asp-action="Index">Terug naar overzicht</a>
