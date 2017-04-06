@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Data
+namespace indicium_webapp.Models
 {
     public class ApplicationRole : IdentityRole
     {

@@ -1,7 +1,12 @@
 @model indicium_webapp.Models.ApplicationUser
+@using indicium_webapp.Models
 
 @{
     ViewData["Title"] = "Edit";
+}
+
+@{
+    var currentrole = ViewData["currentrole"];
 }
 
 <h2>Bewerk persoonsgegevens</h2>
@@ -156,8 +161,18 @@
             <label class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <select name="userrole" class="form-control">
-                    <option>Lid</option>
-                    <option>Bestuur</option>
+                    @foreach (var role in ViewData["allroles"] as List<ApplicationRole>)
+                    {
+                        @if (role.Name.Equals(currentrole))
+                        {
+                            <option selected>@role</option>
+                        }
+                        else
+                        {
+                            <option>@role</option>
+                        }
+
+                    }
                 </select>
             </div>
         </div>
