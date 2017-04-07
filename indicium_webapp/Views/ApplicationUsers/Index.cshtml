@@ -9,10 +9,10 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParam"]">@Html.DisplayNameFor(model => model.FirstName)</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LastName)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParam"]">@Html.DisplayNameFor(model => model.LastName)</a>
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Sex)
