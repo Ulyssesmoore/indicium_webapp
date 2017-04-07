@@ -25,9 +25,26 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: ApplicationUsers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.ApplicationUser.ToListAsync());
+            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
+            ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+            var users = from u in _context.ApplicationUser select u;
+
+            switch (sortOrder)
+            {
+                case "firstname_desc":
+                    users = users.OrderByDescending(u => u.FirstName);
+                    break;
+                case "lastname_desc":
+                    users = users.OrderByDescending(u => u.LastName);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.LastName);
+                    break;
+            }
+
+            return View(await users.AsNoTracking().ToListAsync());
         }
 
         // GET: ApplicationUsers/Details/5
