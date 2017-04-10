@@ -95,10 +95,13 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
+            System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
                     if (applicationUser.IsApproved == 1)
                     {
                         _context.Update(applicationUser);
@@ -106,6 +109,7 @@ namespace indicium_webapp.Controllers
                         await _context.SaveChangesAsync();
                         System.Diagnostics.Debug.WriteLine("Final step worked");
                     } else if (applicationUser.IsApproved == 2 ){
+                        System.Diagnostics.Debug.WriteLine("Initiating deletion of " + applicationUser.UserName);
                         _context.Remove(applicationUser);
                         _context.SaveChanges();
                     }
