@@ -157,9 +157,10 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,IsActive,Id,PhoneNumber")] ApplicationUser applicationUser)
         {
-            if (id != applicationUser.Id)
+            var newApplicationUser = _context.ApplicationUser.Find(applicationUser.Id);
+            if (id != applicationUser.Id || newApplicationUser == null)
             {
                 return NotFound();
             }
@@ -168,7 +169,23 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    _context.Update(applicationUser);
+                    newApplicationUser.FirstName = applicationUser.FirstName;
+                    newApplicationUser.LastName = applicationUser.LastName;
+                    newApplicationUser.Sex = applicationUser.Sex;
+                    newApplicationUser.Birthday = applicationUser.Birthday;
+                    newApplicationUser.AddressStreet = applicationUser.AddressStreet;
+                    newApplicationUser.AddressNumber = applicationUser.AddressNumber;
+                    newApplicationUser.AddressPostalCode = applicationUser.AddressPostalCode;
+                    newApplicationUser.AddressCity = applicationUser.AddressCity;
+                    newApplicationUser.AddressCountry = applicationUser.AddressCountry;
+                    newApplicationUser.Iban = applicationUser.Iban;
+                    newApplicationUser.StudentNumber = applicationUser.StudentNumber;
+                    newApplicationUser.StartdateStudy = applicationUser.StartdateStudy;
+                    newApplicationUser.StudyType = applicationUser.StudyType;
+                    newApplicationUser.IsActive = applicationUser.IsActive;
+                    newApplicationUser.PhoneNumber = applicationUser.PhoneNumber;
+
+                    _context.Update(newApplicationUser);
                     await _context.SaveChangesAsync();
 
                     string roleValue;
@@ -177,8 +194,8 @@ namespace indicium_webapp.Controllers
                     {
                         roleValue = Request.Form["userrole"];
 
-                        await _userManager.RemoveFromRoleAsync(applicationUser, _userManager.GetRolesAsync(applicationUser).Result[0]);
-                        await _userManager.AddToRoleAsync(applicationUser, roleValue);
+                        await _userManager.RemoveFromRoleAsync(newApplicationUser, _userManager.GetRolesAsync(newApplicationUser).Result[0]);
+                        await _userManager.AddToRoleAsync(newApplicationUser, roleValue);
                         
                     }
                 }
