@@ -25,11 +25,25 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: ApplicationUsers
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string nameFilter, string studyFilter, string sortOrder)
         {
+            ViewData["NameFilter"] = nameFilter;
+            ViewData["StudyFilter"] = studyFilter;
+
             ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
             ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+
             var users = from u in _context.ApplicationUser select u;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                users = users.Where(u => u.FirstName.Contains(nameFilter) || u.LastName.Contains(nameFilter));
+            }
+
+            if (!String.IsNullOrEmpty(studyFilter))
+            {
+                users = users.Where(u => u.StudyType.Equals(studyFilter));
+            }
 
             switch (sortOrder)
             {
