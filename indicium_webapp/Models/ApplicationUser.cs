@@ -28,6 +28,11 @@ namespace indicium_webapp.Models
         [Display(Name = "Geslacht")]
         public string Sex { get; set; }
 
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Geboortedatum")]
@@ -67,7 +72,7 @@ namespace indicium_webapp.Models
         public DateTime StartdateStudy { get; set; }
 
         [Display(Name = "Studietype")]
-        public string StudyType { get; set; }
+        public string StudyType { get; set; }   
 
         [Display(Name = "Registratiedatum")]
         public DateTime RegistrationDate { get; set; }
