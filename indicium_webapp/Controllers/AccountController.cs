@@ -121,13 +121,13 @@ namespace indicium_webapp.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Sex = model.Sex,
-                    Birthday = DateTime.Today,
+                    Birthday = DateTime.ParseExact(model.Birthday, "MM/dd/yyyy", null),
                     AddressCity = model.AddressCity,
                     AddressStreet = model.AddressStreet,
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry ="Nederland",
-                    StartdateStudy = DateTime.Today,
+                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "MM/dd/yyyy", null),
                     RegistrationDate = DateTime.Today
                 };
 
