@@ -61,6 +61,43 @@ namespace indicium_webapp.Controllers
             return View(await users.AsNoTracking().ToListAsync());
         }
 
+        // GET: ApplicationUsers
+        public async Task<IActionResult> Approval(string nameFilter, string studyFilter, string sortOrder)
+        {
+            ViewData["NameFilter"] = nameFilter;
+            ViewData["StudyFilter"] = studyFilter;
+
+            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
+            ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+
+            var users = from u in _context.ApplicationUser select u;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                users = users.Where(u => u.FirstName.Contains(nameFilter) || u.LastName.Contains(nameFilter));
+            }
+
+            if (!String.IsNullOrEmpty(studyFilter))
+            {
+                users = users.Where(u => u.StudyType.Equals(studyFilter));
+            }
+
+            switch (sortOrder)
+            {
+                case "firstname_desc":
+                    users = users.OrderByDescending(u => u.FirstName);
+                    break;
+                case "lastname_desc":
+                    users = users.OrderByDescending(u => u.LastName);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.LastName);
+                    break;
+            }
+
+            return View(await users.AsNoTracking().ToListAsync());
+        }
+
         // GET: ApplicationUsers/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -89,27 +126,18 @@ namespace indicium_webapp.Controllers
             */
             if (id != applicationUser.Id)
             {
-                System.Diagnostics.Debug.WriteLine("This is that one error, to rule them all.");
-                System.Diagnostics.Debug.WriteLine(id);
-                System.Diagnostics.Debug.WriteLine(applicationUser.Id);
                 return NotFound();
             }
-
-            System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
                     if (applicationUser.IsApproved == 1)
                     {
                         _context.Update(applicationUser);
-                        System.Diagnostics.Debug.WriteLine("Next step worked");
                         await _context.SaveChangesAsync();
-                        System.Diagnostics.Debug.WriteLine("Final step worked");
                     } else if (applicationUser.IsApproved == 2 ){
-                        System.Diagnostics.Debug.WriteLine("Initiating deletion of " + applicationUser.UserName);
                         _context.Remove(applicationUser);
                         _context.SaveChanges();
                     }
@@ -125,7 +153,7 @@ namespace indicium_webapp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Approval");
             }
             return View(applicationUser);
         }
