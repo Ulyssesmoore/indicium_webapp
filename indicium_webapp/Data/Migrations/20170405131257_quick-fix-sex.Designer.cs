@@ -8,9 +8,10 @@ using indicium_webapp.Data;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170405131257_quick-fix-sex")]
+    partial class quickfixsex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -55,8 +56,6 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<string>("Iban");
 
                     b.Property<int>("IsActive");
-
-                    b.Property<int>("IsApproved");
 
                     b.Property<string>("LastName")
                         .IsRequired()
