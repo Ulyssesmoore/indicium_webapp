@@ -118,33 +118,39 @@ namespace indicium_webapp.Controllers
 
         // POST: ApplicationUsers/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,IsApproved,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Details(string id, int isApproved)
         {
-            /*
-            db.
-            _userManager.GetUserId Request.Form["UserName"];
-            */
-            if (id != applicationUser.Id)
+            var newApplicationUser = _context.ApplicationUser.Find(id);
+            if (newApplicationUser == null)
             {
                 return NotFound();
             }
 
+            System.Diagnostics.Debug.WriteLine(id);
+
             if (ModelState.IsValid)
             {
+                System.Diagnostics.Debug.WriteLine("ModelState Is Valid!");
                 try
                 {
-                    if (applicationUser.IsApproved == 1)
+                    if (isApproved == 1)
                     {
-                        _context.Update(applicationUser);
+                        System.Diagnostics.Debug.WriteLine("IsApproved == 1!");
+                        newApplicationUser.IsApproved = isApproved;
+
+                        _context.Update(newApplicationUser);
                         await _context.SaveChangesAsync();
-                    } else if (applicationUser.IsApproved == 2 ){
-                        _context.Remove(applicationUser);
+                    }
+                    else if (isApproved == 2)
+                    {
+                        System.Diagnostics.Debug.WriteLine("IsApproved == 2!");
+                        _context.Remove(newApplicationUser);
                         _context.SaveChanges();
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApplicationUserExists(applicationUser.Id))
+                    if (!ApplicationUserExists(id))
                     {
                         return NotFound();
                     }
@@ -155,7 +161,7 @@ namespace indicium_webapp.Controllers
                 }
                 return RedirectToAction("Approval");
             }
-            return View(applicationUser);
+            return View(newApplicationUser);
         }
 
         // GET: ApplicationUsers/Edit/5
@@ -176,7 +182,7 @@ namespace indicium_webapp.Controllers
             IList<string> roles = new List<string>();
             ViewData["allroles"] = _context.ApplicationRole.ToListAsync().Result;
             ViewData["currentrole"] = _userManager.GetRolesAsync(applicationUser).Result[0];
-            
+
             return View(applicationUser);
         }
 
@@ -224,7 +230,7 @@ namespace indicium_webapp.Controllers
 
                         await _userManager.RemoveFromRoleAsync(newApplicationUser, _userManager.GetRolesAsync(newApplicationUser).Result[0]);
                         await _userManager.AddToRoleAsync(newApplicationUser, roleValue);
-                        
+
                     }
                 }
                 catch (DbUpdateConcurrencyException)
