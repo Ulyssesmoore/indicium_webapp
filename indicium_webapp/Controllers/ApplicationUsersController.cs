@@ -61,6 +61,43 @@ namespace indicium_webapp.Controllers
             return View(await users.AsNoTracking().ToListAsync());
         }
 
+        // GET: ApplicationUsers
+        public async Task<IActionResult> Approval(string nameFilter, string studyFilter, string sortOrder)
+        {
+            ViewData["NameFilter"] = nameFilter;
+            ViewData["StudyFilter"] = studyFilter;
+
+            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
+            ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+
+            var users = from u in _context.ApplicationUser select u;
+
+            if (!String.IsNullOrEmpty(nameFilter))
+            {
+                users = users.Where(u => u.FirstName.Contains(nameFilter) || u.LastName.Contains(nameFilter));
+            }
+
+            if (!String.IsNullOrEmpty(studyFilter))
+            {
+                users = users.Where(u => u.StudyType.Equals(studyFilter));
+            }
+
+            switch (sortOrder)
+            {
+                case "firstname_desc":
+                    users = users.OrderByDescending(u => u.FirstName);
+                    break;
+                case "lastname_desc":
+                    users = users.OrderByDescending(u => u.LastName);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.LastName);
+                    break;
+            }
+
+            return View(await users.AsNoTracking().ToListAsync());
+        }
+
         // GET: ApplicationUsers/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -89,27 +126,18 @@ namespace indicium_webapp.Controllers
             */
             if (id != applicationUser.Id)
             {
-                System.Diagnostics.Debug.WriteLine("This is that one error, to rule them all.");
-                System.Diagnostics.Debug.WriteLine(id);
-                System.Diagnostics.Debug.WriteLine(applicationUser.Id);
                 return NotFound();
             }
-
-            System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    System.Diagnostics.Debug.WriteLine(applicationUser.IsApproved);
                     if (applicationUser.IsApproved == 1)
                     {
                         _context.Update(applicationUser);
-                        System.Diagnostics.Debug.WriteLine("Next step worked");
                         await _context.SaveChangesAsync();
-                        System.Diagnostics.Debug.WriteLine("Final step worked");
                     } else if (applicationUser.IsApproved == 2 ){
-                        System.Diagnostics.Debug.WriteLine("Initiating deletion of " + applicationUser.UserName);
                         _context.Remove(applicationUser);
                         _context.SaveChanges();
                     }
@@ -125,7 +153,7 @@ namespace indicium_webapp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Approval");
             }
             return View(applicationUser);
         }
@@ -157,9 +185,10 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,RegistrationDate,IsActive,Id,UserName,Email,ConcurrencyStamp,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,IsActive,Id,PhoneNumber")] ApplicationUser applicationUser)
         {
-            if (id != applicationUser.Id)
+            var newApplicationUser = _context.ApplicationUser.Find(applicationUser.Id);
+            if (id != applicationUser.Id || newApplicationUser == null)
             {
                 return NotFound();
             }
@@ -168,7 +197,23 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    _context.Update(applicationUser);
+                    newApplicationUser.FirstName = applicationUser.FirstName;
+                    newApplicationUser.LastName = applicationUser.LastName;
+                    newApplicationUser.Sex = applicationUser.Sex;
+                    newApplicationUser.Birthday = applicationUser.Birthday;
+                    newApplicationUser.AddressStreet = applicationUser.AddressStreet;
+                    newApplicationUser.AddressNumber = applicationUser.AddressNumber;
+                    newApplicationUser.AddressPostalCode = applicationUser.AddressPostalCode;
+                    newApplicationUser.AddressCity = applicationUser.AddressCity;
+                    newApplicationUser.AddressCountry = applicationUser.AddressCountry;
+                    newApplicationUser.Iban = applicationUser.Iban;
+                    newApplicationUser.StudentNumber = applicationUser.StudentNumber;
+                    newApplicationUser.StartdateStudy = applicationUser.StartdateStudy;
+                    newApplicationUser.StudyType = applicationUser.StudyType;
+                    newApplicationUser.IsActive = applicationUser.IsActive;
+                    newApplicationUser.PhoneNumber = applicationUser.PhoneNumber;
+
+                    _context.Update(newApplicationUser);
                     await _context.SaveChangesAsync();
 
                     string roleValue;
@@ -177,8 +222,8 @@ namespace indicium_webapp.Controllers
                     {
                         roleValue = Request.Form["userrole"];
 
-                        await _userManager.RemoveFromRoleAsync(applicationUser, _userManager.GetRolesAsync(applicationUser).Result[0]);
-                        await _userManager.AddToRoleAsync(applicationUser, roleValue);
+                        await _userManager.RemoveFromRoleAsync(newApplicationUser, _userManager.GetRolesAsync(newApplicationUser).Result[0]);
+                        await _userManager.AddToRoleAsync(newApplicationUser, roleValue);
                         
                     }
                 }
