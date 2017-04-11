@@ -31,8 +31,8 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>        
             <td>
-                <a class="btn btn-success" role="button" asp-action="Edit" asp-route-id="@item.Id">Details</a>
-                <a class="btn btn-warning" role="button" asp-action="Details" asp-route-id="@item.Id">Aanpassen</a>
+                <a class="btn btn-success" role="button" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class="btn btn-warning" role="button" asp-action="Edit" asp-route-id="@item.Id">Bewerken</a>
                 <a class="btn btn-danger" role="button" asp-action="Delete" asp-route-id="@item.Id">Verwijderen</a>
             </td>
         </tr>
