@@ -3,12 +3,22 @@
 @{
     ViewData["Title"] = "Register";
 }
+<script>
+$("#startDateStudy").datepicker();
+</script>
 
-<h2>Register</h2>
+<h2>Inschrijfformulier Indicium</h2>
 
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <h4>ApplicationUser</h4>
+    <h4>Algemene gegevens</h4>
     <hr />
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label">Emailadres</label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
     <div class="form-group">
         <label asp-for="Password" class="col-md-2 control-label">Wachtwoord</label>
         <div class="col-md-10">
@@ -48,7 +58,7 @@
     <div class="form-group">
         <label asp-for="Birthday" class="col-md-2 control-label">Geboortedatum</label>
         <div class="col-md-10">
-            <input asp-for="Birthday" class="form-control" />
+            @Html.TextBoxFor(m => m.Birthday, "{0:dd.MM.yyyy}", new { @class = "form-control", id = "birthDay" })
             <span asp-validation-for="Birthday" class="text-danger"></span>
         </div>
     </div>
@@ -90,7 +100,7 @@
     <div class="form-group">
         <label asp-for="StartdateStudy" class="col-md-2 control-label">Begindatum Studie</label>
         <div class="col-md-10">
-            <input asp-for="StartdateStudy" class="form-control" />
+            @Html.TextBoxFor(m => m.StartdateStudy, "{0:dd.MM.yyyy}", new { @class = "form-control", id = "startDateStudy" })
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
@@ -99,13 +109,6 @@
         <div class="col-md-10">
             <input asp-for="StudyType" class="form-control" />
             <span asp-validation-for="StudyType" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="col-md-2 control-label">Emailadres</label>
-        <div class="col-md-10">
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
@@ -122,9 +125,12 @@
     </div> 
 </form>
 
+
 <div>
     <a asp-action="Index">Terug</a>
 </div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

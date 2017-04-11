@@ -27,8 +27,9 @@ namespace indicium_webapp.Models.AccountViewModels
 
         [Required]
         [StringLength(100, ErrorMessage = "This name is invalid")]
-        [DataType(DataType.Text)]
+        [DataType(DataType.Date)]
         [Display(Name = "Birthday")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
         public string Birthday { get; set; }
 
         [Required]
@@ -51,6 +52,7 @@ namespace indicium_webapp.Models.AccountViewModels
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "StartdateStudy")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
         public string StartdateStudy { get; set; }
 
         [Required]
