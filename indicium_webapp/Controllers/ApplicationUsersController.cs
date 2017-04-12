@@ -76,15 +76,37 @@ namespace indicium_webapp.Controllers
                     break;
             }
 
-            List<string> studyTypes = new List<string>();
-            studyTypes.Add("BIM");
-            studyTypes.Add("SIE");
-            studyTypes.Add("SNE");
-            studyTypes.Add("TI");
-            studyTypes.Add("Propedeuse");
+            List<string> studyTypes = new List<string>
+            {
+                "BIM", 
+                "SIE",
+                "SNE",
+                "TI",
+                "Propedeuse",
+            };
 
-            ViewData["StudyTypesList"] = new SelectList(studyTypes);
-            
+            //ViewData["StudyTypesList"] = new SelectList(studyTypes);
+
+            //ViewData["studyTypesList"] = new List<SelectListItem>();
+
+            var StudyTypesList = new List<SelectListItem>();
+            StudyTypesList.Add(new SelectListItem { Value = "", Text = "" });
+
+            foreach (string study in studyTypes)
+            {
+                if (study == studyFilter)
+                {
+                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study });
+                }
+                else
+                {
+                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study, Selected = true });
+                }
+            }
+
+            ViewData["studyTypesList"] = StudyTypesList;
+
+
             int pageSize = 1;
 
             return View(await PaginatedList<ApplicationUser>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));

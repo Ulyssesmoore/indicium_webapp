@@ -23,7 +23,7 @@
             <option>TI</option>
             <option>Propedeuse</option>
         </select>*@
-        @Html.DropDownList("test", (IEnumerable<SelectListItem>)ViewData["studyTypesList"], new { @class = "form-control" })
+        @Html.DropDownList("StudyFilter", (IEnumerable<SelectListItem>)ViewData["studyTypesList"], new { @class = "form-control" })
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Filteren</button>
