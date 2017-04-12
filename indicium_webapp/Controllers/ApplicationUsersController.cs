@@ -26,8 +26,10 @@ namespace indicium_webapp.Controllers
 
         // GET: ApplicationUsers
         public async Task<IActionResult> Index(
+            string studyTypesList,
             string sortOrder,
-            string currentFilter,
+            string currentNameFilter,
+            string currentStudyFilter,
             string nameFilter, 
             string studyFilter,            
             int? page)
@@ -39,13 +41,14 @@ namespace indicium_webapp.Controllers
             ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
             ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
 
-            if (nameFilter != null)
+            if (nameFilter != null || studyFilter != null)
             {
                 page = 1;
             }
             else
             {
-                nameFilter = currentFilter;
+                nameFilter = currentNameFilter;
+                studyFilter = currentStudyFilter;
             }
 
             var users = from u in _context.ApplicationUser select u;
@@ -73,9 +76,18 @@ namespace indicium_webapp.Controllers
                     break;
             }
 
+            List<string> studyTypes = new List<string>();
+            studyTypes.Add("BIM");
+            studyTypes.Add("SIE");
+            studyTypes.Add("SNE");
+            studyTypes.Add("TI");
+            studyTypes.Add("Propedeuse");
+
+            ViewData["StudyTypesList"] = new SelectList(studyTypes);
+            
             int pageSize = 1;
+
             return View(await PaginatedList<ApplicationUser>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
-            //return View(await users.AsNoTracking().ToListAsync());
         }
 
         // GET: ApplicationUsers
