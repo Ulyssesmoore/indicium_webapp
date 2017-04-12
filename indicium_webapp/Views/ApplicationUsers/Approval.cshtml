@@ -8,37 +8,14 @@
 
 <hr />
 
-<form asp-action="Index" method="get" class="form-horizontal">
-    <div class="form-group">
-        <label>Naam</label>
-        <input type="text" name="nameFilter" class="form-control" value="@ViewData["NameFilter"]" />
-    </div>
-    <div class="form-group">
-        <label>Studie</label>
-        <select class="form-control" name="studyFilter">
-            <option></option>
-            <option>BIM</option>
-            <option>SIE</option>
-            <option>SNE</option>
-            <option>TI</option>
-            <option>Propedeuse</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Filteren</button>
-    </div>
-</form>
-
-<hr />
-
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["FirstNameSortParam"]">@Html.DisplayNameFor(model => model.FirstName)</a>
+                @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LastNameSortParam"]">@Html.DisplayNameFor(model => model.LastName)</a>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Sex)

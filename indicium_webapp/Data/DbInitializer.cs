@@ -22,6 +22,7 @@ namespace indicium_webapp.Data
             {
                 new ApplicationRole { Name = "Lid", NormalizedName = "LID", Description = "Een standaard lid"},
                 new ApplicationRole { Name = "Bestuur", NormalizedName = "BESTUUR", Description = "Een bestuurslid"},
+                new ApplicationRole { Name = "Secretaris", NormalizedName = "SECRETARIS", Description = "Een bestuurslid belast met secratariaat"},
             };          
 
             foreach (ApplicationRole r in roles)

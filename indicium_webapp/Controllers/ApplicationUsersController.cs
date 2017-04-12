@@ -12,7 +12,7 @@ using indicium_webapp.Models;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize(Roles = "Bestuur")]
+    [Authorize(Roles = "Bestuur, Secretaris")]
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -112,39 +112,13 @@ namespace indicium_webapp.Controllers
             return View(await PaginatedList<ApplicationUser>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
         }
 
-        // GET: ApplicationUsers
-        public async Task<IActionResult> Approval(string nameFilter, string studyFilter, string sortOrder)
+        // GET: ApplicationUsers/Approval
+        [Authorize(Roles = "Secretaris")]
+        public async Task<IActionResult> Approval()
         {
-            ViewData["NameFilter"] = nameFilter;
-            ViewData["StudyFilter"] = studyFilter;
-
-            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
-            ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
-
             var users = from u in _context.ApplicationUser select u;
 
-            if (!String.IsNullOrEmpty(nameFilter))
-            {
-                users = users.Where(u => u.FirstName.Contains(nameFilter) || u.LastName.Contains(nameFilter));
-            }
-
-            if (!String.IsNullOrEmpty(studyFilter))
-            {
-                users = users.Where(u => u.StudyType.Equals(studyFilter));
-            }
-
-            switch (sortOrder)
-            {
-                case "firstname_desc":
-                    users = users.OrderByDescending(u => u.FirstName);
-                    break;
-                case "lastname_desc":
-                    users = users.OrderByDescending(u => u.LastName);
-                    break;
-                default:
-                    users = users.OrderBy(u => u.LastName);
-                    break;
-            }
+            users = users.OrderBy(u => u.RegistrationDate);
 
             return View(await users.AsNoTracking().ToListAsync());
         }

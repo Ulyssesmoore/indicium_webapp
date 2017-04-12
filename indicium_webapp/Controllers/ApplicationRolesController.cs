@@ -11,7 +11,7 @@ using indicium_webapp.Models;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize(Roles = "Bestuur")]
+    [Authorize(Roles = "Bestuur, Secretaris")]
     public class ApplicationRolesController : Controller
     {
         private readonly ApplicationDbContext _context;

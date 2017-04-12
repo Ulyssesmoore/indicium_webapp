@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
 using indicium_webapp.Models.AccountViewModels;
 using indicium_webapp.Services;
+using indicium_webapp.Data;
 
 namespace indicium_webapp.Controllers
 {
@@ -62,11 +63,21 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+            
+
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                var applicationUser = _userManager.FindByEmailAsync(model.Email).Result;
+                if (applicationUser.IsApproved == 0)
+                {
+                    return RedirectToAction("NotApproved", "Home");
+                }
+
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
