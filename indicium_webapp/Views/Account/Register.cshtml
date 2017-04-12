@@ -13,6 +13,7 @@
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
     <h4>Algemene gegevens</h4>
     <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label">Emailadres</label>
         <div class="col-md-10">
@@ -33,8 +34,7 @@
             <input asp-for="ConfirmPassword" class="form-control" />
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
-    </div>
-    <div asp-validation-summary="All" class="text-danger"></div>
+    </div>  
     <div class="form-group">
         <label asp-for="FirstName" class="col-md-2 control-label">Voornaam</label>
         <div class="col-md-10">
@@ -60,7 +60,7 @@
     <div class="form-group">
         <label asp-for="Birthday" class="col-md-2 control-label">Geboortedatum</label>
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Birthday, "{0:dd-MM-yyyy}", new { @class = "form-control datepicker", id = "birthDay"})
+            <input asp-for="Birthday" class="form-control datepicker" />
             <span asp-validation-for="Birthday" class="text-danger"></span>
         </div>
     </div>
@@ -102,7 +102,7 @@
     <div class="form-group">
         <label asp-for="StartdateStudy" class="col-md-2 control-label">Begindatum Studie</label>
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.StartdateStudy, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "startDateStudy" })
+            <input asp-for="StartdateStudy" class="form-control" />
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
