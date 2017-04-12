@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Register";
-}
-<script>
-$("#startDateStudy").datepicker();
-</script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <h2>Inschrijfformulier Indicium</h2>
 
@@ -55,10 +56,11 @@ $("#startDateStudy").datepicker();
             <span asp-validation-for="Sex" class="text-danger"></span>
         </div>
     </div>
+    <input type="text" class="datepicker" />
     <div class="form-group">
         <label asp-for="Birthday" class="col-md-2 control-label">Geboortedatum</label>
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Birthday, "{0:dd.MM.yyyy}", new { @class = "form-control", id = "birthDay" })
+            @Html.TextBoxFor(m => m.Birthday, "{0:dd-MM-yyyy}", new { @class = "form-control datepicker", id = "birthDay"})
             <span asp-validation-for="Birthday" class="text-danger"></span>
         </div>
     </div>
@@ -100,7 +102,7 @@ $("#startDateStudy").datepicker();
     <div class="form-group">
         <label asp-for="StartdateStudy" class="col-md-2 control-label">Begindatum Studie</label>
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.StartdateStudy, "{0:dd.MM.yyyy}", new { @class = "form-control", id = "startDateStudy" })
+            @Html.TextBoxFor(m => m.StartdateStudy, "{0:dd-MM-yyyy}", new { @class = "form-control", id = "startDateStudy" })
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
@@ -125,12 +127,12 @@ $("#startDateStudy").datepicker();
     </div> 
 </form>
 
-
-<div>
-    <a asp-action="Index">Terug</a>
-</div>
-
-
+}
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker();
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
