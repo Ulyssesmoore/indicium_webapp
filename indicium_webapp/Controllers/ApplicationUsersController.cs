@@ -85,10 +85,6 @@ namespace indicium_webapp.Controllers
                 "Propedeuse",
             };
 
-            //ViewData["StudyTypesList"] = new SelectList(studyTypes);
-
-            //ViewData["studyTypesList"] = new List<SelectListItem>();
-
             var StudyTypesList = new List<SelectListItem>();
             StudyTypesList.Add(new SelectListItem { Value = "", Text = "" });
 
@@ -96,11 +92,11 @@ namespace indicium_webapp.Controllers
             {
                 if (study == studyFilter)
                 {
-                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study });
+                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study, Selected = true });
                 }
                 else
                 {
-                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study, Selected = true });
+                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study });
                 }
             }
 

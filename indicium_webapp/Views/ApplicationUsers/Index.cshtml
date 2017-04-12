@@ -8,25 +8,18 @@
 
 <hr />
 
-<form asp-action="Index" method="get" class="form-horizontal">
+<form asp-action="Index" method="get" class="form-inline">
     <div class="form-group">
         <label>Naam</label>
-        <input type="text" name="NameFilter" class="form-control" value="@ViewData["currentNameFilter"]" />
+        <input type="text" name="NameFilter" class="form-control" value="@ViewData["NameFilter"]" />
     </div>
     <div class="form-group">
         <label>Studie</label>
-        @*<select class="form-control" name="studyFilter">
-            <option></option>
-            <option>BIM</option>
-            <option>SIE</option>
-            <option>SNE</option>
-            <option>TI</option>
-            <option>Propedeuse</option>
-        </select>*@
         @Html.DropDownList("StudyFilter", (IEnumerable<SelectListItem>)ViewData["studyTypesList"], new { @class = "form-control" })
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Filteren</button>
+        <a class="btn btn-default" role="button" asp-action="Index">Reset filters</a>
     </div>
 </form>
 
@@ -114,12 +107,12 @@
    asp-route-page="@(Model.PageIndex - 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @prevDisabled btn">
-    Previous
+    <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
 </a>
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-page="@(Model.PageIndex + 1)"
    asp-route-currentFilter="@ViewData["CurrentFilter"]"
    class="btn btn-default @nextDisabled btn">
-    Next
+    <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 </a>
