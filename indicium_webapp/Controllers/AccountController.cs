@@ -70,7 +70,8 @@ namespace indicium_webapp.Controllers
             {
 
                 var applicationUser = _userManager.FindByEmailAsync(model.Email).Result;
-                if (applicationUser.IsApproved == 0)
+
+                if (applicationUser != null && applicationUser.IsApproved == 0)
                 {
                     return RedirectToAction("NotApproved", "Home");
                 }
