@@ -2,114 +2,115 @@
 
 @{
     ViewData["Title"] = "Register";
-}
 
-<h2>Register</h2>
+
+
+<h2>Inschrijfformulier Indicium</h2>
 
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-    <h4>ApplicationUser</h4>
+    <h4>Algemene gegevens</h4>
     <hr />
-    <div class="form-group">
-        <label asp-for="Password" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="ConfirmPassword" class="form-control" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-    </div>
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="FirstName" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastName" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Sex" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Sex" class="form-control" />
-            <span asp-validation-for="Sex" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Birthday" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Birthday" class="form-control" />
-            <span asp-validation-for="Birthday" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="AddressStreet" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="AddressStreet" class="form-control" />
-            <span asp-validation-for="AddressStreet" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="AddressNumber" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="AddressNumber" class="form-control" />
-            <span asp-validation-for="AddressNumber" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="AddressPostalCode" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="AddressPostalCode" class="form-control" />
-            <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="AddressCity" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="AddressCity" class="form-control" />
-            <span asp-validation-for="AddressCity" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="StudentNumber" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="StudentNumber" class="form-control" />
-            <span asp-validation-for="StudentNumber" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="StartdateStudy" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="StartdateStudy" class="form-control" />
-            <span asp-validation-for="StartdateStudy" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="StudyType" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="StudyType" class="form-control" />
-            <span asp-validation-for="StudyType" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <label asp-for="Email" class="col-md-2 control-label">Emailadres</label>
         <div class="col-md-10">
             <input asp-for="Email" class="form-control" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+        <label asp-for="Password" class="col-md-2 control-label">Wachtwoord</label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword" class="col-md-2 control-label">Bevestig Wachtwoord</label>
+        <div class="col-md-10">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>  
+    <div class="form-group">
+        <label asp-for="FirstName" class="col-md-2 control-label">Voornaam</label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="col-md-2 control-label">Achternaam</label>
+        <div class="col-md-10">
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Sex" class="col-md-2 control-label">Geslacht</label>
+        <div class="col-md-10">
+            <input asp-for="Sex" class="form-control" />
+            <span asp-validation-for="Sex" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Birthday" class="col-md-2 control-label">Geboortedatum</label>
+        <div class="col-md-10">
+            <input asp-for="Birthday" class="form-control datepicker" type="text" />
+            <span asp-validation-for="Birthday" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="AddressStreet" class="col-md-2 control-label">Straat</label>
+        <div class="col-md-10">
+            <input asp-for="AddressStreet" class="form-control" />
+            <span asp-validation-for="AddressStreet" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="AddressNumber" class="col-md-2 control-label">Huisnummer</label>
+        <div class="col-md-10">
+            <input asp-for="AddressNumber" class="form-control" />
+            <span asp-validation-for="AddressNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="AddressPostalCode" class="col-md-2 control-label">Postcode</label>
+        <div class="col-md-10">
+            <input asp-for="AddressPostalCode" class="form-control" />
+            <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="AddressCity" class="col-md-2 control-label">Woonplaats</label>
+        <div class="col-md-10">
+            <input asp-for="AddressCity" class="form-control" />
+            <span asp-validation-for="AddressCity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StudentNumber" class="col-md-2 control-label">Studentnummer</label>
+        <div class="col-md-10">
+            <input asp-for="StudentNumber" class="form-control" />
+            <span asp-validation-for="StudentNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartdateStudy" class="col-md-2 control-label">Begindatum Studie</label>
+        <div class="col-md-10">
+            <input asp-for="StartdateStudy" class="form-control datepicker" type="text" />
+            <span asp-validation-for="StartdateStudy" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StudyType" class="col-md-2 control-label">Type Studie</label>
+        <div class="col-md-10">
+            <input asp-for="StudyType" class="form-control" />
+            <span asp-validation-for="StudyType" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber" class="col-md-2 control-label">Telefoonnummer</label>
         <div class="col-md-10">
             <input asp-for="PhoneNumber" class="form-control" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
@@ -117,14 +118,17 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Register</button>
+            <button type="submit" class="btn btn-default">Registreer</button>
         </div>
     </div> 
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+}
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker();
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

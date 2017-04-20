@@ -29,11 +29,10 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        [Route("/test")]
-        public IActionResult Test()
+        //
+        // GET: /NotApproved
+        public IActionResult NotApproved()
         {
-            ViewData["Message"] = "Your test page.";
-
             return View();
         }
 

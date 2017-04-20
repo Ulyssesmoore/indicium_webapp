@@ -11,13 +11,23 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@UserManager.GetUserName(User) <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Gegevens bekijken</a></li>             
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Administratie</li>
-                    <li><a href="/ApplicationUsers/">Leden bekijken</a></li>
-                    <li><a href="/ApplicationRoles/">Rollen bekijken</a></li>                   
+                    <li><a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Gegevens bekijken</a></li>
+                    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+                    {
+                        <li role="separator" class="divider"></li>
+                        <li class="dropdown-header">Administratie</li>
+                        <li><a href="/ApplicationUsers/">Leden bekijken</a></li>
+                        <li><a href="/ApplicationRoles/">Rollen bekijken</a></li>
+                        @if (this.User.IsInRole("Secretaris"))
+                        {
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">Secretariaat</li>
+                            <li><a href="/ApplicationUsers/Approval">Aanvragen</a></li>
+
+                        }
+                    }
                 </ul>
-            </li>s
+            </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
             </li>

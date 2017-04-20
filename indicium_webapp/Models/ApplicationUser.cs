@@ -63,7 +63,7 @@ namespace indicium_webapp.Models
         public DateTime StartdateStudy { get; set; }
 
         [Display(Name = "Studietype")]
-        public string StudyType { get; set; }
+        public string StudyType { get; set; }   
 
         [Display(Name = "Registratiedatum")]
         public DateTime RegistrationDate { get; set; }
@@ -71,5 +71,9 @@ namespace indicium_webapp.Models
         [Range(0, 1)]
         [Display(Name = "Is Actief")]
         public int IsActive { get; set; }
+
+        [Range(0, 2)]
+        [Display(Name = "Is Goedgekeurd")]
+        public int IsApproved { get; set; }
     }
 }

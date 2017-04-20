@@ -1,0 +1,19 @@
+@model System.Int32
+
+@*@Displays 0 and 1 values as 'Nee' and 'Ja'. If there is a different value, which shouldn't happen, it will
+    give a message that the value isn't right.*@
+@if (Model == 0)
+{
+    @:Nee
+}
+else if (Model == 1)
+{
+    @:Ja
+}
+else if (Model == 2)
+{
+    @:Tentative
+}
+else {
+    @:Wat is deze waarde!? Het systeem is gehacked!!
+}

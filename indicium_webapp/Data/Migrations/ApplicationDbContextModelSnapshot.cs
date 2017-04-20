@@ -56,6 +56,8 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<int>("IsActive");
 
+                    b.Property<int>("IsApproved");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100);

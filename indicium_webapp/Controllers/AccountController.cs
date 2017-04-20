@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
 using indicium_webapp.Models.AccountViewModels;
 using indicium_webapp.Services;
+using indicium_webapp.Data;
 
 namespace indicium_webapp.Controllers
 {
@@ -62,11 +63,22 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+            
+
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                var applicationUser = _userManager.FindByEmailAsync(model.Email).Result;
+
+                if (applicationUser != null && applicationUser.IsApproved == 0)
+                {
+                    return RedirectToAction("NotApproved", "Home");
+                }
+
+                    // This doesn't count login failures towards account lockout
+                    // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -121,13 +133,13 @@ namespace indicium_webapp.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Sex = model.Sex,
-                    Birthday = DateTime.Today,
+                    Birthday = DateTime.ParseExact(model.Birthday, "MM/dd/yyyy", null),
                     AddressCity = model.AddressCity,
                     AddressStreet = model.AddressStreet,
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry ="Nederland",
-                    StartdateStudy = DateTime.Today,
+                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "MM/dd/yyyy", null),
                     RegistrationDate = DateTime.Today
                 };
 
@@ -140,6 +152,8 @@ namespace indicium_webapp.Controllers
                     //var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    await _userManager.AddToRoleAsync(user, "Lid");
+                    
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
