@@ -8,6 +8,11 @@ namespace indicium_webapp.Models
 {
     public class Activity
     {
+        public Activity()
+        {
+            this.SignUps = new HashSet<SignUp>();
+        }
+
         public int ActivityID { get; set; }
 
         [Required]
@@ -33,5 +38,7 @@ namespace indicium_webapp.Models
 
         [Display(Name = "Prijs")]
         public double Price { get; set; }
-    }
+
+        public virtual ICollection<SignUp> SignUps { get; set; }
+}
 }
