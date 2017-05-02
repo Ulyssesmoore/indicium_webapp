@@ -262,3 +262,6 @@ __pycache__/
 
 ## Ignore Visual Studio Code files
 .vscode
+
+## Ignore settings file
+appsettings.json
