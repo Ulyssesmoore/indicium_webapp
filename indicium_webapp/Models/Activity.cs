@@ -40,5 +40,5 @@ namespace indicium_webapp.Models
         public double Price { get; set; }
 
         public virtual ICollection<SignUp> SignUps { get; set; }
-}
+    }
 }

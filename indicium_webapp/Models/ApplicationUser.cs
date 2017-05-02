@@ -75,5 +75,7 @@ namespace indicium_webapp.Models
         [Range(0, 2)]
         [Display(Name = "Is Goedgekeurd")]
         public int IsApproved { get; set; }
+
+        public virtual ICollection<Activity> Activities { get; set; }
     }
 }
