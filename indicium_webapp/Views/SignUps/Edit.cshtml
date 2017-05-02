@@ -1,0 +1,51 @@
+@model indicium_webapp.Models.SignUp
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>SignUp</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="SignUpID" />
+        <div class="form-group">
+            <label asp-for="ActivityID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="ActivityID" class="form-control" asp-items="ViewBag.ActivityID"></select>
+                <span asp-validation-for="ActivityID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ApplicationUserID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ApplicationUserID" class="form-control" />
+                <span asp-validation-for="ApplicationUserID" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Status" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
