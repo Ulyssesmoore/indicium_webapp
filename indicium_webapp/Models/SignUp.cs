@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace indicium_webapp.Models
 {
@@ -13,7 +15,7 @@ namespace indicium_webapp.Models
         [Required]
         public int ActivityID { get; set; }
 
-        public int ApplicationUserID { get; set; }
+        public string ApplicationUserID { get; set; }
 
         [Required]
         public string Status { get; set; }

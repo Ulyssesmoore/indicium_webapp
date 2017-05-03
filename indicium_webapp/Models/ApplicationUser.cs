@@ -10,6 +10,12 @@ namespace indicium_webapp.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+
+            SignUps = new HashSet<SignUp>();
+        }
+
         [Required]
         [StringLength(50, ErrorMessage = "Voornaam mag maximaal 50 karakters.")]
         [Display(Name = "Voornaam")]
@@ -76,6 +82,6 @@ namespace indicium_webapp.Models
         [Display(Name = "Is Goedgekeurd")]
         public int IsApproved { get; set; }
 
-        public virtual ICollection<Activity> Activities { get; set; }
+        public virtual ICollection<SignUp> SignUps { get; set; }
     }
 }

@@ -8,9 +8,10 @@ using indicium_webapp.Data;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170503093728_signup_user_fk_2")]
+    partial class signup_user_fk_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -20,6 +21,8 @@ namespace indicium_webapp.Data.Migrations
                 {
                     b.Property<int>("ActivityID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Description")
                         .IsRequired();
@@ -37,6 +40,8 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<DateTime>("StartDateTime");
 
                     b.HasKey("ActivityID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Activity");
                 });
@@ -139,7 +144,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<int>("ActivityID");
 
-                    b.Property<string>("ApplicationUserID");
+                    b.Property<int>("ApplicationUserID");
 
                     b.Property<string>("Status")
                         .IsRequired();
@@ -147,8 +152,6 @@ namespace indicium_webapp.Data.Migrations
                     b.HasKey("SignUpID");
 
                     b.HasIndex("ActivityID");
-
-                    b.HasIndex("ApplicationUserID");
 
                     b.ToTable("SignUp");
                 });
@@ -276,16 +279,19 @@ namespace indicium_webapp.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
+            modelBuilder.Entity("indicium_webapp.Models.Activity", b =>
+                {
+                    b.HasOne("indicium_webapp.Models.ApplicationUser")
+                        .WithMany("Activities")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("indicium_webapp.Models.SignUp", b =>
                 {
                     b.HasOne("indicium_webapp.Models.Activity")
                         .WithMany("SignUps")
                         .HasForeignKey("ActivityID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("indicium_webapp.Models.ApplicationUser")
-                        .WithMany("SignUps")
-                        .HasForeignKey("ApplicationUserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

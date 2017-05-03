@@ -10,7 +10,7 @@ namespace indicium_webapp.Models
     {
         public Activity()
         {
-            this.SignUps = new HashSet<SignUp>();
+            SignUps = new HashSet<SignUp>();
         }
 
         public int ActivityID { get; set; }
