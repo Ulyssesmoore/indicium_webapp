@@ -21,8 +21,7 @@
         <div class="form-group">
             <label asp-for="ApplicationUserID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ApplicationUserID" class="form-control" />
-                <span asp-validation-for="ApplicationUserID" class="text-danger"></span>
+                <select asp-for="ApplicationUserID" class ="form-control" asp-items="ViewBag.ApplicationUserID"></select>
             </div>
         </div>
         <div class="form-group">
