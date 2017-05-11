@@ -46,6 +46,29 @@ namespace indicium_webapp.Controllers
         // GET: SignUps/Create
         public IActionResult Create()
         {
+            var ApplicationUserList = new List<SelectListItem>();
+            var ApplicationUsers = from u in _context.ApplicationUser select u;
+
+            ApplicationUserList.Add(new SelectListItem { Value = "", Text = "" });
+
+            foreach (ApplicationUser user in ApplicationUsers)
+            {
+                ApplicationUserList.Add(new SelectListItem { Value = user.Id, Text = user.FirstName});
+            }
+
+            var ActivitiesList = new List<SelectListItem>();
+            var Activities = from a in _context.Activity select a;
+
+            ActivitiesList.Add(new SelectListItem { Value = "", Text = "" });
+
+            foreach (Activity activity in Activities)
+            {
+                ActivitiesList.Add(new SelectListItem { Value = activity.ActivityID.ToString(), Text = activity.Name});
+            }
+
+            ViewBag.ApplicationUserID = ApplicationUserList;
+            ViewBag.ActivityID = ActivitiesList;
+
             return View();
         }
 
