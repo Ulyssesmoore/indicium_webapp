@@ -29,8 +29,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        //
-        // GET: /NotApproved
+        [Route("/NotApproved")]
         public IActionResult NotApproved()
         {
             return View();
