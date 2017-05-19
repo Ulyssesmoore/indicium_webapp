@@ -12,19 +12,20 @@ namespace indicium_webapp.api
     [Route("api/v1/[controller]")]
     public class MembersController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        
         public MembersController(ApplicationDbContext context) {
             _context = context; 
         }
 
-        // GET api/v1/members
+        // GET: api/v1/members
         [HttpGet]
         public async Task<IEnumerable<ApplicationUser>> Get()
         {
             return await _context.ApplicationUser.ToListAsync();
         }
 
-        // GET api/v1/members/5
+        // GET: api/v1/members/{id}
         [HttpGet("{id}")]
         public async Task<ApplicationUser> Get(String id)
         {
