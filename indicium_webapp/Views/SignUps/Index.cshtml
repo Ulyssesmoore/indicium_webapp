@@ -16,6 +16,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Status)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActivityID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUserID)
+                </th>
             <th></th>
         </tr>
     </thead>
@@ -24,6 +30,12 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUserID)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SignUpID">Edit</a> |
