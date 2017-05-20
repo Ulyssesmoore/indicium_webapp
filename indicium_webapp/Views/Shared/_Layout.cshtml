@@ -8,9 +8,9 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />       
-        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" />
         <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/all.css">
         <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.min.css">
+        <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" href="~/css/site.css" />       
     </environment>
 
@@ -20,7 +20,7 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/lib/jquery-ui/themes/base/all.css">
         <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.min.css">
-        <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
+        <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     @Html.Raw(JavaScriptSnippet.FullScript)
@@ -58,15 +58,14 @@
     </div>
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.nl.js"></script>
-        <script src="~/lib/jquery-ui/ui/jquery-1-7.js"></script>
-        <script src="~/lib/moment/min/moment.min.js"></script>
-        <script src="~/lib/fullcalendar/dist/fullcalendar.min.js"></script>
-        <script src='~/lib/fullcalendar/dist/locale/nl.js'></script>
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>      
+        <script type="text/javascript" src="~/lib/jquery-ui/ui/jquery-1-7.js"></script>
+        <script type="text/javascript" src="~/lib/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="~/lib/fullcalendar/dist/fullcalendar.min.js"></script>
+        <script type="text/javascript" src="~/lib/fullcalendar/dist/locale/nl.js"></script>
+        <script type="text/javascript" src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -81,13 +80,12 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-        <script type="text/javascript" src="~/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.nl.js"></script>
-        <script src="~/lib/jquery-ui/ui/jquery-1-7.js"></script>
-        <script src="~/lib/moment/min/moment.min.js"></script>
-        <script src="~/lib/fullcalendar/dist/fullcalendar.min.js"></script>
-        <script src='~/lib/fullcalendar/dist/locale/nl.js'></script>
+        <script type="text/javascript" src="~/js/site.min.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/lib/jquery-ui/ui/jquery-1-7.js"></script>
+        <script type="text/javascript" src="~/lib/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="~/lib/fullcalendar/dist/fullcalendar.min.js"></script>
+        <script type="text/javascript" src="~/lib/fullcalendar/dist/locale/nl.js"></script>
+        <script type="text/javascript" src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

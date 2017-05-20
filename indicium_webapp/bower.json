@@ -6,8 +6,8 @@
     "jquery": "2.2.0",
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "bootstrap-datepicker": "v1.7.0-RC2",
     "jquery-ui": "jquery.ui#1.12.1",
-    "fullcalendar": "v3.4.0"
+    "fullcalendar": "v3.4.0",
+    "eonasdan-bootstrap-datetimepicker": "v4.17.45"
   }
 }

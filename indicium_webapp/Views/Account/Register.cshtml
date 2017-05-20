@@ -56,7 +56,7 @@
     <div class="form-group">
         <label asp-for="Birthday" class="col-md-2 control-label">Geboortedatum</label>
         <div class="col-md-10">
-            <input asp-for="Birthday" class="form-control datepicker" type="text" placeholder="mm/dd/yyyy" />
+            <input asp-for="Birthday" class="form-control datetimepicker" type="text" placeholder="dd/mm/yyyy" />
             <span asp-validation-for="Birthday" class="text-danger"></span>
         </div>
     </div>
@@ -98,7 +98,7 @@
     <div class="form-group">
         <label asp-for="StartdateStudy" class="col-md-2 control-label">Begindatum Studie</label>
         <div class="col-md-10">
-            <input asp-for="StartdateStudy" class="form-control datepicker" type="text" placeholder="mm/dd/yyyy" />
+            <input asp-for="StartdateStudy" class="form-control datetimepicker" type="text" placeholder="dd/mm/yyyy" />
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
@@ -130,7 +130,10 @@
 
     <script type="text/javascript">
         $(function () {
-            $('.datepicker').datepicker();
+            $('.datetimepicker').datetimepicker({
+                locale: 'nl',
+                format: 'DD-MM-YYYY'
+            });
         });
-    </script>
+</script>
 }
