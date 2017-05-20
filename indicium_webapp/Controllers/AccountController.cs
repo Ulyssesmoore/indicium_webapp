@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -134,13 +135,13 @@ namespace indicium_webapp.Controllers
                     UserName = model.Email,
                     Email = model.Email,
                     Sex = model.Sex,
-                    Birthday = DateTime.ParseExact(model.Birthday, "MM/dd/yyyy", null),
+                    Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL")),
                     AddressCity = model.AddressCity,
                     AddressStreet = model.AddressStreet,
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry ="Nederland",
-                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "MM/dd/yyyy", null),
+                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", null),
                     RegistrationDate = DateTime.Today
                 };
 
