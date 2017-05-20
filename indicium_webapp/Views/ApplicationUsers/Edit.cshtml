@@ -3,9 +3,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-}
-
-@{
     var currentrole = ViewData["currentrole"];
 }
 
@@ -44,7 +41,7 @@
         <div class="form-group">
             <label asp-for="Birthday" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Birthday" class="form-control" type="text" />
+                <input asp-for="Birthday" class="form-control datetimepicker" type="text" placeholder="dd-mm-yyyy" />
                 <span asp-validation-for="Birthday" class="text-danger"></span>
             </div>
         </div>
@@ -70,7 +67,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="AddressCity" class="col-md-2 control-label"></label>
+            <label asp-for="AddressCity" class="col-md-2 control-label">Woonplaats</label>
             <div class="col-md-10">
                 <input asp-for="AddressCity" class="form-control" />
                 <span asp-validation-for="AddressCity" class="text-danger"></span>
@@ -100,7 +97,7 @@
         <div class="form-group">
             <label asp-for="StartdateStudy" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StartdateStudy" class="form-control" type="text" />
+                <input asp-for="StartdateStudy" class="form-control datetimepicker" type="text" placeholder="dd-mm-yyyy" />
                 <span asp-validation-for="StartdateStudy" class="text-danger"></span>
             </div>
         </div>
@@ -168,4 +165,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.datetimepicker').datetimepicker({
+                locale: 'nl',
+                format: 'DD-MM-YYYY'
+            });
+        });
+</script>
 }
