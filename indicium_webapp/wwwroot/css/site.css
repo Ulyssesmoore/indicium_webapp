@@ -48,3 +48,25 @@ textarea {
         display: none;
     }
 }
+
+/* Menu style for dropdown button */
+.dropdown-menu-button {
+    display: block;
+    padding: 3px 20px !important;
+    margin: 0 !important;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333 !important;
+    white-space: nowrap;
+    border: none;
+    width:100%;
+    text-align: left;
+}
+
+.dropdown-menu-button:focus,
+.dropdown-menu-button:hover {
+    color: #262626 !important;
+    text-decoration: none;
+    background-color: #f5f5f5 !important;
+}
