@@ -74,12 +74,14 @@ namespace indicium_webapp.Controllers
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 
-                if (result.Succeeded && applicationUser.IsApproved == 0) {
-                    return RedirectToAction("", "NotApproved");
-                }
-                else if (result.Succeeded && applicationUser.IsApproved == 1) {
-                    _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                if (result.Succeeded) {
+                    if (applicationUser.IsApproved == 1) {
+                        _logger.LogInformation(1, "User logged in.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else {
+                        return RedirectToAction("", "NotApproved");
+                    }
                 }
 
                 if (result.RequiresTwoFactor)
@@ -155,7 +157,13 @@ namespace indicium_webapp.Controllers
                     
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    
+                    if (user.IsApproved == 1) {
+                        return RedirectToLocal(returnUrl);
+                    }
+                    else {
+                        return RedirectToAction("", "NotApproved");
+                    }
                 }
                 AddErrors(result);
             }

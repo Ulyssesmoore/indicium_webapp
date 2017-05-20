@@ -94,6 +94,9 @@
                                 });
                             });
                             callback(events);
+                        },
+                        error: function() {
+                            alert('Mmm er is geen verbinding met de API.');
                         }
                     });
                 }
