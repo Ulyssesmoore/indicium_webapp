@@ -149,5 +149,11 @@ namespace indicium_webapp.Controllers
         {
             return _context.Activity.Any(e => e.ActivityID == id);
         }
+
+        // GET: Activities/Admin
+        public async Task<IActionResult> Admin()
+        {
+            return View(await _context.Activity.ToListAsync());
+        }
     }
 }
