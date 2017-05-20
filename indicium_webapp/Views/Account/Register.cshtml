@@ -124,12 +124,13 @@
 </form>
 
 }
-<script type="text/javascript">
-    $(function () {
-        $('.datepicker').datepicker();
-    });
-</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker();
+        });
+    </script>
 }
