@@ -7,7 +7,7 @@ using indicium_webapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace indicium_webapp.api
+namespace indicium_webapp.Controllers.api.v1
 {
     [Route("api/v1/[controller]")]
     public class MembersController : Controller
