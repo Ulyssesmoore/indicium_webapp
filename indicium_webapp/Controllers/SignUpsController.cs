@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace indicium_webapp.Controllers
 {
     public class SignUpsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public SignUpsController(ApplicationDbContext context)
+        public SignUpsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: SignUps
@@ -77,14 +80,21 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SignUpID,ActivityID,ApplicationUserID,Status")] SignUp signUp)
+        public async Task<IActionResult> Create([Bind("SignUpID,ActivityID")] SignUp signUp)
         {
             if (ModelState.IsValid)
             {
+                var user = await GetCurrentUserAsync();                
+                signUp.ApplicationUserID = user.Id;
                 _context.Add(signUp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("\n\nModelState Invalid\n\n");
+            }
+            
             return View(signUp);
         }
 
@@ -171,6 +181,11 @@ namespace indicium_webapp.Controllers
         private bool SignUpExists(int id)
         {
             return _context.SignUp.Any(e => e.SignUpID == id);
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

@@ -17,7 +17,6 @@ namespace indicium_webapp.Models
 
         public string ApplicationUserID { get; set; }
 
-        [Required]
         public string Status { get; set; }
     }
 }
