@@ -70,7 +70,9 @@
 
         @if (result)
         {
-            <a asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID" class="btn btn-primary">Uitschrijven</a>
+            <form asp-area="" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                <button type="submit" class="btn btn-primary">Uitschrijven</button>
+            </form>
         }
         else
         {

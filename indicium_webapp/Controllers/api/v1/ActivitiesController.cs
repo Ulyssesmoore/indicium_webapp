@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace indicium_webapp.Controllers.api.v1
 {
-    [Authorize]
     [Route("api/v1/[controller]")]
     public class ActivitiesController : Controller
     {
