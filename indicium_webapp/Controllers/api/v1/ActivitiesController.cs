@@ -25,7 +25,6 @@ namespace indicium_webapp.Controllers.api.v1
         public async Task<IEnumerable<Activity>> Get()
         {
             return await _context.Activity
-                .Include(activity => activity.SignUps)
                 .ToListAsync();
         }
 
@@ -34,7 +33,6 @@ namespace indicium_webapp.Controllers.api.v1
         public async Task<Activity> Get(int? id)
         {
             return await _context.Activity
-                .Include(activity => activity.SignUps)
                 .SingleOrDefaultAsync(m => m.ActivityID == id);
         }
     }
