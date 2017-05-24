@@ -13,13 +13,22 @@
         <thead>
             <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayNameFor(model => model.Activities.Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ActivityID)
+                        @Html.DisplayNameFor(model => model.Activities.Description)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ApplicationUserID)
+                        @Html.DisplayNameFor(model => model.Activities.StartDateTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Activities.EndDateTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Activities.NeedsSignUp)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Activities.Price)
                     </th>
                 <th></th>
             </tr>
@@ -28,13 +37,22 @@
             @foreach (var item in Model) {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status)
+                        @Html.DisplayFor(modelItem => item.Activities.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ActivityID)
+                        @Html.DisplayFor(modelItem => item.Activities.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ApplicationUserID)
+                        @Html.DisplayFor(modelItem => item.Activities.StartDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activities.EndDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activities.NeedsSignUp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Activities.Price)
                     </td>
                     <td>
                         <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID">Details</a>

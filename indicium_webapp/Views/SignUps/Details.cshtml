@@ -12,22 +12,40 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.Activities.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.Activities.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ActivityID)
+            @Html.DisplayNameFor(model => model.Activities.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ActivityID)
+            @Html.DisplayFor(model => model.Activities.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ApplicationUserID)
+            @Html.DisplayNameFor(model => model.Activities.StartDateTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ApplicationUserID)
+            @Html.DisplayFor(model => model.Activities.StartDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.EndDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.EndDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.NeedsSignUp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.NeedsSignUp)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.Price)
         </dd>
     </dl>
 </div>

@@ -28,6 +28,7 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.SignUp
+                .Include(m => m.Activities)
                 .Where(m => m.ApplicationUserID == GetCurrentUserAsync().Result.Id)
                 .ToListAsync());
         }
@@ -40,7 +41,9 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.SignUpID == id);
+            var signUp = await _context.SignUp
+                .Include(m => m.Activities)
+                .SingleOrDefaultAsync(m => m.SignUpID == id);
             
             if (signUp == null)
             {
@@ -88,7 +91,9 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUpResult = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+            var signUpResult = await _context.SignUp
+                .Include(m => m.Activities)
+                .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
             
             if (signUpResult == null)
             {
