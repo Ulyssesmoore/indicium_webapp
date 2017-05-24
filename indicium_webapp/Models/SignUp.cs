@@ -20,5 +20,7 @@ namespace indicium_webapp.Models
         public string Status { get; set; }
 
         public virtual Activity Activities { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

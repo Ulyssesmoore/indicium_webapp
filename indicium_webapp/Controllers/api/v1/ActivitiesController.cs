@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

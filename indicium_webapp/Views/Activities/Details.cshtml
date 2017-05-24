@@ -58,21 +58,9 @@
 <div class="form-actions no-color">
     @if (SignInManager.IsSignedIn(User))
     {
-        var result = false;
-
-        @foreach (var item in Model.SignUps) {
-            @if (item.ApplicationUserID == UserManager.GetUserId(User))
-            {
-                result = true;
-                break;
-            }
-        }
-
-        @if (result)
+        @if (@ViewBag.SignedUp)
         {
-            <form asp-area="" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
-                <button type="submit" class="btn btn-primary">Uitschrijven</button>
-            </form>
+            <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
         }
         else
         {
@@ -82,5 +70,9 @@
         }
     }
 
+    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
+    }
     <a asp-action="Calendar" class="btn btn-default">Terug naar overzicht</a>
 </div>

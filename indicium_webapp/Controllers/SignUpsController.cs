@@ -43,6 +43,7 @@ namespace indicium_webapp.Controllers
 
             var signUp = await _context.SignUp
                 .Include(m => m.Activities)
+                .Include(m => m.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.SignUpID == id);
             
             if (signUp == null)
@@ -93,6 +94,7 @@ namespace indicium_webapp.Controllers
 
             var signUpResult = await _context.SignUp
                 .Include(m => m.Activities)
+                .Include(m => m.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
             
             if (signUpResult == null)

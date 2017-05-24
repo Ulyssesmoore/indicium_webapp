@@ -7,7 +7,7 @@
 
 <h2>Inschrijving verwijderen</h2>
 
-<h3>Weet je zeker dat je dit wilt verwijderen?</h3>
+<h3>Weet je zeker dat je wilt uitschrijven?</h3>
 <div>
     <h4>Inschrijving</h4>
     <hr />
@@ -49,11 +49,90 @@
         <dd>
             @Html.DisplayFor(model => model.Activities.Price)
         </dd>
+        <br/>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Sex)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Sex)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Birthday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Birthday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressStreet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressStreet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressPostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressPostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressCountry)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressCountry)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Iban)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Iban)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StudentNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StudentNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StartdateStudy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StartdateStudy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StudyType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StudyType)
+        </dd>
     </dl>
 
     <form asp-action="delete" asp-route-id="@Model.ActivityID" method="post">
         <div class="form-actions no-color">
-            <button type="submit" class="btn btn-primary">Verwijderen</button>
+            <button type="submit" class="btn btn-danger">Bevestig uitschrijving</button>
             <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
         </div>
     </form>

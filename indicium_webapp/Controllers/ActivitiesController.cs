@@ -15,10 +15,12 @@ namespace indicium_webapp.Controllers
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ActivitiesController(ApplicationDbContext context)
+        public ActivitiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Activities
@@ -44,6 +46,19 @@ namespace indicium_webapp.Controllers
             {
                 return NotFound();
             }
+
+            var signedup = false;
+
+            foreach (var item in activity.SignUps)
+            {
+                if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
+                {
+                    signedup = true;
+                    break;
+                }
+            }
+
+            ViewData["SignedUp"] = signedup;
 
             return View(activity);
         }
@@ -169,6 +184,11 @@ namespace indicium_webapp.Controllers
         private bool ActivityExists(int id)
         {
             return _context.Activity.Any(e => e.ActivityID == id);
+        }
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _userManager.GetUserAsync(User);
         }
     }
 }
