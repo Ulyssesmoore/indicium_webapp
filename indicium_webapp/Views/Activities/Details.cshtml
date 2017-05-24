@@ -1,15 +1,21 @@
+@using indicium_webapp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @model indicium_webapp.Models.Activity
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Activiteit details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Activiteit details</h2>
 
 <div>
-    <h4>Activity</h4>
+    <h4>Activiteit</h4>
     <hr />
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -49,7 +55,30 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ActivityID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="form-actions no-color">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var result = false;
+
+        @foreach (var item in Model.SignUps) {
+            @if (item.ApplicationUserID == UserManager.GetUserId(User))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        @if (result)
+        {
+            <a asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID" class="btn btn-primary">Uitschrijven</a>
+        }
+        else
+        {
+            <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                <button type="submit" class="btn btn-primary">Inschrijven</button>
+            </form>
+        }
+    }
+
+    <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
 </div>

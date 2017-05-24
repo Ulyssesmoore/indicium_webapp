@@ -17,14 +17,14 @@
                     {
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">Administratie</li>
-                        <li><a href="/ApplicationUsers/">Leden bekijken</a></li>
-                        <li><a href="/ApplicationRoles/">Rollen bekijken</a></li>
-                        <li><a href="/Activities/Admin/">Activiteiten admin</a></li>
+                        <li><a asp-controller="applicationusers" asp-action="index">Leden beheren</a></li>
+                        <li><a asp-controller="applicationroles" asp-action="index">Rollen beheren</a></li>
+                        <li><a asp-controller="activities" asp-action="index">Activiteiten beheren</a></li>
                         @if (this.User.IsInRole("Secretaris"))
                         {
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Secretariaat</li>
-                            <li><a href="/ApplicationUsers/Approval">Aanvragen</a></li>
+                            <li><a asp-controller="applicationusers" asp-action="approval">Aanvragen</a></li>
 
                         }
                     }

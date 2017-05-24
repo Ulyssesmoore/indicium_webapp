@@ -1,48 +1,51 @@
 @model IEnumerable<indicium_webapp.Models.SignUp>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inschrijvingen";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Inschrijvingen beheren</h2>
+<h2>Inschrijvingen</h2>
 
-<p>
-    <!--<a asp-action="Create">Create New</a>-->
-</p>
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Status)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ActivityID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ApplicationUserID)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActivityID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUserID)
-            </td>
-            <td>
-                <!--<a asp-action="Edit" asp-route-id="@item.SignUpID">Edit</a> |-->
-                <a asp-action="Details" asp-route-id="@item.SignUpID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SignUpID">Delete</a>
-            </td>
-        </tr>
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ActivityID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApplicationUserID)
+                    </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActivityID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUserID)
+                    </td>
+                    <td>
+                        <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID">Details</a>
+                        <a class="btn btn-danger" asp-action="delete" asp-route-id="@item.ActivityID">Verwijderen</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <p>Er zijn geen inschrijvingen gevonden.</p>
+}

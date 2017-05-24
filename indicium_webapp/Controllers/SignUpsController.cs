@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace indicium_webapp.Controllers
 {
+    [Authorize]
     public class SignUpsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,7 +27,9 @@ namespace indicium_webapp.Controllers
         // GET: SignUps
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SignUp.ToListAsync());
+            return View(await _context.SignUp
+                .Where(m => m.ApplicationUserID == GetCurrentUserAsync().Result.Id)
+                .ToListAsync());
         }
 
         // GET: SignUps/Details/5
@@ -36,8 +40,8 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUp = await _context.SignUp
-                .SingleOrDefaultAsync(m => m.SignUpID == id);
+            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.SignUpID == id);
+            
             if (signUp == null)
             {
                 return NotFound();
@@ -46,48 +50,26 @@ namespace indicium_webapp.Controllers
             return View(signUp);
         }
 
-        // GET: SignUps/Create
-        public IActionResult Create()
-        {
-            var ApplicationUserList = new List<SelectListItem>();
-            var ApplicationUsers = from u in _context.ApplicationUser select u;
-
-            ApplicationUserList.Add(new SelectListItem { Value = "", Text = "" });
-
-            foreach (ApplicationUser user in ApplicationUsers)
-            {
-                ApplicationUserList.Add(new SelectListItem { Value = user.Id, Text = user.FirstName});
-            }
-
-            var ActivitiesList = new List<SelectListItem>();
-            var Activities = from a in _context.Activity select a;
-
-            ActivitiesList.Add(new SelectListItem { Value = "", Text = "" });
-
-            foreach (Activity activity in Activities)
-            {
-                ActivitiesList.Add(new SelectListItem { Value = activity.ActivityID.ToString(), Text = activity.Name});
-            }
-
-            ViewBag.ApplicationUserID = ApplicationUserList;
-            ViewBag.ActivityID = ActivitiesList;
-
-            return View();
-        }
-
-        // POST: SignUps/Create
+        // POST: SignUps/Create/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SignUpID,ActivityID")] SignUp signUp)
+        public async Task<IActionResult> Create(int id, SignUp signUp)
         {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+            
             if (ModelState.IsValid)
             {
-                var user = await GetCurrentUserAsync();                
-                signUp.ApplicationUserID = user.Id;
+                signUp.ApplicationUserID = GetCurrentUserAsync().Result.Id;
+                signUp.ActivityID = id;
+
                 _context.Add(signUp);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
             else
@@ -95,57 +77,6 @@ namespace indicium_webapp.Controllers
                 System.Diagnostics.Debug.WriteLine("\n\nModelState Invalid\n\n");
             }
             
-            return View(signUp);
-        }
-
-        // GET: SignUps/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.SignUpID == id);
-            if (signUp == null)
-            {
-                return NotFound();
-            }
-            return View(signUp);
-        }
-
-        // POST: SignUps/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SignUpID,ActivityID,ApplicationUserID,Status")] SignUp signUp)
-        {
-            if (id != signUp.SignUpID)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(signUp);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SignUpExists(signUp.SignUpID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
-            }
             return View(signUp);
         }
 
@@ -157,14 +88,14 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUp = await _context.SignUp
-                .SingleOrDefaultAsync(m => m.SignUpID == id);
-            if (signUp == null)
+            var signUpResult = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+            
+            if (signUpResult == null)
             {
                 return NotFound();
             }
 
-            return View(signUp);
+            return View(signUpResult);
         }
 
         // POST: SignUps/Delete/5
@@ -172,9 +103,11 @@ namespace indicium_webapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.SignUpID == id);
+            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+
             _context.SignUp.Remove(signUp);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
@@ -183,9 +116,9 @@ namespace indicium_webapp.Controllers
             return _context.SignUp.Any(e => e.SignUpID == id);
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync()
+        private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            return await _userManager.GetUserAsync(User);
         }
     }
 }

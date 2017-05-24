@@ -1,10 +1,10 @@
 @model indicium_webapp.Models.ApplicationRole
 
 @{
-    ViewData["Title"] = "Aanpassen";
+    ViewData["Title"] = "Rol bewerken";
 }
 
-<h2>Aanpassen</h2>
+<h2>Rol bewerken</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
@@ -28,14 +28,14 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Opslaan" class="btn btn-default" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Terug</a>
+    <a asp-action="Index">Terug naar overzicht</a>
 </div>
 
 @section Scripts {

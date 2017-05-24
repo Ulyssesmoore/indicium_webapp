@@ -65,8 +65,6 @@ namespace indicium_webapp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            
-
             if (ModelState.IsValid)
             {
                 var applicationUser = _userManager.FindByEmailAsync(model.Email).Result;
@@ -80,8 +78,12 @@ namespace indicium_webapp.Controllers
                         _logger.LogInformation(1, "User logged in.");
                         return RedirectToLocal(returnUrl);
                     }
-                    else {
-                        return RedirectToAction("", "NotApproved");
+                    else
+                    {
+                        await _signInManager.SignOutAsync();
+                        _logger.LogWarning(2, "User account not approved.");
+                        
+                        return View("NotApproved");
                     }
                 }
 
@@ -92,7 +94,7 @@ namespace indicium_webapp.Controllers
 
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning(2, "User account locked out.");
+                    _logger.LogWarning(3, "User account locked out.");
                     return View("Lockout");
                 }
                 else
