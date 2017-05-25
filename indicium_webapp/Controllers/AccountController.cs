@@ -165,7 +165,10 @@ namespace indicium_webapp.Controllers
                         return RedirectToLocal(returnUrl);
                     }
                     else {
-                        return RedirectToAction("", "NotApproved");
+                        await _signInManager.SignOutAsync();
+                        _logger.LogWarning(2, "User account not approved.");
+
+                        return View("NotApproved");
                     }
                 }
                 AddErrors(result);
