@@ -45,7 +45,7 @@ namespace indicium_webapp.Controllers
                 .Include(m => m.Activities)
                 .Include(m => m.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.SignUpID == id);
-            
+
             if (signUp == null)
             {
                 return NotFound();
@@ -65,22 +65,35 @@ namespace indicium_webapp.Controllers
             {
                 return NotFound();
             }
-            
+
             if (ModelState.IsValid)
             {
+                // Assigns the currently logged in user Id and activity Id to the signup. 
                 signUp.ApplicationUserID = GetCurrentUserAsync().Result.Id;
                 signUp.ActivityID = id;
 
-                _context.Add(signUp);
-                await _context.SaveChangesAsync();
+                // Validates if activity needs a signup and if user is not already signed up to said activity.
+                if (_context.Activity.Find(id).NeedsSignUp)
+                {
+                    if (!UserSignedUp(id))
+                    {
+                        // Saves the signup to the database.
+                        _context.Add(signUp);
+                        await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index");
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Details", "activities", new { id });
+                    }
+                }
+                else
+                {
+                    return RedirectToAction("Details", "activities", new { id });
+                }
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("\n\nModelState Invalid\n\n");
-            }
-            
+
             return View(signUp);
         }
 
@@ -96,7 +109,7 @@ namespace indicium_webapp.Controllers
                 .Include(m => m.Activities)
                 .Include(m => m.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
-            
+
             if (signUpResult == null)
             {
                 return NotFound();
@@ -118,9 +131,14 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool SignUpExists(int id)
+        private bool SignUpExists(int signUpId)
         {
-            return _context.SignUp.Any(e => e.SignUpID == id);
+            return _context.SignUp.Any(e => e.SignUpID == signUpId);
+        }
+
+        private bool UserSignedUp(int activityId)
+        {
+            return _context.SignUp.Any(e => e.ActivityID == activityId && e.ApplicationUserID == GetCurrentUserAsync().Result.Id);
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

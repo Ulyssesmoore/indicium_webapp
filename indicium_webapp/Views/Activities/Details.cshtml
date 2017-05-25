@@ -56,7 +56,8 @@
     </dl>
 </div>
 <div class="form-actions no-color">
-    @if (SignInManager.IsSignedIn(User))
+
+    @if (SignInManager.IsSignedIn(User) && Model.NeedsSignUp)
     {
         @if (@ViewBag.SignedUp)
         {
