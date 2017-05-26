@@ -27,24 +27,11 @@ namespace indicium_webapp.Controllers
         // GET: ApplicationUsers
         public async Task<IActionResult> Index(
             string studyTypesList,
-            string currentNameFilter,
-            string currentStudyFilter,
             string nameFilter, 
-            string studyFilter,            
-            int? page)
+            string studyFilter)
         {
             ViewData["NameFilter"] = nameFilter;
             ViewData["StudyFilter"] = studyFilter;
-
-            if (nameFilter != null || studyFilter != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                nameFilter = currentNameFilter;
-                studyFilter = currentStudyFilter;
-            }
 
             var users = from u in _context.ApplicationUser select u;
 
