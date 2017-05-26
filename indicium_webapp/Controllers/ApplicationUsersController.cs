@@ -84,10 +84,7 @@ namespace indicium_webapp.Controllers
 
             ViewData["studyTypesList"] = StudyTypesList;
 
-
-            int pageSize = 1;
-
-            return View(await PaginatedList<ApplicationUser>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
+            return View(await users.AsNoTracking().ToListAsync());
         }
 
         // GET: ApplicationUsers/Approval
