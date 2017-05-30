@@ -157,19 +157,9 @@ namespace indicium_webapp.Controllers
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _userManager.AddToRoleAsync(user, "Lid");
+                    _logger.LogInformation(3, "User created a new account with password and role.");
                     
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    
-                    if (user.IsApproved == 1) {
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else {
-                        await _signInManager.SignOutAsync();
-                        _logger.LogWarning(2, "User account not approved.");
-
-                        return View("NotApproved");
-                    }
+                    return View("NotApproved");
                 }
                 AddErrors(result);
             }
