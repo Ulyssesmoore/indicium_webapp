@@ -23,14 +23,16 @@ namespace indicium_webapp.Controllers.api.v1
         [HttpGet]
         public async Task<IEnumerable<Activity>> Get()
         {
-            return await _context.Activity.Include(activity => activity.SignUps).ToListAsync();
+            return await _context.Activity
+                .ToListAsync();
         }
 
         // GET: api/v1/activities/{id}
         [HttpGet("{id}")]
         public async Task<Activity> Get(int? id)
         {
-            return await _context.Activity.Include(activity => activity.SignUps).SingleOrDefaultAsync(m => m.ActivityID == id);
+            return await _context.Activity
+                .SingleOrDefaultAsync(m => m.ActivityID == id);
         }
     }
 }

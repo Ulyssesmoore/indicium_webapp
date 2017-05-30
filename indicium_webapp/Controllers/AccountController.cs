@@ -65,8 +65,6 @@ namespace indicium_webapp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            
-
             if (ModelState.IsValid)
             {
                 var applicationUser = _userManager.FindByEmailAsync(model.Email).Result;
@@ -80,8 +78,12 @@ namespace indicium_webapp.Controllers
                         _logger.LogInformation(1, "User logged in.");
                         return RedirectToLocal(returnUrl);
                     }
-                    else {
-                        return RedirectToAction("", "NotApproved");
+                    else
+                    {
+                        await _signInManager.SignOutAsync();
+                        _logger.LogWarning(2, "User account not approved.");
+                        
+                        return View("NotApproved");
                     }
                 }
 
@@ -92,7 +94,7 @@ namespace indicium_webapp.Controllers
 
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning(2, "User account locked out.");
+                    _logger.LogWarning(3, "User account locked out.");
                     return View("Lockout");
                 }
                 else
@@ -155,16 +157,9 @@ namespace indicium_webapp.Controllers
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _userManager.AddToRoleAsync(user, "Lid");
+                    _logger.LogInformation(3, "User created a new account with password and role.");
                     
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    
-                    if (user.IsApproved == 1) {
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else {
-                        return RedirectToAction("", "NotApproved");
-                    }
+                    return View("NotApproved");
                 }
                 AddErrors(result);
             }

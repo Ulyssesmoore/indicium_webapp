@@ -1,15 +1,21 @@
+@using indicium_webapp.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @model indicium_webapp.Models.Activity
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Activiteit details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Activiteit details</h2>
 
 <div>
-    <h4>Activity</h4>
+    <h4>Activiteit</h4>
     <hr />
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -49,7 +55,25 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ActivityID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="form-actions no-color">
+
+    @if (SignInManager.IsSignedIn(User) && Model.NeedsSignUp)
+    {
+        @if (@ViewBag.SignedUp)
+        {
+            <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+        }
+        else
+        {
+            <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                <button type="submit" class="btn btn-primary">Inschrijven</button>
+            </form>
+        }
+    }
+
+    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
+    }
+    <a asp-action="Calendar" class="btn btn-default">Terug naar overzicht</a>
 </div>

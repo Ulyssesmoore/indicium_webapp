@@ -1,0 +1,56 @@
+@model IEnumerable<indicium_webapp.Models.Activity>
+
+@{
+    ViewData["Title"] = "Activiteiten Kalender";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Activiteiten Kalender</h2>
+<hr />
+
+@if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Toevoegen</a>
+    </p>
+}
+
+<div id="calendar"></div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                // put your options and callbacks here
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listMonth'
+                },
+                locale: 'nl',
+                events: function(start, end, timezone, callback) {
+                    $.ajax({
+                        url: '/api/v1/activities',
+                        dataType: 'json',
+                        success: function(doc) {
+                            var events = [];
+                            $(doc).each(function() {
+                                events.push({
+                                    title: $(this).attr('name'),
+                                    start: $(this).attr('startDateTime'),
+                                    end: $(this).attr('endDateTime'),
+                                    url: '/activities/details/' + $(this).attr('activityID')
+                                });
+                            });
+                            callback(events);
+                        },
+                        error: function() {
+                            alert('Mmm er is geen verbinding met de API.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

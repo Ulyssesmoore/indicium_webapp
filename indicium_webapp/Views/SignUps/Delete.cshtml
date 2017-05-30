@@ -1,30 +1,139 @@
 @model indicium_webapp.Models.SignUp
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Inschrijving verwijderen";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
+<h2>Inschrijving verwijderen</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Weet je zeker dat je wilt uitschrijven?</h3>
 <div>
-    <h4>SignUp</h4>
+    <h4>Inschrijving</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="SignUpID" />
         <dt>
-            @Html.DisplayNameFor(model => model.Status)
+            @Html.DisplayNameFor(model => model.Activities.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.DisplayFor(model => model.Activities.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.StartDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.StartDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.EndDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.EndDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.NeedsSignUp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.NeedsSignUp)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activities.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Activities.Price)
+        </dd>
+        <br/>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Sex)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Sex)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Birthday)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Birthday)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressStreet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressStreet)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressPostalCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressPostalCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.AddressCountry)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.AddressCountry)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Iban)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.Iban)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StudentNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StudentNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StartdateStudy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StartdateStudy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplicationUser.StudyType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ApplicationUser.StudyType)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="delete" asp-route-id="@Model.ActivityID" method="post">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <button type="submit" class="btn btn-danger">Bevestig uitschrijving</button>
+            <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
         </div>
     </form>
 </div>

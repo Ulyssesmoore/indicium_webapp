@@ -1,15 +1,15 @@
 @model indicium_webapp.Models.Activity
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Activiteit bewerken";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Activiteit bewerken</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>Activity</h4>
+        <h4>Activiteit</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="ActivityID" />
@@ -30,14 +30,14 @@
         <div class="form-group">
             <label asp-for="StartDateTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StartDateTime" class="form-control" />
+                <input asp-for="StartDateTime" class="form-control datetimepicker" />
                 <span asp-validation-for="StartDateTime" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="EndDateTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="EndDateTime" class="form-control" />
+                <input asp-for="EndDateTime" class="form-control datetimepicker" />
                 <span asp-validation-for="EndDateTime" class="text-danger"></span>
             </div>
         </div>
@@ -58,16 +58,24 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Opslaan" class="btn btn-default" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug naar overzicht</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.datetimepicker').datetimepicker({
+                locale: 'nl'
+            });
+        });
+    </script>
 }

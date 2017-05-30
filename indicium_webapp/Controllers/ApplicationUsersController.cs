@@ -27,29 +27,11 @@ namespace indicium_webapp.Controllers
         // GET: ApplicationUsers
         public async Task<IActionResult> Index(
             string studyTypesList,
-            string sortOrder,
-            string currentNameFilter,
-            string currentStudyFilter,
             string nameFilter, 
-            string studyFilter,            
-            int? page)
+            string studyFilter)
         {
-            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameFilter"] = nameFilter;
             ViewData["StudyFilter"] = studyFilter;
-
-            ViewData["FirstNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "firstname_desc" : "";
-            ViewData["LastNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
-
-            if (nameFilter != null || studyFilter != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                nameFilter = currentNameFilter;
-                studyFilter = currentStudyFilter;
-            }
 
             var users = from u in _context.ApplicationUser select u;
 
@@ -61,19 +43,6 @@ namespace indicium_webapp.Controllers
             if (!String.IsNullOrEmpty(studyFilter))
             {
                 users = users.Where(u => u.StudyType.Equals(studyFilter));
-            }
-
-            switch (sortOrder)
-            {
-                case "firstname_desc":
-                    users = users.OrderByDescending(u => u.FirstName);
-                    break;
-                case "lastname_desc":
-                    users = users.OrderByDescending(u => u.LastName);
-                    break;
-                default:
-                    users = users.OrderBy(u => u.LastName);
-                    break;
             }
 
             List<string> studyTypes = new List<string>
@@ -102,10 +71,7 @@ namespace indicium_webapp.Controllers
 
             ViewData["studyTypesList"] = StudyTypesList;
 
-
-            int pageSize = 1;
-
-            return View(await PaginatedList<ApplicationUser>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
+            return View(await users.AsNoTracking().ToListAsync());
         }
 
         // GET: ApplicationUsers/Approval

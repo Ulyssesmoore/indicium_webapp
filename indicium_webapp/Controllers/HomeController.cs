@@ -29,12 +29,6 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        [Route("/NotApproved")]
-        public IActionResult NotApproved()
-        {
-            return View();
-        }
-
         public IActionResult Error()
         {
             return View();

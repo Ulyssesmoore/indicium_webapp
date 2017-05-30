@@ -1,10 +1,10 @@
 @model indicium_webapp.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Persoonsgegevens details";
 }
 
-<h2>Details persoonsgegevens</h2>
+<h2>Persoonsgegevens details</h2>
 
 <div>
     <h4>Gebruiker</h4>
@@ -158,6 +158,6 @@
 }
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Bewerk</a> |
-    <a asp-action="Index">Terug naar overzicht</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Bewerken</a>
+    <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
 </div>

@@ -7,19 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace indicium_webapp.Controllers
 {
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ActivitiesController(ApplicationDbContext context)
+        public ActivitiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
         }
 
         // GET: Activities
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Activity.ToListAsync());
@@ -34,16 +39,32 @@ namespace indicium_webapp.Controllers
             }
 
             var activity = await _context.Activity
+                .Include(a => a.SignUps)
                 .SingleOrDefaultAsync(m => m.ActivityID == id);
+            
             if (activity == null)
             {
                 return NotFound();
             }
 
+            var signedup = false;
+
+            foreach (var item in activity.SignUps)
+            {
+                if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
+                {
+                    signedup = true;
+                    break;
+                }
+            }
+
+            ViewData["SignedUp"] = signedup;
+
             return View(activity);
         }
 
         // GET: Activities/Create
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public IActionResult Create()
         {
             return View();
@@ -54,18 +75,21 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Create([Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price")] Activity activity)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(activity);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
             return View(activity);
         }
 
         // GET: Activities/Edit/5
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,6 +98,7 @@ namespace indicium_webapp.Controllers
             }
 
             var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+            
             if (activity == null)
             {
                 return NotFound();
@@ -86,6 +111,7 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Edit(int id, [Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price")] Activity activity)
         {
             if (id != activity.ActivityID)
@@ -117,6 +143,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: Activities/Delete/5
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,8 +151,8 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity
-                .SingleOrDefaultAsync(m => m.ActivityID == id);
+            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+
             if (activity == null)
             {
                 return NotFound();
@@ -137,12 +164,21 @@ namespace indicium_webapp.Controllers
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+
             _context.Activity.Remove(activity);
             await _context.SaveChangesAsync();
+            
             return RedirectToAction("Index");
+        }
+
+        // GET: Activities/Calendar
+        public async Task<IActionResult> Calendar()
+        {
+            return View(await _context.Activity.ToListAsync());
         }
 
         private bool ActivityExists(int id)
@@ -150,10 +186,9 @@ namespace indicium_webapp.Controllers
             return _context.Activity.Any(e => e.ActivityID == id);
         }
 
-        // GET: Activities/Admin
-        public async Task<IActionResult> Admin()
+        private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return View(await _context.Activity.ToListAsync());
+            return await _userManager.GetUserAsync(User);
         }
     }
 }
