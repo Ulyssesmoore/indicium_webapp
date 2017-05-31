@@ -74,16 +74,21 @@ namespace indicium_webapp.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 
                 if (result.Succeeded) {
-                    if (applicationUser.IsApproved == 1) {
+                    if (applicationUser.Status == Status.Lid || applicationUser.Status == Status.Alumni) {
                         _logger.LogInformation(1, "User logged in.");
                         return RedirectToLocal(returnUrl);
                     }
-                    else
+                    else if(applicationUser.Status == Status.Nieuw)
                     {
                         await _signInManager.SignOutAsync();
                         _logger.LogWarning(2, "User account not approved.");
                         
                         return View("NotApproved");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        return View(model);
                     }
                 }
 
