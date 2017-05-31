@@ -117,8 +117,6 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            //ViewData["allroles"] = _userManager.GetRolesAsync(applicationUser);
-            IList<string> roles = new List<string>();
             ViewData["allroles"] = _context.ApplicationRole.ToListAsync().Result;
             ViewData["currentrole"] = _userManager.GetRolesAsync(applicationUser).Result[0];
 
@@ -184,6 +182,9 @@ namespace indicium_webapp.Controllers
                 }
                 return RedirectToAction("Index");
             }
+            ViewData["allroles"] = _context.ApplicationRole.ToListAsync().Result;
+            ViewData["currentrole"] = _userManager.GetRolesAsync(applicationUser).Result[0];
+            
             return View(applicationUser);
         }
 

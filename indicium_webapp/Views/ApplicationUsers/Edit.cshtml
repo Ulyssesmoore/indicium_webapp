@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Persoonsgegevens bewerken";
+    var allroles = ViewData["allroles"];
     var currentrole = ViewData["currentrole"];
 }
 
@@ -123,10 +124,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label"></label>
+            <label class="col-md-2 control-label">Rol</label>
             <div class="col-md-10">
                 <select name="userrole" class="form-control">
-                    @foreach (var role in ViewData["allroles"] as List<ApplicationRole>)
+                    @foreach (var role in allroles as List<ApplicationRole>)
                     {
                         @if (role.Name.Equals(currentrole))
                         {
