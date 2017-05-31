@@ -103,54 +103,6 @@ namespace indicium_webapp.Controllers
             return View(applicationUser);
         }
 
-        // POST: ApplicationUsers/Details/5
-        [HttpPost]
-        public async Task<IActionResult> Details(string id, int isApproved)
-        {
-            var newApplicationUser = _context.ApplicationUser.Find(id);
-            if (newApplicationUser == null)
-            {
-                return NotFound();
-            }
-
-            System.Diagnostics.Debug.WriteLine(id);
-
-            if (ModelState.IsValid)
-            {
-                System.Diagnostics.Debug.WriteLine("ModelState Is Valid!");
-                try
-                {
-                    if (isApproved == 1)
-                    {
-                        System.Diagnostics.Debug.WriteLine("IsApproved == 1!");
-                        newApplicationUser.IsApproved = isApproved;
-
-                        _context.Update(newApplicationUser);
-                        await _context.SaveChangesAsync();
-                    }
-                    else if (isApproved == 2)
-                    {
-                        System.Diagnostics.Debug.WriteLine("IsApproved == 2!");
-                        _context.Remove(newApplicationUser);
-                        _context.SaveChanges();
-                    }
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApplicationUserExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Approval");
-            }
-            return View(newApplicationUser);
-        }
-
         // GET: ApplicationUsers/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -234,6 +186,78 @@ namespace indicium_webapp.Controllers
                 return RedirectToAction("Index");
             }
             return View(applicationUser);
+        }
+
+        // POST: ApplicationUsers/Approve/5
+        [HttpPost]
+        [Authorize(Roles = "Secretaris")]
+        public async Task<IActionResult> Approve(string id)
+        {
+            var newApplicationUser = _context.ApplicationUser.Find(id);
+            if (newApplicationUser == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    newApplicationUser.Status = Status.Lid;
+
+                    _context.Update(newApplicationUser);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicationUserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Approval");
+            }
+            return View(newApplicationUser);
+        }
+
+        // POST: ApplicationUsers/Disapprove/5
+        [HttpPost]
+        [Authorize(Roles = "Secretaris")]
+        public async Task<IActionResult> Disapprove(string id)
+        {
+            var newApplicationUser = _context.ApplicationUser.Find(id);
+            if (newApplicationUser == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    newApplicationUser.Status = Status.Afgekeurd;
+
+                    _context.Update(newApplicationUser);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ApplicationUserExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Approval");
+            }
+            return View(newApplicationUser);
         }
 
         private bool ApplicationUserExists(string id)
