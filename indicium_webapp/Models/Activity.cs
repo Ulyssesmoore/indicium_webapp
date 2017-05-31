@@ -26,10 +26,12 @@ namespace indicium_webapp.Models
 
         [Required]
         [Display(Name = "Start")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime StartDateTime { get; set; }
 
         [Required]
         [Display(Name = "Eind")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndDateTime { get; set; }
 
         [Required]

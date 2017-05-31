@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using indicium_webapp.Data;
-using indicium_webapp.Models;
 
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170531132217_Guest")]
+    partial class Guest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -111,8 +111,6 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<string>("Sex");
 
                     b.Property<DateTime>("StartdateStudy");
-
-                    b.Property<int>("Status");
 
                     b.Property<int>("StudentNumber");
 
