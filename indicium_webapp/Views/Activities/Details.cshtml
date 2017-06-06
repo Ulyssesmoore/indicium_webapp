@@ -14,6 +14,29 @@
 
 <div>
     <h4>Activiteit</h4>
+
+    <div class="form-actions no-color">
+        @if (SignInManager.IsSignedIn(User) && Model.NeedsSignUp)
+        {
+            @if (@ViewBag.SignedUp)
+            {
+                <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+            }
+            else
+            {
+                <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                    <button type="submit" class="btn btn-primary">Inschrijven</button>
+                </form>
+            }
+        }
+
+        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
+        }
+        <a asp-action="Calendar" class="btn btn-default">Terug naar overzicht</a>
+    </div>
+
     <hr />
 
     <dl class="dl-horizontal">
@@ -55,25 +78,87 @@
         </dd>
     </dl>
 </div>
-<div class="form-actions no-color">
 
-    @if (SignInManager.IsSignedIn(User) && Model.NeedsSignUp)
+<div>
+    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
     {
-        @if (@ViewBag.SignedUp)
+        <hr/>
+
+        <h4>Inschrijvingen</h4>
+
+        @if (Model.SignUps != null && Model.SignUps.Any())
         {
-            <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+            @if (ViewBag.applicationUserResult)
+            {
+                <h5>Ingeschreven leden</h5>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Studentnummer</th>
+                            <th>Naam</th>
+                            <th>Geslacht</th>
+                            <th>Studietype</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SignUps)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="applicationusers" asp-action="Edit" asp-route-id="@item.ApplicationUser.Id">
+                                        @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
+                                    </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.Sex)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.StudyType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApplicationUser.Status)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (ViewBag.guestResult)
+            {
+                <h5>Gasten</h5>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Naam</th>
+                            <th>E-mail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.SignUps)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Guest.FirstName) @Html.DisplayFor(modelItem => item.Guest.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Guest.Email)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         }
         else
         {
-            <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
-                <button type="submit" class="btn btn-primary">Inschrijven</button>
-            </form>
+            <p>Er zijn geen inschrijvingen gevonden.</p>
         }
     }
-
-    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
-    {
-        <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
-    }
-    <a asp-action="Calendar" class="btn btn-default">Terug naar overzicht</a>
 </div>

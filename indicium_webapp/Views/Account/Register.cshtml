@@ -50,11 +50,7 @@
     <div class="form-group">
         <label asp-for="Sex" class="col-md-2 control-label">Geslacht</label>
         <div class="col-md-10">
-            <select asp-for="Sex" class="form-control">
-                <option>M</option>
-                <option>V</option>
-                <option>O</option>
-            </select>
+            <select asp-for="Sex" asp-items="Html.GetEnumSelectList<Sex>()" class="form-control"></select>
             <span asp-validation-for="Sex" class="text-danger"></span>
         </div>
     </div>
@@ -110,13 +106,7 @@
     <div class="form-group">
         <label asp-for="StudyType" class="col-md-2 control-label">Type Studie</label>
         <div class="col-md-10">
-            <select asp-for="StudyType" class="form-control">
-                    <option>Propedeuse</option>
-                    <option>SIE</option>
-                    <option>TI</option>
-                    <option>SNE</option>
-                    <option>BIM</option>
-                </select>
+            <select asp-for="StudyType" asp-items="Html.GetEnumSelectList<StudyType>()" class="form-control"></select>
             <span asp-validation-for="StudyType" class="text-danger"></span>
         </div>
     </div>

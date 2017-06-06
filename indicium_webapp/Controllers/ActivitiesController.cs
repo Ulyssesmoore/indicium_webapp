@@ -40,6 +40,9 @@ namespace indicium_webapp.Controllers
 
             var activity = await _context.Activity
                 .Include(a => a.SignUps)
+                    .ThenInclude(a => a.ApplicationUser)
+                .Include(a => a.SignUps)
+                    .ThenInclude(a => a.Guest)
                 .SingleOrDefaultAsync(m => m.ActivityID == id);
             
             if (activity == null)
@@ -48,7 +51,6 @@ namespace indicium_webapp.Controllers
             }
 
             var signedup = false;
-
             foreach (var item in activity.SignUps)
             {
                 if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
@@ -58,7 +60,30 @@ namespace indicium_webapp.Controllers
                 }
             }
 
+            var applicationUserResult = false;
+            foreach(var item in activity.SignUps)
+            {
+                if (item.ApplicationUser != null)
+                {
+                    applicationUserResult = true;
+                    break;
+                }
+            }
+
+            var guestResult = false;
+            foreach(var item in activity.SignUps)
+            {
+                if (item.Guest != null)
+                {
+                    guestResult = true;
+                    break;
+                }
+            }
+
             ViewData["SignedUp"] = signedup;
+
+            ViewData["applicationUserResult"] = applicationUserResult;
+            ViewData["guestResult"] = guestResult;
 
             return View(activity);
         }

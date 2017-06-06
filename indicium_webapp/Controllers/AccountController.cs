@@ -141,15 +141,16 @@ namespace indicium_webapp.Controllers
                     PhoneNumber = model.PhoneNumber,
                     UserName = model.Email,
                     Email = model.Email,
-                    Sex = model.Sex,
+                    Sex = (Sex)Convert.ToInt32(model.Sex),
                     Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL")),
                     AddressCity = model.AddressCity,
                     AddressStreet = model.AddressStreet,
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
-                    AddressCountry ="Nederland",
+                    AddressCountry = "Nederland",
                     StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", null),
-                    RegistrationDate = DateTime.Today
+                    RegistrationDate = DateTime.Today,
+                    StudyType = (StudyType)Convert.ToInt32(model.StudyType)
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

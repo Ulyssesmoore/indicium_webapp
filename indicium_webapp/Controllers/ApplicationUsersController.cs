@@ -45,32 +45,6 @@ namespace indicium_webapp.Controllers
                 users = users.Where(u => u.StudyType.Equals(studyFilter));
             }
 
-            List<string> studyTypes = new List<string>
-            {
-                "BIM", 
-                "SIE",
-                "SNE",
-                "TI",
-                "Propedeuse",
-            };
-
-            var StudyTypesList = new List<SelectListItem>();
-            StudyTypesList.Add(new SelectListItem { Value = "", Text = "" });
-
-            foreach (string study in studyTypes)
-            {
-                if (study == studyFilter)
-                {
-                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study, Selected = true });
-                }
-                else
-                {
-                    StudyTypesList.Add(new SelectListItem { Value = study, Text = study });
-                }
-            }
-
-            ViewData["studyTypesList"] = StudyTypesList;
-
             return View(await users.AsNoTracking().ToListAsync());
         }
 
@@ -128,7 +102,7 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,Id,PhoneNumber")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,Sex,Birthday,AddressStreet,AddressNumber,AddressPostalCode,AddressCity,AddressCountry,Iban,StudentNumber,StartdateStudy,StudyType,Id,PhoneNumber,Status")] ApplicationUser applicationUser)
         {
             var newApplicationUser = _context.ApplicationUser.Find(applicationUser.Id);
             if (id != applicationUser.Id || newApplicationUser == null)
@@ -154,6 +128,9 @@ namespace indicium_webapp.Controllers
                     newApplicationUser.StartdateStudy = applicationUser.StartdateStudy;
                     newApplicationUser.StudyType = applicationUser.StudyType;
                     newApplicationUser.PhoneNumber = applicationUser.PhoneNumber;
+                    
+                    // nog geen validatie voor secretaris rol (bug: user.isinrole)
+                    newApplicationUser.Status = applicationUser.Status;
 
                     _context.Update(newApplicationUser);
                     await _context.SaveChangesAsync();

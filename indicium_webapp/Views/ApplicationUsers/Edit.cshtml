@@ -31,11 +31,7 @@
         <div class="form-group">
             <label asp-for="Sex" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Sex" class="form-control">
-                    <option>M</option>
-                    <option>V</option>
-                    <option>O</option>
-                </select>
+                <select asp-for="Sex" asp-items="Html.GetEnumSelectList<Sex>()" class="form-control"></select>
                 <span asp-validation-for="Sex" class="text-danger"></span>
             </div>
         </div>
@@ -105,13 +101,7 @@
         <div class="form-group">
             <label asp-for="StudyType" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="StudyType" class="form-control">
-                    <option>Propedeuse</option>
-                    <option>SIE</option>
-                    <option>TI</option>
-                    <option>SNE</option>
-                    <option>BIM</option>
-                </select>
+                <select asp-for="StudyType" asp-items="Html.GetEnumSelectList<StudyType>()" class="form-control"></select>
                 <span asp-validation-for="StudyType" class="text-danger"></span>
             </div>
         </div>
@@ -142,25 +132,28 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">Status</label>
-            <div class="col-md-10">
-                <select name="userstatus" class="form-control">
-                    @foreach (var status in Enum.GetValues(typeof(Status)))
-                    {
-                        if (status.Equals(Model.Status))
+        @if (this.User.IsInRole("Secretaris"))
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label">Status</label>
+                <div class="col-md-10">
+                    <select name="Status" class="form-control">
+                        @foreach (var status in Enum.GetValues(typeof(Status)))
                         {
-                            <option selected>@status</option>
-                        }
-                        else
-                        {
-                            <option>@status</option>
-                        }
+                            if (status.Equals(Model.Status))
+                            {
+                                <option selected>@status</option>
+                            }
+                            else
+                            {
+                                <option>@status</option>
+                            }
 
-                    }
-                </select>
+                        }
+                    </select>
+                </div>
             </div>
-        </div>
+        }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-default" />
