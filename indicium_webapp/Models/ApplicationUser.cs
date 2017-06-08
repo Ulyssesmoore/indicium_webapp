@@ -10,8 +10,7 @@ namespace indicium_webapp.Models
     public enum Sex
     {
         Man,
-        Vrouw,
-        Anders
+        Vrouw
     }
 
     public enum StudyType

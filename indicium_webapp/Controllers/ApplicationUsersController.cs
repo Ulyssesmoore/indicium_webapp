@@ -140,7 +140,10 @@ namespace indicium_webapp.Controllers
                     newApplicationUser.PhoneNumber = applicationUser.PhoneNumber;
                     
                     // nog geen validatie voor secretaris rol (bug: user.isinrole)
-                    newApplicationUser.Status = applicationUser.Status;
+                    if (User.IsInRole("Secretaris"))
+                    {
+                        newApplicationUser.Status = applicationUser.Status;
+                    }
 
                     _context.Update(newApplicationUser);
                     await _context.SaveChangesAsync();

@@ -16,11 +16,13 @@ namespace indicium_webapp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ActivitiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ActivitiesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: Activities
@@ -52,40 +54,43 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signedup = false;
-            foreach (var item in activity.SignUps)
+            if (_signInManager.IsSignedIn(User))
             {
-                if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
+                var signedup = false;
+                foreach (var item in activity.SignUps)
                 {
-                    signedup = true;
-                    break;
+                    if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
+                    {
+                        signedup = true;
+                        break;
+                    }
                 }
-            }
 
-            var applicationUserResult = false;
-            foreach(var item in activity.SignUps)
-            {
-                if (item.ApplicationUser != null)
+                var applicationUserResult = false;
+                foreach(var item in activity.SignUps)
                 {
-                    applicationUserResult = true;
-                    break;
+                    if (item.ApplicationUser != null)
+                    {
+                        applicationUserResult = true;
+                        break;
+                    }
                 }
-            }
 
-            var guestResult = false;
-            foreach(var item in activity.SignUps)
-            {
-                if (item.Guest != null)
+                var guestResult = false;
+                foreach(var item in activity.SignUps)
                 {
-                    guestResult = true;
-                    break;
+                    if (item.Guest != null)
+                    {
+                        guestResult = true;
+                        break;
+                    }
                 }
+
+                ViewData["SignedUp"] = signedup;
+
+                ViewData["applicationUserResult"] = applicationUserResult;
+                ViewData["guestResult"] = guestResult;
             }
-
-            ViewData["SignedUp"] = signedup;
-
-            ViewData["applicationUserResult"] = applicationUserResult;
-            ViewData["guestResult"] = guestResult;
 
             return View(activity);
         }
