@@ -1,32 +1,32 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Manage your account";
+    ViewData["Title"] = "Beheer je account";
 }
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
 <div>
-    <h4>Change your account settings</h4>
+    <h4>Wijzig je account instellingen</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Password:</dt>
+        <dt>Wachtwoord:</dt>
         <dd>
             @if (Model.HasPassword)
             {
-                <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
+                <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Wijzig</a>
             }
             else
             {
                 <a asp-controller="Manage" asp-action="SetPassword" class="btn-bracketed">Create</a>
             }
         </dd>
-        <dt>External Logins:</dt>
+        <dt>Externe logins:</dt>
         <dd>
 
-            @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
+            @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Beheren</a>
         </dd>
-        <dt>Phone Number:</dt>
+        <dt>Telefoonnummer:</dt>
         <dd>
             <p>
                 Phone Numbers can be used as a second factor of verification in two-factor authentication.

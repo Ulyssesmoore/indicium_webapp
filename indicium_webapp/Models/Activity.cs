@@ -35,7 +35,7 @@ namespace indicium_webapp.Models
         public DateTime EndDateTime { get; set; }
 
         [Required]
-        [Display(Name = "Inschrijving Verplicht")]
+        [Display(Name = "Inschrijving verplicht")]
         public bool NeedsSignUp { get; set; }
 
         [Display(Name = "Prijs")]

@@ -7,6 +7,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace indicium_webapp.Models
 {
+    public enum Sex
+    {
+        Man,
+        Vrouw,
+        Anders
+    }
+
+    public enum StudyType
+    {
+        Propedeuse,
+        SIE,
+        TI,
+        SNE,
+        BIM
+    }
+    
     public enum Status
     {
         Nieuw,
@@ -35,8 +51,7 @@ namespace indicium_webapp.Models
         public string LastName { get; set; }
 
         [Display(Name = "Geslacht")]
-        [RegularExpression(@"^(M|V|O)$")]
-        public string Sex { get; set; }
+        public Sex Sex { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
@@ -75,20 +90,12 @@ namespace indicium_webapp.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Startdatum studie")]
         public DateTime StartdateStudy { get; set; }
-
+        
         [Display(Name = "Studietype")]
-        public string StudyType { get; set; }   
+        public StudyType StudyType { get; set; }
 
         [Display(Name = "Registratiedatum")]
         public DateTime RegistrationDate { get; set; }
-
-        [Range(0, 1)]
-        [Display(Name = "Is Actief")]
-        public int IsActive { get; set; }
-
-        [Range(0, 2)]
-        [Display(Name = "Is Goedgekeurd")]
-        public int IsApproved { get; set; }
 
         [Required]
         public Status Status { get; set; }
