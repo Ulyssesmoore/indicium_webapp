@@ -28,10 +28,12 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Index(
             string studyTypesList,
             string nameFilter, 
-            string studyFilter)
+            string studyFilter,
+            string statusFilter)
         {
             ViewData["NameFilter"] = nameFilter;
             ViewData["StudyFilter"] = studyFilter;
+            ViewData["StatusFilter"] = statusFilter;
 
             var users = from u in _context.ApplicationUser select u;
 
@@ -42,7 +44,12 @@ namespace indicium_webapp.Controllers
 
             if (!String.IsNullOrEmpty(studyFilter))
             {
-                users = users.Where(u => u.StudyType.Equals(studyFilter));
+                users = users.Where(u => u.StudyType.Equals((StudyType) Enum.Parse(typeof(StudyType), studyFilter)));
+            }
+
+            if (!String.IsNullOrEmpty(statusFilter))
+            {
+                users = users.Where(u => u.Status.Equals((Status)Enum.Parse(typeof(Status), statusFilter)));
             }
 
             return View(await users.AsNoTracking().ToListAsync());
