@@ -41,6 +41,7 @@ namespace indicium_webapp.Models
         [Display(Name = "Prijs")]
         public double Price { get; set; }
 
+        [Display(Name = "Inschrijvingen")]
         public virtual ICollection<SignUp> SignUps { get; set; }
     }
 }

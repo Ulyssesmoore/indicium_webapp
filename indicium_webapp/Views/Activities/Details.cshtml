@@ -80,7 +80,7 @@
 </div>
 
 <div>
-    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+    @if ((this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris")) && Model.NeedsSignUp)
     {
         <hr/>
 
@@ -107,7 +107,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a asp-controller="applicationusers" asp-action="Edit" asp-route-id="@item.ApplicationUser.Id">
+                                    <a asp-controller="signups" asp-action="details" asp-route-id="@item.SignUpID">
                                         @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
                                     </a>
                                 </td>
