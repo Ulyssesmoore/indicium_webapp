@@ -82,12 +82,13 @@ namespace indicium_webapp.Controllers
                     {
                         await _signInManager.SignOutAsync();
                         _logger.LogWarning(2, "User account not approved.");
-                        
-                        return View("NotApproved");
+                        ModelState.AddModelError(string.Empty, "Account niet goedgekeurd, dit kan echter nog even duren.");
+                        return View(model);
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        await _signInManager.SignOutAsync();
+                        ModelState.AddModelError(string.Empty, "Ongeldige aanmeldpoging.");
                         return View(model);
                     }
                 }
@@ -104,7 +105,7 @@ namespace indicium_webapp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Ongeldige aanmeldpoging.");
                     return View(model);
                 }
             }
@@ -164,8 +165,8 @@ namespace indicium_webapp.Controllers
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     await _userManager.AddToRoleAsync(user, "Lid");
                     _logger.LogInformation(3, "User created a new account with password and role.");
-                    
-                    return View("NotApproved");
+                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
+                    return View("login");
                 }
                 AddErrors(result);
             }
