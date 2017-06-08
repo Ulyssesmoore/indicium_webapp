@@ -39,16 +39,19 @@ namespace indicium_webapp.Controllers
 
             if (!String.IsNullOrEmpty(nameFilter))
             {
-                users = users.Where(u => u.FirstName.Contains(nameFilter) || u.LastName.Contains(nameFilter));
+                // Names are converted to lowercase to make filtering case-insenitive
+                users = users.Where(u => u.FirstName.ToLower().Contains(nameFilter.ToLower()) || u.LastName.ToLower().Contains(nameFilter.ToLower()));
             }
 
             if (!String.IsNullOrEmpty(studyFilter))
             {
+                // Cast string to enum and filter
                 users = users.Where(u => u.StudyType.Equals((StudyType) Enum.Parse(typeof(StudyType), studyFilter)));
             }
 
             if (!String.IsNullOrEmpty(statusFilter))
             {
+                // Cast string to enum and filter
                 users = users.Where(u => u.Status.Equals((Status)Enum.Parse(typeof(Status), statusFilter)));
             }
 

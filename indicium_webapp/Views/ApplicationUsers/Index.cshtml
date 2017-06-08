@@ -15,11 +15,11 @@
     </div>
     <div class="form-group">
         <label>Studie</label>
-        @Html.DropDownList("StudyFilter", (IEnumerable<SelectListItem>)Html.GetEnumSelectList<StudyType>(), new { @class = "form-control" })
+        @Html.DropDownList("StudyFilter", (IEnumerable<SelectListItem>)Html.GetEnumSelectList<StudyType>(), string.Empty, new { @class = "form-control" })
     </div>
     <div class="form-group">
         <label>Status</label>
-        @Html.DropDownList("StatusFilter", (IEnumerable<SelectListItem>)Html.GetEnumSelectList<Status>(), new { @class = "form-control" })
+        @Html.DropDownList("StatusFilter", (IEnumerable<SelectListItem>)Html.GetEnumSelectList<Status>(), string.Empty, new { @class = "form-control" })
     </div>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Filteren</button>
