@@ -27,7 +27,9 @@ namespace indicium_webapp.Controllers
         [Authorize(Roles = "Bestuur, Secretaris")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Activity.ToListAsync());
+            return View(await _context.Activity
+                .Include(a => a.SignUps)
+                .ToListAsync());
         }
 
         // GET: Activities/Details/5
