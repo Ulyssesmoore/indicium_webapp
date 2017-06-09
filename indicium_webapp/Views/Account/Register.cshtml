@@ -146,7 +146,7 @@
             
             function getEmail() {
                 var result = firstname.value + '.' + lastname.value + '@@student.hu.nl';
-                return result.replace(/\s/g, '');
+                return result.replace(/\s/g, '').toLowerCase();
             }
             
             firstname.addEventListener('input', function() { generateEmail() });
@@ -164,8 +164,14 @@
             };
 
             function generateEmail() {
+                var result = getEmail();
+
                 if (firstname.value != '' && lastname.value != '') {
-                    suggestedEmail.innerHTML = 'Voorgestelde email: ' + getEmail();
+                    if (email.value != result) {
+                        suggestedEmail.innerHTML = 'Voorgestelde email: ' + result;
+                    } else {
+                        suggestedEmail.innerHTML = '';
+                    }
                 } else {
                     suggestedEmail.innerHTML = '';
                 }
