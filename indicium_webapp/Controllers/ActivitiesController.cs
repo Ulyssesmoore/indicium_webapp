@@ -218,7 +218,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: Activities/Calendar
-        public async Task<IActionResult> Calendar()
+        public IActionResult Calendar()
         {
             return View();
         }

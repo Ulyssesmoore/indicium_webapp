@@ -17,7 +17,7 @@ namespace indicium_webapp.Models
 
         public string ApplicationUserID { get; set; }
 
-        public string GuestID { get; set; }
+        public int GuestID { get; set; }
 
         public string Status { get; set; }
 
@@ -30,7 +30,7 @@ namespace indicium_webapp.Models
         // Validation to make sure there's at least a ApplicationUser or Guest coupled to the signup
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ApplicationUserID == null && GuestID == null)
+            if (ApplicationUserID == null)
             {
                 yield return new ValidationResult("Er moet een gast of gebruiker zijn gekoppeld aan de inschrijving.");
             }
