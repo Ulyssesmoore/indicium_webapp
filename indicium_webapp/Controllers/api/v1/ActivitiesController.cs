@@ -23,7 +23,7 @@ namespace indicium_webapp.Controllers.api.v1
         [HttpGet]
         public async Task<IEnumerable<Activity>> Get()
         {
-            return await _context.Activity
+            return await _context.Activity.Include(t => t.ActivityType)
                 .ToListAsync();
         }
 

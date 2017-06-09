@@ -63,18 +63,24 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.EndDateTime)
+        </dd>        
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActivityType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ActivityType.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.NeedsSignUp)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.NeedsSignUp)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
         </dd>
     </dl>
 </div>

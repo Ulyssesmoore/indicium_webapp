@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170608141535_activitytype")]
+    partial class activitytype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -53,7 +54,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<string>("BackgroundColor");
 
-                    b.Property<string>("BorderColor");
+                    b.Property<string>("LineColor");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -327,8 +328,8 @@ namespace indicium_webapp.Data.Migrations
 
             modelBuilder.Entity("indicium_webapp.Models.Activity", b =>
                 {
-                    b.HasOne("indicium_webapp.Models.ActivityType", "ActivityType")
-                        .WithMany()
+                    b.HasOne("indicium_webapp.Models.ActivityType")
+                        .WithMany("Activities")
                         .HasForeignKey("ActivityTypeID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
