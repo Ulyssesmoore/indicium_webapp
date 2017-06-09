@@ -54,7 +54,7 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActivityTypeID,Name,BackgroundColor,LineColor,TextColor")] ActivityType activityType)
+        public async Task<IActionResult> Create([Bind("ActivityTypeID,Name,BackgroundColor,BorderColor,TextColor")] ActivityType activityType)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ActivityTypeID,Name,BackgroundColor,LineColor,TextColor")] ActivityType activityType)
+        public async Task<IActionResult> Edit(int id, [Bind("ActivityTypeID,Name,BackgroundColor,BorderColor,TextColor")] ActivityType activityType)
         {
             if (id != activityType.ActivityTypeID)
             {

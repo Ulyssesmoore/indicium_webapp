@@ -26,7 +26,7 @@ namespace indicium_webapp.Models
 
         [RegularExpression(@"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = "Dit is geen correcte HEX kleur")] // Hex color
         [Display(Name = "Lijnkleur")]
-        public string LineColor { get; set; }
+        public string BorderColor { get; set; }
 
         [RegularExpression(@"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = "Dit is geen correcte HEX kleur")] // Hex color
         [Display(Name = "Tekstkleur")]
