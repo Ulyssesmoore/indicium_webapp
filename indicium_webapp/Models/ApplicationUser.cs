@@ -49,31 +49,28 @@ namespace indicium_webapp.Models
         [Display(Name = "Achternaam")]
         public string LastName { get; set; }
 
+        [Required]
         [Display(Name = "Geslacht")]
         public Sex Sex { get; set; }
 
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Geboortedatum")]
         public DateTime Birthday { get; set; }
 
-        [Required]
         [Display(Name = "Straat")]
         public string AddressStreet { get; set; }
 
-        [Required]
         [Display(Name = "Huisnummer")]
         public string AddressNumber { get; set; }
 
-        [Required]
         [Display(Name = "Postcode")]
         public string AddressPostalCode { get; set; }
 
-        [Required]
         [Display(Name = "Plaats")]
         public string AddressCity { get; set; }
 
-        [Required]
         [Display(Name = "Land")]
         public string AddressCountry { get; set; }
 
@@ -82,16 +79,20 @@ namespace indicium_webapp.Models
 
         public string Iban { get; set; }
 
+        [Required]
         [Display(Name = "Student nummer")]
         public int StudentNumber { get; set; }
 
+        [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Startdatum studie")]
         public DateTime StartdateStudy { get; set; }
-        
+
+        [Required]
         [Display(Name = "Studietype")]
         public StudyType StudyType { get; set; }
+
 
         [Display(Name = "Registratiedatum")]
         public DateTime RegistrationDate { get; set; }

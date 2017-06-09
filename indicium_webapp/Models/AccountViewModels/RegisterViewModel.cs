@@ -55,13 +55,11 @@ namespace indicium_webapp.Models.AccountViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
         public string StartdateStudy { get; set; }
 
-        [Required]
         [StringLength(100, ErrorMessage = "This street is invalid")]
         [DataType(DataType.Text)]
         [Display(Name = "Street")]
         public string AddressStreet { get; set; }
 
-        [Required]
         [StringLength(5, ErrorMessage = "This number is invalid")]
         [DataType(DataType.Text)]
         [Display(Name = "Adress number")]
@@ -79,19 +77,16 @@ namespace indicium_webapp.Models.AccountViewModels
         [Display(Name = "Study type")]
         public string StudyType { get; set; }
 
-        [Required]
         [StringLength(100, ErrorMessage = "This phone number is invalid")]
         [DataType(DataType.Text)]
         [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
 
-        [Required]
         [StringLength(7, ErrorMessage = "This postal code is invalid")]
         [DataType(DataType.Text)]
         [Display(Name = "Postal code")]
         public string AddressPostalCode { get; set; }
 
-        [Required]
         [StringLength(100, ErrorMessage = "This city is invalid")]
         [Display(Name = "AddressCity")]
         public string AddressCity { get; set; }
