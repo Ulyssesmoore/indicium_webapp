@@ -35,12 +35,15 @@
                         dataType: 'json',
                         success: function(doc) {
                             var events = [];
-                            $(doc).each(function() {
+                            $(doc).each(function (index, val) {
                                 events.push({
-                                    title: $(this).attr('name'),
-                                    start: $(this).attr('startDateTime'),
-                                    end: $(this).attr('endDateTime'),
-                                    url: '/activities/details/' + $(this).attr('activityID')
+                                    title: val.name,
+                                    start: val.startDateTime,
+                                    end: val.endDateTime,
+                                    backgroundColor: val.activityType.backgroundColor,
+                                    borderColor: val.activityType.lineColor,
+                                    textColor: val.activityType.textColor,
+                                    url: '/activities/details/' + val.activityID
                                 });
                             });
                             callback(events);

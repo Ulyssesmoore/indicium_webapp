@@ -10,7 +10,7 @@ namespace indicium_webapp.Models
     {
         public ActivityType()
         {
-            Activities = new HashSet<Activity>();
+            //Activities = new HashSet<Activity>();
         }
 
         public int ActivityTypeID { get; set; }
@@ -32,7 +32,7 @@ namespace indicium_webapp.Models
         [Display(Name = "Tekstkleur")]
         public string TextColor { get; set; }
 
-        [Display(Name = "Activiteiten")]
-        public virtual ICollection<Activity> Activities { get; set; }
+        //[Display(Name = "Activiteiten")]
+        //public virtual ICollection<Activity> Activities { get; set; }
     }
 }
