@@ -94,6 +94,11 @@ namespace indicium_webapp.Controllers
         [Authorize(Roles = "Bestuur, Secretaris")]
         public IActionResult Create()
         {
+            var types = _context.ActivityType.ToListAsync().Result;
+            SelectList typeList = new SelectList(types, "ActivityTypeID", "Name");
+            ViewData["ActivityTypeID"] = typeList;
+            ViewBag.ActivityTypeID = typeList;
+
             return View();
         }
 
@@ -103,7 +108,7 @@ namespace indicium_webapp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Bestuur, Secretaris")]
-        public async Task<IActionResult> Create([Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price")] Activity activity)
+        public async Task<IActionResult> Create([Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price,ActivityTypeID")] Activity activity)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +144,7 @@ namespace indicium_webapp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Bestuur, Secretaris")]
-        public async Task<IActionResult> Edit(int id, [Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price")] Activity activity)
+        public async Task<IActionResult> Edit(int id, [Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price,ActivityTypeID")] Activity activity)
         {
             if (id != activity.ActivityID)
             {
