@@ -4,8 +4,6 @@
     ViewData["Title"] = "Register";
 }
 
-
-
 <h2>Inschrijfformulier Indicium</h2>
 
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
@@ -13,9 +11,26 @@
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
+        <label asp-for="FirstName" class="col-md-2 control-label">Voornaam</label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="col-md-2 control-label">Achternaam</label>
+        <div class="col-md-10">
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label">Emailadres</label>
         <div class="col-md-10">
             <input asp-for="Email" class="form-control" />
+            <span class="text-info" style="display:block;">
+                <a id="suggestedemail"></a>
+            </span>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
@@ -31,20 +46,6 @@
         <div class="col-md-10">
             <input asp-for="ConfirmPassword" class="form-control" />
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-    </div>  
-    <div class="form-group">
-        <label asp-for="FirstName" class="col-md-2 control-label">Voornaam</label>
-        <div class="col-md-10">
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="LastName" class="col-md-2 control-label">Achternaam</label>
-        <div class="col-md-10">
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
@@ -134,5 +135,41 @@
                 format: 'DD-MM-YYYY'
             });
         });
-</script>
+    </script>
+
+    <script>
+        window.onload = function () {
+            var firstname = document.getElementById("FirstName"),
+                lastname = document.getElementById("LastName"),
+                email = document.getElementById("Email"),
+                suggestedEmail = document.getElementById("suggestedemail");
+            
+            function getEmail() {
+                var result = firstname.value + '.' + lastname.value + '@@student.hu.nl';
+                return result.replace(/\s/g, '');
+            }
+            
+            firstname.addEventListener('input', function() { generateEmail() });
+            lastname.addEventListener('input', function() { generateEmail() });
+            email.addEventListener('input', function() { generateEmail() });
+            
+            suggestedEmail.onclick = function() {
+                var result = getEmail();
+                
+                email.value = result;
+
+                if (email.value == result) {
+                    suggestedEmail.innerHTML = '';
+                }
+            };
+
+            function generateEmail() {
+                if (firstname.value != '' && lastname.value != '') {
+                    suggestedEmail.innerHTML = 'Voorgestelde email: ' + getEmail();
+                } else {
+                    suggestedEmail.innerHTML = '';
+                }
+            }
+        };
+    </script>
 }
