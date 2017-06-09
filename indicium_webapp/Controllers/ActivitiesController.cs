@@ -45,6 +45,7 @@ namespace indicium_webapp.Controllers
                     .ThenInclude(a => a.ApplicationUser)
                 .Include(a => a.SignUps)
                     .ThenInclude(a => a.Guest)
+                .Include(t => t.ActivityType)
                 .SingleOrDefaultAsync(m => m.ActivityID == id);
             
             if (activity == null)
@@ -96,7 +97,6 @@ namespace indicium_webapp.Controllers
         {
             var types = _context.ActivityType.ToListAsync().Result;
             SelectList typeList = new SelectList(types, "ActivityTypeID", "Name");
-            ViewData["ActivityTypeID"] = typeList;
             ViewBag.ActivityTypeID = typeList;
 
             return View();
@@ -135,6 +135,11 @@ namespace indicium_webapp.Controllers
             {
                 return NotFound();
             }
+
+            var types = _context.ActivityType.ToListAsync().Result;
+            SelectList typeList = new SelectList(types, "ActivityTypeID", "Name", activity.ActivityTypeID);
+            ViewBag.ActivityTypeID = typeList;
+
             return View(activity);
         }
 
@@ -183,7 +188,7 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+            var activity = await _context.Activity.Include(t => t.ActivityType).SingleOrDefaultAsync(m => m.ActivityID == id);
 
             if (activity == null)
             {
@@ -210,7 +215,7 @@ namespace indicium_webapp.Controllers
         // GET: Activities/Calendar
         public async Task<IActionResult> Calendar()
         {
-            return View(await _context.Activity.ToListAsync());
+            return View();
         }
 
         private bool ActivityExists(int id)

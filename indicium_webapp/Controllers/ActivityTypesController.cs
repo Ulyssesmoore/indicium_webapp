@@ -25,24 +25,6 @@ namespace indicium_webapp.Controllers
             return View(await _context.ActivityType.ToListAsync());
         }
 
-        // GET: ActivityTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var activityType = await _context.ActivityType
-                .SingleOrDefaultAsync(m => m.ActivityTypeID == id);
-            if (activityType == null)
-            {
-                return NotFound();
-            }
-
-            return View(activityType);
-        }
-
         // GET: ActivityTypes/Create
         public IActionResult Create()
         {

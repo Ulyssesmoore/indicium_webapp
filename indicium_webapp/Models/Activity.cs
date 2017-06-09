@@ -49,6 +49,7 @@ namespace indicium_webapp.Models
         public virtual ICollection<SignUp> SignUps { get; set; }
 
         // Property to help select related data
+        [Display(Name = "Activiteit Type")]
         public virtual ActivityType ActivityType { get; set; }
     }
 }
