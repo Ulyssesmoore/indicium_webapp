@@ -50,13 +50,16 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been successfully updated"
+                message == ManageMessageId.ChangePasswordSuccess ? "Je wachtwoord is veranderd."
+                : message == ManageMessageId.SetPasswordSuccess ? "Je wachtwoord is gezet."
+                : message == ManageMessageId.SetTwoFactorSuccess ? "Je twee-factor authenticatie provider is gezet."
+                : message == ManageMessageId.Error ? "Er heeft een fout plaatsgevonden."
+                : message == ManageMessageId.AddPhoneSuccess ? "Je telefoonnummer is toegevoegd."
+                : message == ManageMessageId.RemovePhoneSuccess ? "Je telefoonnummer is verwijderd"
+                : message == ManageMessageId.ChangeEmailSuccess ? "Je email-adres is met succes gewijzigd."
+                : message == ManageMessageId.ChangePersonalInformationSuccess ? "Je persoonlijke gegevens zijn met succes gewijzigd."
+                : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
+                : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -72,6 +75,7 @@ namespace indicium_webapp.Controllers
                 AddressPostalCode = user.AddressPostalCode,
                 AddressNumber = user.AddressNumber,
                 AddressStreet = user.AddressStreet,
+                AddressCountry = user.AddressCountry,
                 PhoneNumber = user.PhoneNumber,
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType,
@@ -127,7 +131,7 @@ namespace indicium_webapp.Controllers
                 return View("Error");
             }
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
+            await _smsSender.SendSmsAsync(model.PhoneNumber, "Je veiligheidscode is: " + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
 
@@ -199,7 +203,7 @@ namespace indicium_webapp.Controllers
                 }
             }
             // If we got this far, something failed, redisplay the form
-            ModelState.AddModelError(string.Empty, "Failed to verify phone number");
+            ModelState.AddModelError(string.Empty, "Het is niet gelukt je telefoonnummer te verifiëren.");
             return View(model);
         }
 
@@ -263,7 +267,7 @@ namespace indicium_webapp.Controllers
             {               
                 try
                 {
-                    // Generates a token, updates all currently logged in values to the new email. 
+                    // Generates a token, overwrites values in currently logged in user to match the new data
                     var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.Email);
                     await _userManager.ChangeEmailAsync(user, model.Email, token);
                     user.UserName = model.Email;
@@ -294,6 +298,148 @@ namespace indicium_webapp.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
+
+        //
+        // GET: /Manage/ChangePersonalInformation
+        [HttpGet]
+        public async Task<IActionResult> ChangePersonalInformation()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new ChangePersonalInformationViewModel
+            {
+                Birthday = user.Birthday,
+                Sex = user.Sex,
+                Iban = user.Iban
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangePersonalInformation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePersonalInformation(ChangePersonalInformationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                // Overwrites values in currently logged in user to match the new data
+                user.Iban = model.Iban;
+                user.Sex = model.Sex;
+                user.Birthday = model.Birthday;
+
+                // Saves changes
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePersonalInformationSuccess });
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+        //
+        // GET: /Manage/ChangeEducationalInformation
+        [HttpGet]
+        public async Task<IActionResult> ChangeEducationalInformation()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new ChangeEducationalInformationViewModel
+            {
+                StartdateStudy = user.StartdateStudy,
+                StudyType = user.StudyType
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangeEducationalInformation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEducationalInformation(ChangeEducationalInformationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                // Overwrites values in currently logged in user to match the new data
+                user.StartdateStudy = model.StartdateStudy;
+                user.StudyType = model.StudyType;
+
+                // Saves changes
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangeEducationalInformationSuccess });
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+
+        //
+        // GET: /Manage/ChangeAddressInformation
+        [HttpGet]
+        public async Task<IActionResult> ChangeAddressInformation()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new ChangeAddressInformationViewModel
+            {
+                AddressCountry = user.AddressCountry,
+                AddressCity = user.AddressCity,
+                AddressPostalCode = user.AddressPostalCode,
+                AddressNumber = user.AddressNumber,
+                AddressStreet = user.AddressStreet
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangeAddressInformation
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAddressInformation(ChangeAddressInformationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                // Overwrites values in currently logged in user to match the new data
+                user.AddressCountry = model.AddressCountry;
+                user.AddressCity = model.AddressCity;
+                user.AddressPostalCode = model.AddressPostalCode;
+                user.AddressNumber = model.AddressNumber;
+                user.AddressStreet = model.AddressStreet;
+
+                // Saves changes
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangeAddressInformationSuccess });
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
 
         //
         // GET: /Manage/SetPassword
@@ -334,9 +480,9 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                message == ManageMessageId.RemoveLoginSuccess ? "Externe login is verwijderd."
+                : message == ManageMessageId.AddLoginSuccess ? "Externe login is toegevoegd."
+                : message == ManageMessageId.Error ? "Er heeft een fout plaatsgevonden."
                 : "";
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -411,10 +557,13 @@ namespace indicium_webapp.Controllers
             ChangePasswordSuccess,
             SetTwoFactorSuccess,
             ChangeEmailSuccess,
+            ChangeEducationalInformationSuccess,
+            ChangePersonalInformationSuccess,
+            ChangeAddressInformationSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error            
+            Error
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

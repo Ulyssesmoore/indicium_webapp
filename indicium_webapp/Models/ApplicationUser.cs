@@ -76,7 +76,6 @@ namespace indicium_webapp.Models
 
         [RegularExpression(@"^(NL([0-9]{2})([A-Z]{4})([0-9]{10}))$")]
         [Display(Name = "IBAN nummer")]
-
         public string Iban { get; set; }
 
         [Required]

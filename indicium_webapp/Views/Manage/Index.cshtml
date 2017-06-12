@@ -26,7 +26,7 @@
         <dt>Telefoonnummer:</dt>
         <dd>@Model.PhoneNumber</dd>
         <dd>
-            @*<a asp-controller="Manage" asp-action="ChangePhoneNumber" class="btn-bracketed">Wijzig</a>*@
+            <a asp-controller="Manage" asp-action="ChangePhoneNumber" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
 
@@ -40,12 +40,14 @@
         <dt>Iban:</dt>
         <dd>@Model.Iban</dd>
         <dd>
-            @*<a asp-controller="Manage" asp-action="ChangePersonalInformation" class="btn-bracketed">Wijzig</a>*@
+            <a asp-controller="Manage" asp-action="ChangePersonalInformation" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
 
     <h5>Adresgegevens:</h5>
     <dl class="dl-horizontal">
+        <dt>Land:</dt>
+        <dd>@Model.AddressCountry</dd>
         <dt>Plaats:</dt>
         <dd>@Model.AddressCity</dd>
         <dt>Postcode:</dt>
@@ -55,7 +57,7 @@
         <dt>Nummer:</dt>
         <dd>@Model.AddressNumber</dd>
         <dd>
-            @*<a asp-controller="Manage" asp-action="ChangeAddressInformation" class="btn-bracketed">Wijzig</a>*@
+            <a asp-controller="Manage" asp-action="ChangeAddressInformation" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
 
@@ -66,7 +68,7 @@
         <dt>Studietype:</dt>
         <dd>@Model.StudyType</dd>
         <dd>
-            @*<a asp-controller="Manage" asp-action="ChangeEducationalInformation" class="btn-bracketed">Wijzig</a>*@
+            <a asp-controller="Manage" asp-action="ChangeEducationalInformation" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
 </div>

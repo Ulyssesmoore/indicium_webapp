@@ -18,6 +18,8 @@ namespace indicium_webapp.Models.ManageViewModels
 
         public string AddressStreet { get; set; }
 
+        public string AddressCountry { get; set; }
+
         public string PhoneNumber { get; set; }
 
         public DateTime StartdateStudy { get; set; }
