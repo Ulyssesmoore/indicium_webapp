@@ -1,4 +1,4 @@
-@model indicium_webapp.Models.ApplicationUser
+@model ApplicationUserViewModel
 
 @{
     ViewData["Title"] = "Persoonsgegevens details";
@@ -95,19 +95,19 @@
             @Html.DisplayFor(model => model.RegistrationDate)
         </dd>
         <dt>
-            Gebruikersnaam
+            @Html.DisplayNameFor(model => model.UserName)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt>
-            E-mail
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt>
-            Telefoonnummer
+            @Html.DisplayNameFor(model => model.PhoneNumber)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.PhoneNumber)

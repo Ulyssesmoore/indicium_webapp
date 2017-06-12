@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
+using indicium_webapp.Models.AccountViewModels;
 
 namespace indicium_webapp.Controllers
 {
@@ -24,7 +25,16 @@ namespace indicium_webapp.Controllers
         // GET: ApplicationRoles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ApplicationRole.ToListAsync());
+            var applicationrole = await _context.ApplicationRole.ToListAsync();
+
+            IEnumerable<ApplicationRoleViewModel> applicationroleviewmodel = applicationrole.Select(role => new ApplicationRoleViewModel
+            {
+                Id = role.Id,
+                Name = role.Name,
+                Description = role.Description
+            });
+
+            return View(applicationroleviewmodel);
         }
 
         // GET: ApplicationRoles/Details/5
@@ -35,14 +45,22 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationRole = await _context.ApplicationRole
+            var applicationrole = await _context.ApplicationRole
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (applicationRole == null)
+            
+            if (applicationrole == null)
             {
                 return NotFound();
             }
 
-            return View(applicationRole);
+            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
+            {
+                Id = applicationrole.Id,
+                Name = applicationrole.Name,
+                Description = applicationrole.Description
+            };
+
+            return View(applicationroleviewmodel);
         }
 
         // GET: ApplicationRoles/Create
@@ -75,12 +93,21 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationRole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
-            if (applicationRole == null)
+            var applicationrole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (applicationrole == null)
             {
                 return NotFound();
             }
-            return View(applicationRole);
+            
+            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
+            {
+                Id = applicationrole.Id,
+                Name = applicationrole.Name,
+                Description = applicationrole.Description
+            };
+
+            return View(applicationroleviewmodel);
         }
 
         // POST: ApplicationRoles/Edit/5
@@ -88,9 +115,10 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Description,Id,Name,NormalizedName,ConcurrencyStamp")] ApplicationRole applicationRole)
+        public async Task<IActionResult> Edit(string id, ApplicationRoleViewModel applicationroleviewmodel)
         {
-            if (id != applicationRole.Id)
+            var newApplicationRole = _context.ApplicationRole.Find(id);
+            if (id != applicationroleviewmodel.Id || newApplicationRole == null)
             {
                 return NotFound();
             }
@@ -99,12 +127,16 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    _context.Update(applicationRole);
+                    newApplicationRole.Id = applicationroleviewmodel.Id;
+                    newApplicationRole.Name = applicationroleviewmodel.Name;
+                    newApplicationRole.Description = applicationroleviewmodel.Description;
+                    
+                    _context.Update(newApplicationRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApplicationRoleExists(applicationRole.Id))
+                    if (!_context.ApplicationRole.Any(e => e.Id == applicationroleviewmodel.Id))
                     {
                         return NotFound();
                     }
@@ -115,7 +147,7 @@ namespace indicium_webapp.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(applicationRole);
+            return View(applicationroleviewmodel);
         }
 
         // GET: ApplicationRoles/Delete/5
@@ -126,14 +158,21 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationRole = await _context.ApplicationRole
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (applicationRole == null)
+            var applicationrole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
+            
+            if (applicationrole == null)
             {
                 return NotFound();
             }
 
-            return View(applicationRole);
+            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
+            {
+                Id = applicationrole.Id,
+                Name = applicationrole.Name,
+                Description = applicationrole.Description
+            };
+
+            return View(applicationroleviewmodel);
         }
 
         // POST: ApplicationRoles/Delete/5

@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170610195349_fixed_signups")]
+    partial class fixed_signups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -40,7 +41,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.HasIndex("ActivityTypeID");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activity");
                 });
 
             modelBuilder.Entity("indicium_webapp.Models.ActivityType", b =>
@@ -58,7 +59,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.HasKey("ActivityTypeID");
 
-                    b.ToTable("ActivityTypes");
+                    b.ToTable("ActivityType");
                 });
 
             modelBuilder.Entity("indicium_webapp.Models.ApplicationUser", b =>
@@ -154,7 +155,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.HasKey("GuestID");
 
-                    b.ToTable("Guests");
+                    b.ToTable("Guest");
                 });
 
             modelBuilder.Entity("indicium_webapp.Models.SignUp", b =>
@@ -178,7 +179,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.HasIndex("GuestID");
 
-                    b.ToTable("SignUps");
+                    b.ToTable("SignUp");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -314,7 +315,7 @@ namespace indicium_webapp.Data.Migrations
 
             modelBuilder.Entity("indicium_webapp.Models.SignUp", b =>
                 {
-                    b.HasOne("indicium_webapp.Models.Activity", "Activity")
+                    b.HasOne("indicium_webapp.Models.Activity", "Activities")
                         .WithMany("SignUps")
                         .HasForeignKey("ActivityID")
                         .OnDelete(DeleteBehavior.Cascade);
