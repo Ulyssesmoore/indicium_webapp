@@ -1,4 +1,4 @@
-@model IEnumerable<indicium_webapp.Models.SignUp>
+@model IEnumerable<SignUpViewModel>
 
 @{
     ViewData["Title"] = "Inschrijvingen";
@@ -13,22 +13,25 @@
         <thead>
             <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.Name)
+                        @Html.DisplayNameFor(model => model.Activity.Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.Description)
+                        @Html.DisplayNameFor(model => model.Activity.Description)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.StartDateTime)
+                        @Html.DisplayNameFor(model => model.Activity.StartDateTime)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.EndDateTime)
+                        @Html.DisplayNameFor(model => model.Activity.EndDateTime)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.NeedsSignUp)
+                        @Html.DisplayNameFor(model => model.Activity.NeedsSignUp)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Activities.Price)
+                        @Html.DisplayNameFor(model => model.Activity.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
                     </th>
                 <th></th>
             </tr>
@@ -37,26 +40,29 @@
             @foreach (var item in Model) {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.Name)
+                        @Html.DisplayFor(modelItem => item.Activity.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.Description)
+                        @Html.DisplayFor(modelItem => item.Activity.Description)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.StartDateTime)
+                        @Html.DisplayFor(modelItem => item.Activity.StartDateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.EndDateTime)
+                        @Html.DisplayFor(modelItem => item.Activity.EndDateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.NeedsSignUp)
+                        @Html.DisplayFor(modelItem => item.Activity.NeedsSignUp)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activities.Price)
+                        @Html.DisplayFor(modelItem => item.Activity.Price)
                     </td>
                     <td>
-                        <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID">Details</a>
-                        <a class="btn btn-danger" asp-action="delete" asp-route-id="@item.ActivityID">Uitschrijven</a>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
+                        <a class="btn btn-danger" asp-action="delete" asp-route-id="@item.Activity.ActivityID">Uitschrijven</a>
                     </td>
                 </tr>
             }

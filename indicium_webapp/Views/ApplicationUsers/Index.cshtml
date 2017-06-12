@@ -1,4 +1,4 @@
-@model List<ApplicationUser>
+@model IEnumerable<ApplicationUserViewModel>
 
 @{
     ViewData["Title"] = "persoonsgegevens";
@@ -32,15 +32,33 @@
 <table class="table" id="userTable">
     <thead>
         <tr>
-            <th>Voornaam</th>
-            <th>Achternaam</th>
-            <th>Geslacht</th>
-            <th>Geboortedatum</th>
-            <th>Straat</th>
-            <th>Nummer</th>
-            <th>Postcode</th>
-            <th>Plaats</th>
-            <th>Studentnummer</th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressStreet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressPostalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentNumber)
+            </th>
             <th></th>
         </tr>
     </thead>

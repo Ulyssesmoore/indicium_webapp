@@ -9,6 +9,8 @@ using indicium_webapp.Data;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using indicium_webapp.Models.AccountViewModels;
+using System.Globalization;
 
 namespace indicium_webapp.Controllers
 {
@@ -27,10 +29,29 @@ namespace indicium_webapp.Controllers
         // GET: SignUps
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SignUp
-                .Include(m => m.Activities)
-                .Where(m => m.ApplicationUserID == GetCurrentUserAsync().Result.Id)
-                .ToListAsync());
+            var signups = await _context.SignUp
+                .Include(m => m.Activity)
+                .Where(m => m.ApplicationUserID == GetCurrentUserAsync().Id)
+                .ToListAsync();
+            
+            IEnumerable<SignUpViewModel> signupviewmodel = signups.Select(signup => new SignUpViewModel
+            {
+                SignUpID = signup.SignUpID,
+                Status = signup.Status,
+                Activity = new ActivityViewModel {
+                    ActivityID = signup.Activity.ActivityID,
+                    Name = signup.Activity.Name,
+                    Description = signup.Activity.Description,
+                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    NeedsSignUp = signup.Activity.NeedsSignUp,
+                    Price = signup.Activity.Price,
+                    ActivityType = signup.Activity.ActivityType,
+                    SignUps = signup.Activity.SignUps
+                }
+            });
+
+            return View(signupviewmodel);
         }
 
         // GET: SignUps/Details/5
@@ -41,17 +62,51 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUp = await _context.SignUp
-                .Include(m => m.Activities)
+            var signup = await _context.SignUp
+                .Include(m => m.Activity)
                 .Include(m => m.ApplicationUser)
                 .SingleOrDefaultAsync(m => m.SignUpID == id);
 
-            if (signUp == null)
+            if (signup == null)
             {
                 return NotFound();
             }
 
-            return View(signUp);
+            SignUpViewModel signupviewmodel = new SignUpViewModel
+            {
+                SignUpID = signup.SignUpID,
+                Status = signup.Status,
+                ApplicationUser = new ApplicationUserViewModel {
+                    FirstName = signup.ApplicationUser.FirstName,
+                    LastName = signup.ApplicationUser.LastName,
+                    Sex = signup.ApplicationUser.Sex.ToString(),
+                    Birthday = signup.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    AddressStreet = signup.ApplicationUser.AddressStreet,
+                    AddressNumber = signup.ApplicationUser.AddressNumber,
+                    AddressPostalCode = signup.ApplicationUser.AddressPostalCode,
+                    AddressCity = signup.ApplicationUser.AddressCity,
+                    AddressCountry = signup.ApplicationUser.AddressCountry,
+                    Iban = signup.ApplicationUser.Iban,
+                    StudentNumber = signup.ApplicationUser.StudentNumber.ToString(),
+                    StartdateStudy = signup.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StudyType = signup.ApplicationUser.StudyType.ToString(),
+                    PhoneNumber = signup.ApplicationUser.PhoneNumber
+                },
+                Guest = signup.Guest,
+                Activity = new ActivityViewModel {
+                    ActivityID = signup.Activity.ActivityID,
+                    Name = signup.Activity.Name,
+                    Description = signup.Activity.Description,
+                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    NeedsSignUp = signup.Activity.NeedsSignUp,
+                    Price = signup.Activity.Price,
+                    ActivityType = signup.Activity.ActivityType,
+                    SignUps = signup.Activity.SignUps
+                }
+            };
+
+            return View(signupviewmodel);
         }
 
         // POST: SignUps/Create/5
@@ -69,7 +124,7 @@ namespace indicium_webapp.Controllers
             if (ModelState.IsValid)
             {
                 // Assigns the currently logged in user Id and activity Id to the signup. 
-                signUp.ApplicationUserID = GetCurrentUserAsync().Result.Id;
+                signUp.ApplicationUserID = GetCurrentUserAsync().Id;
                 signUp.ActivityID = id;
 
                 // Validates if activity needs a signup and if user is not already signed up to said activity.
@@ -105,17 +160,51 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signUpResult = await _context.SignUp
-                .Include(m => m.Activities)
+            var signup = await _context.SignUp
+                .Include(m => m.Activity)
                 .Include(m => m.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+                .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Id);
 
-            if (signUpResult == null)
+            if (signup == null)
             {
                 return NotFound();
             }
 
-            return View(signUpResult);
+            SignUpViewModel signupviewmodel = new SignUpViewModel
+            {
+                SignUpID = signup.SignUpID,
+                Status = signup.Status,
+                ApplicationUser = new ApplicationUserViewModel {
+                    FirstName = signup.ApplicationUser.FirstName,
+                    LastName = signup.ApplicationUser.LastName,
+                    Sex = signup.ApplicationUser.Sex.ToString(),
+                    Birthday = signup.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    AddressStreet = signup.ApplicationUser.AddressStreet,
+                    AddressNumber = signup.ApplicationUser.AddressNumber,
+                    AddressPostalCode = signup.ApplicationUser.AddressPostalCode,
+                    AddressCity = signup.ApplicationUser.AddressCity,
+                    AddressCountry = signup.ApplicationUser.AddressCountry,
+                    Iban = signup.ApplicationUser.Iban,
+                    StudentNumber = signup.ApplicationUser.StudentNumber.ToString(),
+                    StartdateStudy = signup.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StudyType = signup.ApplicationUser.StudyType.ToString(),
+                    PhoneNumber = signup.ApplicationUser.PhoneNumber,
+                },
+                Guest = signup.Guest,
+                Activity = new ActivityViewModel {
+                    ActivityID = signup.Activity.ActivityID,
+                    Name = signup.Activity.Name,
+                    Description = signup.Activity.Description,
+                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    NeedsSignUp = signup.Activity.NeedsSignUp,
+                    Price = signup.Activity.Price,
+                    ActivityType = signup.Activity.ActivityType,
+                    SignUps = signup.Activity.SignUps
+                }
+            };
+
+            return View(signupviewmodel);
         }
 
         // POST: SignUps/Delete/5
@@ -123,7 +212,7 @@ namespace indicium_webapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Id);
 
             _context.SignUp.Remove(signUp);
             await _context.SaveChangesAsync();
@@ -138,12 +227,12 @@ namespace indicium_webapp.Controllers
 
         private bool UserSignedUp(int activityId)
         {
-            return _context.SignUp.Any(e => e.ActivityID == activityId && e.ApplicationUserID == GetCurrentUserAsync().Result.Id);
+            return _context.SignUp.Any(e => e.ActivityID == activityId && e.ApplicationUserID == GetCurrentUserAsync().Id);
         }
 
-        private async Task<ApplicationUser> GetCurrentUserAsync()
+        private ApplicationUser GetCurrentUserAsync()
         {
-            return await _userManager.GetUserAsync(User);
+            return _userManager.GetUserAsync(User).Result;
         }
     }
 }
