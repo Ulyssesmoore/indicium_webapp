@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170612124127_plural-tablenames")]
+    partial class pluraltablenames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -24,11 +25,14 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<int>("ActivityTypeID");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired();
 
                     b.Property<DateTime>("EndDateTime");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<bool>("NeedsSignUp");
 
@@ -52,7 +56,9 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<string>("BorderColor");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("TextColor");
 
@@ -88,11 +94,15 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Iban");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -146,11 +156,16 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<int>("GuestID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("GuestID");
 
@@ -166,7 +181,7 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<string>("ApplicationUserID");
 
-                    b.Property<int?>("GuestID");
+                    b.Property<int>("GuestID");
 
                     b.Property<string>("Status");
 
@@ -314,7 +329,7 @@ namespace indicium_webapp.Data.Migrations
 
             modelBuilder.Entity("indicium_webapp.Models.SignUp", b =>
                 {
-                    b.HasOne("indicium_webapp.Models.Activity", "Activity")
+                    b.HasOne("indicium_webapp.Models.Activity", "Activities")
                         .WithMany("SignUps")
                         .HasForeignKey("ActivityID")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -325,7 +340,8 @@ namespace indicium_webapp.Data.Migrations
 
                     b.HasOne("indicium_webapp.Models.Guest", "Guest")
                         .WithMany("SignUps")
-                        .HasForeignKey("GuestID");
+                        .HasForeignKey("GuestID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

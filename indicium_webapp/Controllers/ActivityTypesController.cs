@@ -22,7 +22,18 @@ namespace indicium_webapp.Controllers
         // GET: ActivityTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ActivityType.ToListAsync());
+            var activitytypes = await _context.ActivityType.ToListAsync();
+            
+            IEnumerable<ActivityTypeViewModel> activitytypeviewmodel = activitytypes.Select(activitytype => new ActivityTypeViewModel
+            {
+                ActivityTypeID = activitytype.ActivityTypeID,
+                Name = activitytype.Name,
+                BackgroundColor = activitytype.BackgroundColor,
+                BorderColor = activitytype.BorderColor,
+                TextColor = activitytype.TextColor
+            });
+
+            return View(activitytypeviewmodel);
         }
 
         // GET: ActivityTypes/Create
@@ -36,15 +47,24 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActivityTypeID,Name,BackgroundColor,BorderColor,TextColor")] ActivityType activityType)
+        public async Task<IActionResult> Create(ActivityTypeViewModel activitytypeviewmodel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(activityType);
+                var activitytype = new ActivityType
+                {
+                    ActivityTypeID = activitytypeviewmodel.ActivityTypeID,
+                    Name = activitytypeviewmodel.Name,
+                    BackgroundColor = activitytypeviewmodel.BackgroundColor,
+                    BorderColor = activitytypeviewmodel.BorderColor,
+                    TextColor = activitytypeviewmodel.TextColor
+                };
+
+                _context.Add(activitytype);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(activityType);
+            return View(activitytypeviewmodel);
         }
 
         // GET: ActivityTypes/Edit/5
@@ -55,12 +75,23 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activityType = await _context.ActivityType.SingleOrDefaultAsync(m => m.ActivityTypeID == id);
-            if (activityType == null)
+            var activitytype = await _context.ActivityType.SingleOrDefaultAsync(m => m.ActivityTypeID == id);
+
+            if (activitytype == null)
             {
                 return NotFound();
             }
-            return View(activityType);
+
+            ActivityTypeViewModel activitytypeviewmodel = new ActivityTypeViewModel
+            {
+                ActivityTypeID = activitytype.ActivityTypeID,
+                Name = activitytype.Name,
+                BackgroundColor = activitytype.BackgroundColor,
+                BorderColor = activitytype.BorderColor,
+                TextColor = activitytype.TextColor
+            };
+
+            return View(activitytypeviewmodel);
         }
 
         // POST: ActivityTypes/Edit/5
@@ -68,9 +99,9 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ActivityTypeID,Name,BackgroundColor,BorderColor,TextColor")] ActivityType activityType)
+        public async Task<IActionResult> Edit(int id, ActivityTypeViewModel activitytypeviewmodel)
         {
-            if (id != activityType.ActivityTypeID)
+            if (id != activitytypeviewmodel.ActivityTypeID)
             {
                 return NotFound();
             }
@@ -79,12 +110,21 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    _context.Update(activityType);
+                    var activitytype = new ActivityType
+                    {
+                        ActivityTypeID = activitytypeviewmodel.ActivityTypeID,
+                        Name = activitytypeviewmodel.Name,
+                        BackgroundColor = activitytypeviewmodel.BackgroundColor,
+                        BorderColor = activitytypeviewmodel.BorderColor,
+                        TextColor = activitytypeviewmodel.TextColor
+                    };
+                    
+                    _context.Update(activitytype);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActivityTypeExists(activityType.ActivityTypeID))
+                    if (!ActivityTypeExists(activitytypeviewmodel.ActivityTypeID))
                     {
                         return NotFound();
                     }
@@ -95,7 +135,7 @@ namespace indicium_webapp.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(activityType);
+            return View(activitytypeviewmodel);
         }
 
         // GET: ActivityTypes/Delete/5
@@ -106,14 +146,23 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activityType = await _context.ActivityType
-                .SingleOrDefaultAsync(m => m.ActivityTypeID == id);
-            if (activityType == null)
+            var activitytype = await _context.ActivityType.SingleOrDefaultAsync(m => m.ActivityTypeID == id);
+
+            if (activitytype == null)
             {
                 return NotFound();
             }
 
-            return View(activityType);
+            ActivityTypeViewModel activitytypeviewmodel = new ActivityTypeViewModel
+            {
+                ActivityTypeID = activitytype.ActivityTypeID,
+                Name = activitytype.Name,
+                BackgroundColor = activitytype.BackgroundColor,
+                BorderColor = activitytype.BorderColor,
+                TextColor = activitytype.TextColor
+            };
+
+            return View(activitytypeviewmodel);
         }
 
         // POST: ActivityTypes/Delete/5

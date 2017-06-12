@@ -9,6 +9,7 @@ using indicium_webapp.Data;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Globalization;
 
 namespace indicium_webapp.Controllers
 {
@@ -27,11 +28,24 @@ namespace indicium_webapp.Controllers
 
         // GET: Activities
         [Authorize(Roles = "Bestuur, Secretaris")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Activity
-                .Include(a => a.SignUps)
-                .ToListAsync());
+            var activities = _context.Activity.Include(a => a.SignUps);
+
+            IEnumerable<ActivityViewModel> activityviewmodel = activities.Select(activity => new ActivityViewModel
+            {
+                ActivityID = activity.ActivityID,
+                Name = activity.Name,
+                Description = activity.Description,
+                StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                NeedsSignUp = activity.NeedsSignUp,
+                Price = activity.Price,
+                ActivityType = activity.ActivityType,
+                SignUps = activity.SignUps
+            });
+
+            return View(activityviewmodel);
         }
 
         // GET: Activities/Details/5
@@ -43,10 +57,8 @@ namespace indicium_webapp.Controllers
             }
 
             var activity = await _context.Activity
-                .Include(a => a.SignUps)
-                    .ThenInclude(a => a.ApplicationUser)
-                .Include(a => a.SignUps)
-                    .ThenInclude(a => a.Guest)
+                .Include(a => a.SignUps).ThenInclude(a => a.ApplicationUser)
+                .Include(a => a.SignUps).ThenInclude(a => a.Guest)
                 .Include(t => t.ActivityType)
                 .SingleOrDefaultAsync(m => m.ActivityID == id);
             
@@ -55,45 +67,26 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
+            ActivityViewModel activityviewmodel = new ActivityViewModel {
+                    ActivityID = activity.ActivityID,
+                    Name = activity.Name,
+                    Description = activity.Description,
+                    StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    NeedsSignUp = activity.NeedsSignUp,
+                    Price = activity.Price,
+                    ActivityType = activity.ActivityType,
+                    SignUps = activity.SignUps
+            };
+
             if (_signInManager.IsSignedIn(User))
             {
-                var signedup = false;
-                foreach (var item in activity.SignUps)
-                {
-                    if (item.ApplicationUserID == GetCurrentUserAsync().Result.Id)
-                    {
-                        signedup = true;
-                        break;
-                    }
-                }
-
-                var applicationUserResult = false;
-                foreach(var item in activity.SignUps)
-                {
-                    if (item.ApplicationUser != null)
-                    {
-                        applicationUserResult = true;
-                        break;
-                    }
-                }
-
-                var guestResult = false;
-                foreach(var item in activity.SignUps)
-                {
-                    if (item.Guest != null)
-                    {
-                        guestResult = true;
-                        break;
-                    }
-                }
-
-                ViewData["SignedUp"] = signedup;
-
-                ViewData["applicationUserResult"] = applicationUserResult;
-                ViewData["guestResult"] = guestResult;
+                ViewData["SignedUp"] = activityviewmodel.SignUps.Where(x => x.ApplicationUserID == GetCurrentUserAsync().Id).Any();
+                ViewData["applicationUserResult"] = activityviewmodel.SignUps.Where(x => x.ApplicationUserID != null).Any();
+                ViewData["guestResult"] = activityviewmodel.SignUps.Where(x => x.Guest != null).Any();
             }
 
-            return View(activity);
+            return View(activityviewmodel);
         }
 
         // GET: Activities/Create
@@ -101,8 +94,7 @@ namespace indicium_webapp.Controllers
         public IActionResult Create()
         {
             var types = _context.ActivityType.ToListAsync().Result;
-            SelectList typeList = new SelectList(types, "ActivityTypeID", "Name");
-            ViewBag.ActivityTypeID = typeList;
+            ViewBag.ActivityTypeID = new SelectList(types, "ActivityTypeID", "Name");
 
             return View();
         }
@@ -113,16 +105,28 @@ namespace indicium_webapp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Bestuur, Secretaris")]
-        public async Task<IActionResult> Create([Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price,ActivityTypeID")] Activity activity)
+        public async Task<IActionResult> Create(ActivityViewModel activityviewmodel)
         {
             if (ModelState.IsValid)
             {
+                
+                var activity = new Activity
+                {
+                    Name = activityviewmodel.Name,
+                    Description = activityviewmodel.Description,
+                    StartDateTime = DateTime.ParseExact(activityviewmodel.StartDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    EndDateTime = DateTime.ParseExact(activityviewmodel.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    NeedsSignUp = activityviewmodel.NeedsSignUp,
+                    Price = activityviewmodel.Price,
+                    ActivityTypeID = activityviewmodel.ActivityTypeID
+                };
+                
                 _context.Add(activity);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index");
             }
-            return View(activity);
+            return View(activityviewmodel);
         }
 
         // GET: Activities/Edit/5
@@ -141,11 +145,22 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var types = _context.ActivityType.ToListAsync().Result;
-            SelectList typeList = new SelectList(types, "ActivityTypeID", "Name", activity.ActivityTypeID);
-            ViewBag.ActivityTypeID = typeList;
+            ActivityViewModel activityviewmodel = new ActivityViewModel {
+                    ActivityID = activity.ActivityID,
+                    Name = activity.Name,
+                    Description = activity.Description,
+                    StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    NeedsSignUp = activity.NeedsSignUp,
+                    Price = activity.Price,
+                    ActivityType = activity.ActivityType,
+                    SignUps = activity.SignUps
+            };
 
-            return View(activity);
+            var types = _context.ActivityType.ToListAsync().Result;
+            ViewBag.ActivityTypeID = new SelectList(types, "ActivityTypeID", "Name", activityviewmodel.ActivityTypeID);
+
+            return View(activityviewmodel);
         }
 
         // POST: Activities/Edit/5
@@ -154,9 +169,9 @@ namespace indicium_webapp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Bestuur, Secretaris")]
-        public async Task<IActionResult> Edit(int id, [Bind("ActivityID,Name,Description,StartDateTime,EndDateTime,NeedsSignUp,Price,ActivityTypeID")] Activity activity)
+        public async Task<IActionResult> Edit(int id, ActivityViewModel activityviewmodel)
         {
-            if (id != activity.ActivityID)
+            if (id != activityviewmodel.ActivityID)
             {
                 return NotFound();
             }
@@ -165,12 +180,23 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
+                    var activity = new Activity {
+                        ActivityID = activityviewmodel.ActivityID,
+                        Name = activityviewmodel.Name,
+                        Description = activityviewmodel.Description,
+                        StartDateTime = DateTime.ParseExact(activityviewmodel.StartDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                        EndDateTime = DateTime.ParseExact(activityviewmodel.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                        NeedsSignUp = activityviewmodel.NeedsSignUp,
+                        Price = activityviewmodel.Price,
+                        ActivityTypeID = activityviewmodel.ActivityTypeID
+                    };
+
                     _context.Update(activity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActivityExists(activity.ActivityID))
+                    if (!_context.Activity.Any(e => e.ActivityID == activityviewmodel.ActivityID))
                     {
                         return NotFound();
                     }
@@ -181,7 +207,7 @@ namespace indicium_webapp.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(activity);
+            return View(activityviewmodel);
         }
 
         // GET: Activities/Delete/5
@@ -193,14 +219,28 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity.Include(t => t.ActivityType).SingleOrDefaultAsync(m => m.ActivityID == id);
+            var activity = await _context.Activity
+                .Include(t => t.ActivityType)
+                .SingleOrDefaultAsync(m => m.ActivityID == id);
 
             if (activity == null)
             {
                 return NotFound();
             }
 
-            return View(activity);
+            ActivityViewModel activityviewmodel = new ActivityViewModel {
+                    ActivityID = activity.ActivityID,
+                    Name = activity.Name,
+                    Description = activity.Description,
+                    StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                    NeedsSignUp = activity.NeedsSignUp,
+                    Price = activity.Price,
+                    ActivityType = activity.ActivityType,
+                    SignUps = activity.SignUps
+            };
+
+            return View(activityviewmodel);
         }
 
         // POST: Activities/Delete/5
@@ -223,14 +263,9 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        private bool ActivityExists(int id)
+        private ApplicationUser GetCurrentUserAsync()
         {
-            return _context.Activity.Any(e => e.ActivityID == id);
-        }
-
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return await _userManager.GetUserAsync(User);
+            return _userManager.GetUserAsync(User).Result;
         }
     }
 }

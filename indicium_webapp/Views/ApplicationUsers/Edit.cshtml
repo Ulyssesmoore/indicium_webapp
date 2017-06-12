@@ -1,10 +1,7 @@
-@model indicium_webapp.Models.ApplicationUser
-@using indicium_webapp.Models
+@model ApplicationUserViewModel
 
 @{
     ViewData["Title"] = "Persoonsgegevens bewerken";
-    var allroles = ViewData["allroles"];
-    var currentrole = ViewData["currentrole"];
 }
 
 <h2>Persoonsgegevens bewerken</h2>
@@ -26,6 +23,13 @@
             <div class="col-md-10">
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" disabled />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -105,55 +109,31 @@
                 <span asp-validation-for="StudyType" class="text-danger"></span>
             </div>
         </div>
-        <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="PhoneNumber" class="col-md-2 control-label">Telefoonnummer</label>
+            <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label">Rol</label>
+            <label asp-for="Roles" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select name="userrole" class="form-control">
-                    @foreach (var role in allroles as List<ApplicationRole>)
-                    {
-                        @if (role.Name.Equals(currentrole))
-                        {
-                            <option selected>@role</option>
-                        }
-                        else
-                        {
-                            <option>@role</option>
-                        }
-
-                    }
-                </select>
+                @Html.EditorFor(x => x.Roles)
             </div>
         </div>
+
         @if (this.User.IsInRole("Secretaris"))
         {
             <div class="form-group">
-                <label class="col-md-2 control-label">Status</label>
+                <label asp-for="Status" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <select name="Status" class="form-control">
-                        @foreach (var status in Enum.GetValues(typeof(Status)))
-                        {
-                            if (status.Equals(Model.Status))
-                            {
-                                <option selected>@status</option>
-                            }
-                            else
-                            {
-                                <option>@status</option>
-                            }
-
-                        }
-                    </select>
+                    <select asp-for="Status" asp-items="Html.GetEnumSelectList<Status>()" class="form-control"></select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
             </div>
         }
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opslaan" class="btn btn-default" />

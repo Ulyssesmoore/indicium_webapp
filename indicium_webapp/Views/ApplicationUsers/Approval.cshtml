@@ -1,4 +1,4 @@
-﻿@model IEnumerable<indicium_webapp.Models.ApplicationUser>
+﻿@model IEnumerable<ApplicationUserViewModel>
 
 @{
     ViewData["Title"] = "Openstaande verzoeken";
@@ -44,41 +44,38 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if (item.Status == Status.Nieuw)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sex)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Birthday)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddressStreet)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddressNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddressPostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AddressCity)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StudentNumber)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success">Controleren</a>
-                    </td>
-                </tr>
-            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sex)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressStreet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressPostalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressCity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentNumber)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Controleren</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
