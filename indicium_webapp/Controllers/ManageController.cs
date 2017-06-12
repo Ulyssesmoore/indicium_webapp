@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
 using indicium_webapp.Models.ManageViewModels;
 using indicium_webapp.Services;
+using indicium_webapp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace indicium_webapp.Controllers
 {
@@ -18,6 +20,7 @@ namespace indicium_webapp.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
         private readonly string _externalCookieScheme;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
@@ -26,6 +29,7 @@ namespace indicium_webapp.Controllers
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
+          ApplicationDbContext context,
           IOptions<IdentityCookieOptions> identityCookieOptions,
           IEmailSender emailSender,
           ISmsSender smsSender,
@@ -33,6 +37,7 @@ namespace indicium_webapp.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
             _emailSender = emailSender;
             _smsSender = smsSender;
@@ -51,6 +56,7 @@ namespace indicium_webapp.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Your email has been successfully updated"
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -60,11 +66,19 @@ namespace indicium_webapp.Controllers
             }
             var model = new IndexViewModel
             {
-                HasPassword = await _userManager.HasPasswordAsync(user),
-                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                Name = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                AddressCity = user.AddressCity,
+                AddressPostalCode = user.AddressPostalCode,
+                AddressNumber = user.AddressNumber,
+                AddressStreet = user.AddressStreet,
+                PhoneNumber = user.PhoneNumber,
+                StartdateStudy = user.StartdateStudy,
+                StudyType = user.StudyType,
+                Sex = user.Sex,
+                Birthday = user.Birthday,
+                Iban = user.Iban//,
+                //BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
             };
             return View(model);
         }
@@ -207,7 +221,7 @@ namespace indicium_webapp.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
-
+        
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
@@ -217,10 +231,28 @@ namespace indicium_webapp.Controllers
         }
 
         //
-        // POST: /Manage/ChangePassword
+        // GET: /Manage/ChangeEmail
+        [HttpGet]
+        public async Task<IActionResult> ChangeEmail()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new ChangeEmailViewModel
+            {
+                Email = user.Email
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangeEmail
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -228,16 +260,37 @@ namespace indicium_webapp.Controllers
             }
             var user = await GetCurrentUserAsync();
             if (user != null)
-            {
-                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                if (result.Succeeded)
+            {               
+                try
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User changed their password successfully.");
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
+                    // Generates a token, updates all currently logged in values to the new email. 
+                    var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.Email);
+                    await _userManager.ChangeEmailAsync(user, model.Email, token);
+                    user.UserName = model.Email;
+                    await _userManager.UpdateNormalizedEmailAsync(user);
+                    await _userManager.UpdateNormalizedUserNameAsync(user);
+
+                    // Saves changes
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+
+                    // Relogs user to refresh the _LoginPatial.cshtml
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.SignInAsync(user, false);
+
+                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangeEmailSuccess });
                 }
-                AddErrors(result);
-                return View(model);
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.ApplicationUser.Any(e => e.Id == user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
@@ -357,10 +410,11 @@ namespace indicium_webapp.Controllers
             AddLoginSuccess,
             ChangePasswordSuccess,
             SetTwoFactorSuccess,
+            ChangeEmailSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error            
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()

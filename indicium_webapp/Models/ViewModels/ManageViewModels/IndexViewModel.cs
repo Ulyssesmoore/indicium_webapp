@@ -8,14 +8,30 @@ namespace indicium_webapp.Models.ManageViewModels
 {
     public class IndexViewModel
     {
-        public bool HasPassword { get; set; }
+        public string Email { get; set; }
 
-        public IList<UserLoginInfo> Logins { get; set; }
+        public string AddressCity { get; set; }
+
+        public string AddressPostalCode { get; set; }
+
+        public string AddressNumber { get; set; }
+
+        public string AddressStreet { get; set; }
 
         public string PhoneNumber { get; set; }
 
-        public bool TwoFactor { get; set; }
+        public DateTime StartdateStudy { get; set; }
 
-        public bool BrowserRemembered { get; set; }
+        public Sex Sex { get; set; }
+
+        public DateTime Birthday { get; set; }
+
+        public string Iban { get; set; }
+
+        public StudyType StudyType { get; set; }
+
+        //public bool BrowserRemembered { get; set; }
+
+        public string Name { get; set; }
     }
 }
