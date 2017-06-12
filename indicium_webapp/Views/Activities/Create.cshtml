@@ -1,4 +1,4 @@
-@model indicium_webapp.Models.Activity
+@model ActivityViewModel
 
 @{
     ViewData["Title"] = "Activiteit toevoegen";
@@ -29,14 +29,14 @@
         <div class="form-group">
             <label asp-for="StartDateTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StartDateTime" class="form-control datetimepicker" />
+                <input asp-for="StartDateTime" class="form-control datetimepicker" placeholder="dd-mm-yyyy HH:mm" />
                 <span asp-validation-for="StartDateTime" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="EndDateTime" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="EndDateTime" class="form-control datetimepicker" />
+                <input asp-for="EndDateTime" class="form-control datetimepicker" placeholder="dd-mm-yyyy HH:mm" />
                 <span asp-validation-for="EndDateTime" class="text-danger"></span>
             </div>
         </div>       
@@ -50,7 +50,7 @@
         <div class="form-group">
             <label asp-for="ActivityTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownList("ActivityTypeID", (IEnumerable<SelectListItem>)ViewBag.ActivityTypeID, new { @class = "form-control" })
+                <select asp-for="ActivityTypeID" asp-items="(IEnumerable<SelectListItem>)ViewBag.ActivityTypeID" class="form-control"></select>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
         </div>

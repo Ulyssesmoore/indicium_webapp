@@ -1,4 +1,4 @@
-@model indicium_webapp.Models.SignUp
+@model SignUpViewModel
 
 @{
     ViewData["Title"] = "Inschrijving details";
@@ -12,40 +12,40 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.Name)
+            @Html.DisplayNameFor(model => model.Activity.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.Name)
+            @Html.DisplayFor(model => model.Activity.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.Description)
+            @Html.DisplayNameFor(model => model.Activity.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.Description)
+            @Html.DisplayFor(model => model.Activity.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.StartDateTime)
+            @Html.DisplayNameFor(model => model.Activity.StartDateTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.StartDateTime)
+            @Html.DisplayFor(model => model.Activity.StartDateTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.EndDateTime)
+            @Html.DisplayNameFor(model => model.Activity.EndDateTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.EndDateTime)
+            @Html.DisplayFor(model => model.Activity.EndDateTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.NeedsSignUp)
+            @Html.DisplayNameFor(model => model.Activity.NeedsSignUp)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.NeedsSignUp)
+            @Html.DisplayFor(model => model.Activity.NeedsSignUp)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Activities.Price)
+            @Html.DisplayNameFor(model => model.Activity.Price)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Activities.Price)
+            @Html.DisplayFor(model => model.Activity.Price)
         </dd>
         <br/>
         <dt>

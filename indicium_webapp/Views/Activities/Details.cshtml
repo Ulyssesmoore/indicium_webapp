@@ -3,7 +3,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@model indicium_webapp.Models.Activity
+@model ActivityViewModel
 
 @{
     ViewData["Title"] = "Activiteit details";
@@ -34,7 +34,11 @@
         {
             <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
         }
-        <a asp-action="Calendar" class="btn btn-default">Terug naar overzicht</a>
+        <a asp-action="Calendar" class="btn btn-default">Terug naar kalender</a>
+        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        {
+            <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
+        }
     </div>
 
     <hr />

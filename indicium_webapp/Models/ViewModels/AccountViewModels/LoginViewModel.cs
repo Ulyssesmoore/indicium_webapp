@@ -10,10 +10,12 @@ namespace indicium_webapp.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
+        [Display(Name = "E-mailadres")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
 
         [Display(Name = "Onthouden?")]

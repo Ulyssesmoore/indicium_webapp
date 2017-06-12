@@ -1,4 +1,4 @@
-@model indicium_webapp.Models.Activity
+@model ActivityViewModel
 
 @{
     ViewData["Title"] = "Activiteit bewerken";
@@ -51,7 +51,7 @@
         <div class="form-group">
             <label asp-for="ActivityTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownList("ActivityTypeID", (IEnumerable<SelectListItem>)ViewBag.ActivityTypeID, new { @class = "form-control" })
+                <select asp-for="ActivityTypeID" asp-items="(IEnumerable<SelectListItem>)ViewBag.ActivityTypeID" class="form-control"></select>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
         </div>
