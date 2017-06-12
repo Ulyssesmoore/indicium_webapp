@@ -44,7 +44,7 @@ namespace indicium_webapp.Models.AccountViewModels
 
         [Required]
         [StringLength(100, ErrorMessage = "Geboortedatum is ongeldig.")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Geboortedatum")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public string Birthday { get; set; }
@@ -83,7 +83,7 @@ namespace indicium_webapp.Models.AccountViewModels
         public string StudentNumber { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Begindatum studie")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
         public string StartdateStudy { get; set; }
