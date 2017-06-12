@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace indicium_webapp.Models
 {
+    [Table("SignUps")]
     public class SignUp
     {
         public int SignUpID { get; set; }
