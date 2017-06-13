@@ -60,24 +60,7 @@ namespace indicium_webapp.Controllers
 
             var applicationusers = await users.AsNoTracking().ToListAsync();
 
-            IEnumerable<ApplicationUserViewModel> applicationuserviewmodel = applicationusers.Select(applicationuser => new ApplicationUserViewModel
-            {
-                Id = applicationuser.Id,
-                FirstName = applicationuser.FirstName,
-                LastName = applicationuser.LastName,
-                Sex = applicationuser.Sex.ToString(),
-                Birthday = applicationuser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                AddressStreet = applicationuser.AddressStreet,
-                AddressNumber = applicationuser.AddressNumber,
-                AddressPostalCode = applicationuser.AddressPostalCode,
-                AddressCity = applicationuser.AddressCity,
-                AddressCountry = applicationuser.AddressCountry,
-                Iban = applicationuser.Iban,
-                StudentNumber = applicationuser.StudentNumber.ToString(),
-                StartdateStudy = applicationuser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                StudyType = applicationuser.StudyType.ToString(),
-                PhoneNumber = applicationuser.PhoneNumber
-            });
+            IEnumerable<ApplicationUserViewModel> applicationuserviewmodel = applicationusers.Select(CreateApplicationUserViewModel);
 
             return View(applicationuserviewmodel);
         }
@@ -90,30 +73,13 @@ namespace indicium_webapp.Controllers
 
             users = users.OrderBy(u => u.RegistrationDate);
 
-            var applicationusers = await users.AsNoTracking()
+            var applicationUsers = await users.AsNoTracking()
                 .Where(x => x.Status == Status.Nieuw)
                 .ToListAsync();
 
-            IEnumerable<ApplicationUserViewModel> applicationuserviewmodel = applicationusers.Select(applicationsuser => new ApplicationUserViewModel
-            {
-                Id = applicationsuser.Id,
-                FirstName = applicationsuser.FirstName,
-                LastName = applicationsuser.LastName,
-                Sex = applicationsuser.Sex.ToString(),
-                Birthday = applicationsuser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                AddressStreet = applicationsuser.AddressStreet,
-                AddressNumber = applicationsuser.AddressNumber,
-                AddressPostalCode = applicationsuser.AddressPostalCode,
-                AddressCity = applicationsuser.AddressCity,
-                AddressCountry = applicationsuser.AddressCountry,
-                Iban = applicationsuser.Iban,
-                StudentNumber = applicationsuser.StudentNumber.ToString(),
-                StartdateStudy = applicationsuser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                StudyType = applicationsuser.StudyType.ToString(),
-                PhoneNumber = applicationsuser.PhoneNumber
-            });
+            IEnumerable<ApplicationUserViewModel> applicationUserViewmodel = applicationUsers.Select(CreateApplicationUserViewModel);
 
-            return View(applicationuserviewmodel);
+            return View(applicationUserViewmodel);
         }
 
         // GET: ApplicationUsers/Details/5
@@ -124,34 +90,17 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationuser = await _context.ApplicationUser
+            var applicationUser = await _context.ApplicationUser
                 .SingleOrDefaultAsync(m => m.Id == id);
             
-            if (applicationuser == null)
+            if (applicationUser == null)
             {
                 return NotFound();
             }
 
-            ApplicationUserViewModel applicationuserviewmodel = new ApplicationUserViewModel {
-                Id = applicationuser.Id,
-                FirstName = applicationuser.FirstName,
-                LastName = applicationuser.LastName,
-                Sex = applicationuser.Sex.ToString(),
-                Birthday = applicationuser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                AddressStreet = applicationuser.AddressStreet,
-                AddressNumber = applicationuser.AddressNumber,
-                AddressPostalCode = applicationuser.AddressPostalCode,
-                AddressCity = applicationuser.AddressCity,
-                AddressCountry = applicationuser.AddressCountry,
-                Iban = applicationuser.Iban,
-                StudentNumber = applicationuser.StudentNumber.ToString(),
-                StartdateStudy = applicationuser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                StudyType = applicationuser.StudyType.ToString(),
-                PhoneNumber = applicationuser.PhoneNumber,
-                Status = applicationuser.Status
-            };
+            ApplicationUserViewModel applicationUserViewmodel = CreateApplicationUserViewModel(applicationUser);
 
-            return View(applicationuserviewmodel);
+            return View(applicationUserViewmodel);
         }
 
         // GET: ApplicationUsers/Edit/5
@@ -162,32 +111,14 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationuser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
+            var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (applicationuser == null)
+            if (applicationUser == null)
             {
                 return NotFound();
             }
 
-            ApplicationUserViewModel applicationuserviewmodel = new ApplicationUserViewModel {
-                Id = applicationuser.Id,
-                FirstName = applicationuser.FirstName,
-                LastName = applicationuser.LastName,
-                Sex = applicationuser.Sex.ToString(),
-                Birthday = applicationuser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                AddressStreet = applicationuser.AddressStreet,
-                AddressNumber = applicationuser.AddressNumber,
-                AddressPostalCode = applicationuser.AddressPostalCode,
-                AddressCity = applicationuser.AddressCity,
-                AddressCountry = applicationuser.AddressCountry,
-                Iban = applicationuser.Iban,
-                StudentNumber = applicationuser.StudentNumber.ToString(),
-                StartdateStudy = applicationuser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                StudyType = applicationuser.StudyType.ToString(),
-                PhoneNumber = applicationuser.PhoneNumber,
-                Email = applicationuser.Email,
-                Status = applicationuser.Status
-            };
+            ApplicationUserViewModel applicationUserViewmodel = CreateApplicationUserViewModel(applicationUser);
 
             var checkBoxListItems = new List<CheckBoxListItem>();
             foreach (var role in _context.ApplicationRole.ToListAsync().Result)
@@ -196,12 +127,12 @@ namespace indicium_webapp.Controllers
                 {
                     ID = role.Id,
                     Display = role.Name,
-                    IsChecked = _userManager.IsInRoleAsync(applicationuser, role.Name).Result
+                    IsChecked = _userManager.IsInRoleAsync(applicationUser, role.Name).Result
                 });
             }
-            applicationuserviewmodel.Roles = checkBoxListItems;
+            applicationUserViewmodel.Roles = checkBoxListItems;
 
-            return View(applicationuserviewmodel);
+            return View(applicationUserViewmodel);
         }
 
         // POST: ApplicationUsers/Edit/5
@@ -365,6 +296,30 @@ namespace indicium_webapp.Controllers
         private ApplicationUser GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(User).Result;
+        }
+
+        private ApplicationUserViewModel CreateApplicationUserViewModel(ApplicationUser applicationUser)
+        {
+            return new ApplicationUserViewModel
+            {
+                Id = applicationUser.Id,
+                FirstName = applicationUser.FirstName,
+                LastName = applicationUser.LastName,
+                Sex = applicationUser.Sex.ToString(),
+                Birthday = applicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                AddressStreet = applicationUser.AddressStreet,
+                AddressNumber = applicationUser.AddressNumber,
+                AddressPostalCode = applicationUser.AddressPostalCode,
+                AddressCity = applicationUser.AddressCity,
+                AddressCountry = applicationUser.AddressCountry,
+                Iban = applicationUser.Iban,
+                StudentNumber = applicationUser.StudentNumber.ToString(),
+                StartdateStudy = applicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                StudyType = applicationUser.StudyType.ToString(),
+                PhoneNumber = applicationUser.PhoneNumber,
+                Email = applicationUser.Email,
+                Status = applicationUser.Status
+            };
         }
     }
 }
