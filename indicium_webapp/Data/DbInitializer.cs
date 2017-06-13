@@ -12,7 +12,7 @@ namespace indicium_webapp.Data
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(ApplicationDbContext context)
+        public static void Initialize(ApplicationDbContext context)
         {
             var roleStore = new RoleStore<ApplicationRole>(context);
             var roleManager = new RoleManager<ApplicationRole>(roleStore, null, null, null, null, null);

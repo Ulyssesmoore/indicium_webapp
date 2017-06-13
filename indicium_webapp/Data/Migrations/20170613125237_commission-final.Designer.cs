@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170613125237_commission-final")]
+    partial class commissionfinal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -80,6 +81,8 @@ namespace indicium_webapp.Data.Migrations
 
                     b.Property<DateTime>("Birthday");
 
+                    b.Property<int?>("CommissionID");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -130,6 +133,8 @@ namespace indicium_webapp.Data.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommissionID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -346,6 +351,13 @@ namespace indicium_webapp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("indicium_webapp.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("indicium_webapp.Models.Commission")
+                        .WithMany("Members")
+                        .HasForeignKey("CommissionID");
+                });
+
             modelBuilder.Entity("indicium_webapp.Models.CommissionMember", b =>
                 {
                     b.HasOne("indicium_webapp.Models.ApplicationUser", "ApplicationUser")
@@ -353,7 +365,7 @@ namespace indicium_webapp.Data.Migrations
                         .HasForeignKey("ApplicationUserID");
 
                     b.HasOne("indicium_webapp.Models.Commission", "Commission")
-                        .WithMany("Members")
+                        .WithMany()
                         .HasForeignKey("CommissionID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

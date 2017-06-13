@@ -29,5 +29,7 @@ namespace indicium_webapp.Data
         public DbSet<indicium_webapp.Models.Activity> Activity { get; set; }
         public DbSet<indicium_webapp.Models.ActivityType> ActivityType { get; set; }
         public DbSet<indicium_webapp.Models.SignUp> SignUp { get; set; }
+        public DbSet<indicium_webapp.Models.Commission> Commission { get; set; }
+        public DbSet<indicium_webapp.Models.CommissionMember> CommissionMember { get; set; }
     }
 }

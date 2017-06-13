@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170613122618_commission-member")]
+    partial class commissionmember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -139,40 +140,6 @@ namespace indicium_webapp.Data.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("indicium_webapp.Models.Commission", b =>
-                {
-                    b.Property<int>("CommissionID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("CommissionID");
-
-                    b.ToTable("Commissions");
-                });
-
-            modelBuilder.Entity("indicium_webapp.Models.CommissionMember", b =>
-                {
-                    b.Property<int>("CommissionMemberID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ApplicationUserID");
-
-                    b.Property<int>("CommissionID");
-
-                    b.Property<int>("Status");
-
-                    b.HasKey("CommissionMemberID");
-
-                    b.HasIndex("ApplicationUserID");
-
-                    b.HasIndex("CommissionID");
-
-                    b.ToTable("CommissionMembers");
                 });
 
             modelBuilder.Entity("indicium_webapp.Models.Guest", b =>
@@ -343,18 +310,6 @@ namespace indicium_webapp.Data.Migrations
                     b.HasOne("indicium_webapp.Models.ActivityType", "ActivityType")
                         .WithMany()
                         .HasForeignKey("ActivityTypeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("indicium_webapp.Models.CommissionMember", b =>
-                {
-                    b.HasOne("indicium_webapp.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Commissions")
-                        .HasForeignKey("ApplicationUserID");
-
-                    b.HasOne("indicium_webapp.Models.Commission", "Commission")
-                        .WithMany("Members")
-                        .HasForeignKey("CommissionID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
