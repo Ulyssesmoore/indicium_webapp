@@ -8,7 +8,7 @@ namespace indicium_webapp.Models
 {
     public enum CommisionMemberStatus
     {
-        Interesee,
+        Interesse,
         Lid
     }
 

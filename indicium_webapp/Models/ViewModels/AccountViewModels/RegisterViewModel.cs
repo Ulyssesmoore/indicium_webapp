@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using indicium_webapp.Models.InterfaceItemModels;
 
 namespace indicium_webapp.Models.ViewModels.AccountViewModels
 {
@@ -99,5 +100,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Commissie Interesses")]
+        public IEnumerable<CheckBoxListItem> Commissions { get; set; }
     }
 }

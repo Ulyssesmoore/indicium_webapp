@@ -119,8 +119,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="
-               " class="col-md-2 control-label"></label>
+        <label asp-for="StudyType" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <select asp-for="StudyType" asp-items="Html.GetEnumSelectList<StudyType>()" class="form-control"></select>
             <span asp-validation-for="StudyType" class="text-danger"></span>
@@ -131,6 +130,14 @@
         <div class="col-md-10">
             <input asp-for="PhoneNumber" class="form-control" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <p class="col-md-offset-2">Heb je interesse om mee te helpen in een of meerdere van onderstaande commissies:</p>
+    <div class="form-group">       
+        <label asp-for="Commissions" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @Html.EditorFor(x => x.Commissions)
+            <span asp-validation-for="Commissions" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
