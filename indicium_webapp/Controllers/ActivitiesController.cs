@@ -10,6 +10,7 @@ using indicium_webapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
+using indicium_webapp.Models.ViewModels;
 
 namespace indicium_webapp.Controllers
 {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
-using indicium_webapp.Models.ManageViewModels;
+using indicium_webapp.Models.ViewModels.ManageViewModels;
 using indicium_webapp.Services;
 using indicium_webapp.Data;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +60,7 @@ namespace indicium_webapp.Controllers
                 : message == ManageMessageId.ChangePersonalInformationSuccess ? "Je persoonlijke gegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
+                : message == ManageMessageId.ChangePhoneNumberSuccess ? "Je telefoonnummer is met succes gewijzigd."
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -440,6 +441,46 @@ namespace indicium_webapp.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        //
+        // GET: /Manage/ChangePhoneNumber
+        [HttpGet]
+        public async Task<IActionResult> ChangePhoneNumber()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new ChangePhoneNumberViewModel
+            {
+                PhoneNumber = user.PhoneNumber
+            };
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/ChangePhoneNumber
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePhoneNumber(ChangePhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                // Overwrites values in currently logged in user to match the new data
+                user.PhoneNumber = model.PhoneNumber;
+                // Saves changes
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePhoneNumberSuccess });
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
 
         //
         // GET: /Manage/SetPassword
@@ -560,6 +601,7 @@ namespace indicium_webapp.Controllers
             ChangeEducationalInformationSuccess,
             ChangePersonalInformationSuccess,
             ChangeAddressInformationSuccess,
+            ChangePhoneNumberSuccess,
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,

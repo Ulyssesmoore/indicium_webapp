@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using indicium_webapp.Models.InterfaceItemModels;
 
-namespace indicium_webapp.Models.AccountViewModels
+namespace indicium_webapp.Models.ViewModels.AccountViewModels
 {
     public class ApplicationUserViewModel
     {

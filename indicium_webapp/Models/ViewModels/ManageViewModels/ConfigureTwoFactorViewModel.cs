@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace indicium_webapp.Models.ManageViewModels
+namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class ConfigureTwoFactorViewModel
     {

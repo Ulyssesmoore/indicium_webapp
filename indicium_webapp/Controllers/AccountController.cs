@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
-using indicium_webapp.Models.AccountViewModels;
+using indicium_webapp.Models.ViewModels.AccountViewModels;
 using indicium_webapp.Services;
 using indicium_webapp.Data;
 

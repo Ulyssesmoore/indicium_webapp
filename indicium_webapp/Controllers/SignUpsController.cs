@@ -9,8 +9,11 @@ using indicium_webapp.Data;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using indicium_webapp.Models.AccountViewModels;
+using indicium_webapp.Models.ViewModels.AccountViewModels;
+using indicium_webapp.ViewModels;
+using indicium_webapp.Models.ViewModels;
 using System.Globalization;
+
 
 namespace indicium_webapp.Controllers
 {

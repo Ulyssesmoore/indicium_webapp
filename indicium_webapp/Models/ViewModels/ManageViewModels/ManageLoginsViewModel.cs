@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace indicium_webapp.Models.ManageViewModels
+namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class ManageLoginsViewModel
     {
