@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
+using indicium_webapp.Models.ViewModels;
 
 namespace indicium_webapp.Controllers
 {

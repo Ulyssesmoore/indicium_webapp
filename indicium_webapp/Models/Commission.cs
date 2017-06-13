@@ -12,22 +12,15 @@ namespace indicium_webapp.Models
     {
         public Commission()
         {
-            Members = new HashSet<ApplicationUser>();
+            Members = new HashSet<CommissionMember>();
         }
 
         public int CommissionID { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        [Display(Name = "Naam")]
         public string Name { get; set; }
 
-        [Required]
-        [StringLength(200)]
-        [Display(Name = "Beschrijving")]
         public string Description { get; set; }
 
-        [Display(Name = "Leden")]
-        public virtual ICollection<ApplicationUser> Members { get; set; }
+        public virtual ICollection<CommissionMember> Members { get; set; }
     }
 }

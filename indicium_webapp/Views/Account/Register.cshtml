@@ -132,6 +132,24 @@
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
     </div>
+    
+    <p class="col-md-offset-2">Heb je interesse om mee te helpen in een of meerdere commissies?</p>
+    <div class="form-group">
+        <label asp-for="Commissions" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input class="form-control" type="checkbox" data-toggle="collapse" data-target="#commissionCollapse"/>
+        </div>
+    </div>
+
+    <div id="commissionCollapse" aria-expanded="false"class="collapse">
+        <div class="form-group">                 
+            <div class="col-md-10 col-md-offset-2">
+                @Html.EditorFor(x => x.Commissions)
+                <span asp-validation-for="Commissions" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <button type="submit" class="btn btn-default">Registreren</button>

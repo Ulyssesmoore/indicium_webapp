@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
-using indicium_webapp.Models.AccountViewModels;
 using System.Globalization;
 using indicium_webapp.Models.InterfaceItemModels;
+using indicium_webapp.Models.ViewModels.AccountViewModels;
 
 namespace indicium_webapp.Controllers
 {

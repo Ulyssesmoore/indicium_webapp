@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models.AccountViewModels
+namespace indicium_webapp.Models.ViewModels.AccountViewModels
 {
     public class LoginViewModel
     {

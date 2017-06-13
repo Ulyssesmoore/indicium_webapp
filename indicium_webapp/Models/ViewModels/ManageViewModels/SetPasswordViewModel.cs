@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models.ManageViewModels
+namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class SetPasswordViewModel
     {
