@@ -8,12 +8,12 @@ namespace indicium_webapp.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mailadres")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Password)]
         [Display(Name = "Wachtwoord")]
         public string Password { get; set; }

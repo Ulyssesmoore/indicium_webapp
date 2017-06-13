@@ -8,12 +8,12 @@ namespace indicium_webapp.Models.ManageViewModels
 {
     public class VerifyPhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         public string Code { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Phone]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
     }
 }

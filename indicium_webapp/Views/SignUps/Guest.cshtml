@@ -1,0 +1,104 @@
+@model GuestViewModel
+
+@{
+    ViewData["Title"] = "Inschrijven";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var ActivityName = @Model.Activity.Name;
+}
+
+<h2>Inschrijven voor @ActivityName</h2>
+
+<form asp-action="guest" asp-route-id="@Model.Activity.ActivityID">
+    <div class="form-horizontal">
+        <h4>Activiteit</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>      
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Name)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Name)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Description)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Description)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.StartDateTime)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.StartDateTime)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.EndDateTime)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.EndDateTime)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Price)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Price)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.ActivityType)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.ActivityType.Name)</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.NeedsSignUp)</label>
+            <div class="col-md-10">
+                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.NeedsSignUp)</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Inschrijving bevestigen" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-controller="activities" asp-action="calendar">Terug naar overzicht</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.datetimepicker').datetimepicker({
+                locale: 'nl'
+            });
+        });
+    </script>
+}

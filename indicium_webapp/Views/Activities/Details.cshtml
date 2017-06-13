@@ -16,17 +16,24 @@
     <h4>Activiteit</h4>
 
     <div class="form-actions no-color">
-        @if (SignInManager.IsSignedIn(User) && Model.NeedsSignUp)
+        @if (Model.NeedsSignUp)
         {
-            @if (@ViewBag.SignedUp)
+            @if (SignInManager.IsSignedIn(User))
             {
-                <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+                @if (@ViewBag.SignedUp)
+                {
+                    <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+                }
+                else
+                {
+                    <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                        <button type="submit" class="btn btn-primary">Inschrijven</button>
+                    </form>
+                }
             }
             else
             {
-                <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
-                    <button type="submit" class="btn btn-primary">Inschrijven</button>
-                </form>
+                <a class="btn btn-primary" asp-controller="signups" asp-action="guest" asp-route-id="@Model.ActivityID">Inschrijven</a>
             }
         }
 
@@ -115,25 +122,28 @@
                     <tbody>
                         @foreach (var item in Model.SignUps)
                         {
-                            <tr>
-                                <td>
-                                    <a asp-controller="signups" asp-action="details" asp-route-id="@item.SignUpID">
-                                        @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
-                                    </a>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ApplicationUser.Sex)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ApplicationUser.StudyType)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ApplicationUser.Status)
-                                </td>
-                            </tr>
+                            @if (item.ApplicationUser != null)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="signups" asp-action="details" asp-route-id="@item.SignUpID">
+                                            @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Sex)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ApplicationUser.StudyType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Status)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -153,14 +163,17 @@
                     <tbody>
                         @foreach (var item in Model.SignUps)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Guest.FirstName) @Html.DisplayFor(modelItem => item.Guest.LastName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Guest.Email)
-                                </td>
-                            </tr>
+                            @if (item.Guest != null)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Guest.FirstName) @Html.DisplayFor(modelItem => item.Guest.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Guest.Email)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>

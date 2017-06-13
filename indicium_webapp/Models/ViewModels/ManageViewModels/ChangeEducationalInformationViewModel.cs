@@ -8,12 +8,12 @@ namespace indicium_webapp.Models.ManageViewModels
 {
     public class ChangeEducationalInformationViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         [Display(Name = "Studietype")]
         public StudyType StudyType { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Begindatum studie")]

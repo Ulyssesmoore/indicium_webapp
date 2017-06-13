@@ -8,7 +8,7 @@ namespace indicium_webapp.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [EmailAddress]
         public string Email { get; set; }
     }

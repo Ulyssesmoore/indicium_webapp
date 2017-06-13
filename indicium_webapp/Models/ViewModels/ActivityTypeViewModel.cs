@@ -10,8 +10,8 @@ namespace indicium_webapp.Models
     {
         public int ActivityTypeID { get; set; }
         
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [StringLength(50, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [Display(Name = "Naam")]
         public string Name { get; set; }
 

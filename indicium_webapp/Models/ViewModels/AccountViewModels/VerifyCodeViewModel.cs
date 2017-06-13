@@ -8,18 +8,18 @@ namespace indicium_webapp.Models.AccountViewModels
 {
     public class VerifyCodeViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         public string Provider { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         public string Code { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Remember this browser?")]
+        [Display(Name = "Onthoud deze browser?")]
         public bool RememberBrowser { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Onthouden?")]
         public bool RememberMe { get; set; }
     }
 }

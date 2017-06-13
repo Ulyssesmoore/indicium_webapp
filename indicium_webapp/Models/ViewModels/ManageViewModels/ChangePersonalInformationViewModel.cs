@@ -8,12 +8,12 @@ namespace indicium_webapp.Models.ManageViewModels
 {
     public class ChangePersonalInformationViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         [Display(Name = "Geslacht")]
         public Sex Sex { get; set; }
         
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Geboortedag")]

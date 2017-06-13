@@ -19,11 +19,13 @@ namespace indicium_webapp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public SignUpsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public SignUpsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: SignUps
@@ -92,7 +94,6 @@ namespace indicium_webapp.Controllers
                     StudyType = signup.ApplicationUser.StudyType.ToString(),
                     PhoneNumber = signup.ApplicationUser.PhoneNumber
                 },
-                Guest = signup.Guest,
                 Activity = new ActivityViewModel {
                     ActivityID = signup.Activity.ActivityID,
                     Name = signup.Activity.Name,
@@ -190,7 +191,11 @@ namespace indicium_webapp.Controllers
                     StudyType = signup.ApplicationUser.StudyType.ToString(),
                     PhoneNumber = signup.ApplicationUser.PhoneNumber,
                 },
-                Guest = signup.Guest,
+                Guest = new GuestViewModel {
+                    FirstName = signup.Guest.FirstName,
+                    LastName = signup.Guest.LastName,
+                    Email = signup.Guest.Email
+                },
                 Activity = new ActivityViewModel {
                     ActivityID = signup.Activity.ActivityID,
                     Name = signup.Activity.Name,
@@ -218,6 +223,88 @@ namespace indicium_webapp.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        // GET: SignUps/Guest/5
+        [AllowAnonymous]
+        public async Task<IActionResult> Guest(int? id)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return Forbid();
+            }
+            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            GuestViewModel guestviewmodel = new GuestViewModel
+            {
+                Activity = new ActivityViewModel {
+                    ActivityID = activity.ActivityID,
+                    Name = activity.Name,
+                    Description = activity.Description,
+                    StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    NeedsSignUp = activity.NeedsSignUp,
+                    Price = activity.Price,
+                    ActivityType = activity.ActivityType,
+                    SignUps = activity.SignUps
+                }
+            };
+
+            if (activity.NeedsSignUp == false)
+            {
+                return NotFound();
+            }
+            
+            return View(guestviewmodel);
+        }
+
+        // POST: SignUps/Guest/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Guest(int id, Guest guest)
+        {
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+
+                if (activity.NeedsSignUp)
+                {
+                    SignUp signup = new SignUp {
+                        ActivityID = activity.ActivityID,
+                        Guest = guest
+                    };
+                    
+                    _context.Add(signup);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Calendar", "activities");
+                }
+                else
+                {
+                    return RedirectToAction("Details", "activities", new { id });
+                }
+            }
+
+            return View(guest);
         }
 
         private bool SignUpExists(int signUpId)

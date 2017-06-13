@@ -8,9 +8,9 @@ namespace indicium_webapp.Models.ManageViewModels
 {
     public class ChangeEmailViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "E-mail adres")]
+        [Display(Name = "E-mailadres")]
         public string Email { get; set; }
     }
 }

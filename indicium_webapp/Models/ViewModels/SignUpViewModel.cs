@@ -17,9 +17,7 @@ namespace indicium_webapp.Models
 
         public ApplicationUserViewModel ApplicationUser { get; set; }
 
-        public int? GuestID { get; set; }
-
-        public virtual Guest Guest { get; set; }
+        public GuestViewModel Guest { get; set; }
 
     }
 }
