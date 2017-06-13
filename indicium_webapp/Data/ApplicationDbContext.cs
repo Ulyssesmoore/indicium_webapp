@@ -25,13 +25,9 @@ namespace indicium_webapp.Data
         }
 
         public DbSet<indicium_webapp.Models.ApplicationUser> ApplicationUser { get; set; }
-
         public DbSet<indicium_webapp.Models.ApplicationRole> ApplicationRole { get; set; }
-
         public DbSet<indicium_webapp.Models.Activity> Activity { get; set; }
-
         public DbSet<indicium_webapp.Models.ActivityType> ActivityType { get; set; }
-
         public DbSet<indicium_webapp.Models.SignUp> SignUp { get; set; }
     }
 }

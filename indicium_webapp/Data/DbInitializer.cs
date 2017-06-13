@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace indicium_webapp.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(ApplicationDbContext context)
+        public static async Task Initialize(ApplicationDbContext context)
         {
+            var roleStore = new RoleStore<ApplicationRole>(context);
+            var roleManager = new RoleManager<ApplicationRole>(roleStore, null, null, null, null, null);
+
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore, null, null, null, null, null, null, null, null);
+
             context.Database.EnsureCreated();
 
             if (context.Roles.Any())
@@ -32,38 +41,40 @@ namespace indicium_webapp.Data
 
             context.SaveChanges();
 
-            // DON'T USE THE SHIT DOWN BELOW
+            // DIT WERKT NIET
 
-            //var users = new ApplicationUser[]
+            //if (!context.ApplicationUser.Any(u => u.FirstName == "Admin"))
             //{
-            //    new ApplicationUser {
-            //        AddressCity = "Utrecht",
-            //        AddressCountry = "Nederland",
-            //        AddressStreet = "Een straat",
-            //        AddressNumber = "42",
-            //        AddressPostalCode = "1234AB",
-            //        Birthday = new DateTime(1997, 5, 22),
-            //        Email = "iemand@test.nl",
-            //        NormalizedEmail = "IEMAND@TEST.NL",
-            //        UserName = "iemand@test.nl",
-            //        NormalizedUserName = "IEMAND@TEST.NL",
-            //        FirstName = "Henk",
-            //        LastName = "Tober",
-            //        Sex = "M",
-            //        StudentNumber = 123456,
-            //        StartdateStudy = new DateTime(2016, 5, 22),
-            //        StudyType = "SIE",
-            //        PhoneNumber = "06123456",
+            //    var user = new ApplicationUser
+            //    {
+            //        StudentNumber = 0000000,
+            //        FirstName = "Admin",
+            //        LastName = "Admin",
+            //        PhoneNumber = "123456789",
+            //        UserName = "admin@admin.com",
+            //        Email = "admin@admin.com",
+            //        Sex = Sex.Man,
+            //        Birthday = DateTime.ParseExact("01-01-1997", "dd-MM-yyyy", new CultureInfo("nl-NL")),
+            //        AddressCity = "Admindam",
+            //        AddressStreet = "Adminstraat",
+            //        AddressNumber = "1",
+            //        AddressPostalCode = "1234Ab",
+            //        AddressCountry = "Adminland",
+            //        StartdateStudy = DateTime.ParseExact("01-01-2015", "dd-MM-yyyy", new CultureInfo("nl-NL")),
+            //        RegistrationDate = DateTime.Today,
+            //        StudyType = StudyType.SIE,
+            //        Status = Status.Lid
+            //    };
+
+            //    await userManager.CreateAsync(user, "admin");
+
+            //    foreach (var role in roles)
+            //    {
+            //        await userManager.AddToRoleAsync(user, role.Name);
             //    }
-            //};
 
-            //foreach (ApplicationUser u in users)
-            //{
-            //    u.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(u, "P@ssword12");
-            //    context.Users.Add(u);
+            //    context.SaveChanges();
             //}
-
-            //context.SaveChanges();
         }
     }
 }
