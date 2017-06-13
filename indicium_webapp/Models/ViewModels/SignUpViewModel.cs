@@ -7,7 +7,7 @@ using indicium_webapp.Models.ViewModels.AccountViewModels;
 using indicium_webapp.Models.ViewModels;
 using indicium_webapp.Models;
 
-namespace indicium_webapp.ViewModels
+namespace indicium_webapp.Models.ViewModels
 {
     public class SignUpViewModel
     {
