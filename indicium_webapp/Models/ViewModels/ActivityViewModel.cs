@@ -41,10 +41,11 @@ namespace indicium_webapp.Models
         public double Price { get; set; }
 
         [Required]
+        [Display(Name = "Activiteittype")]
         public int ActivityTypeID { get; set; }
         
         [Display(Name = "Activiteittype")]
-        public ActivityType ActivityType { get; set; }
+        public virtual ActivityType ActivityType { get; set; }
 
         [Display(Name = "Inschrijvingen")]
         public virtual ICollection<SignUp> SignUps { get; set; }
