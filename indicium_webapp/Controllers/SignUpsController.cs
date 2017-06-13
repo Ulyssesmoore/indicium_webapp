@@ -10,7 +10,6 @@ using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using indicium_webapp.Models.ViewModels.AccountViewModels;
-using indicium_webapp.ViewModels;
 using indicium_webapp.Models.ViewModels;
 using System.Globalization;
 
@@ -193,11 +192,6 @@ namespace indicium_webapp.Controllers
                     StartdateStudy = signup.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     StudyType = signup.ApplicationUser.StudyType.ToString(),
                     PhoneNumber = signup.ApplicationUser.PhoneNumber,
-                },
-                Guest = new GuestViewModel {
-                    FirstName = signup.Guest.FirstName,
-                    LastName = signup.Guest.LastName,
-                    Email = signup.Guest.Email
                 },
                 Activity = new ActivityViewModel {
                     ActivityID = signup.Activity.ActivityID,
