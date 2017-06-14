@@ -27,8 +27,6 @@ namespace indicium_webapp.Models
 
         public bool NeedsSignUp { get; set; }
 
-        public double Price { get; set; }
-
         public int ActivityTypeID { get; set; }
 
         // Property to help select related data

@@ -13,8 +13,6 @@ namespace indicium_webapp.Models.ViewModels
     {
         public int SignUpID { get; set; }
 
-        public string Status { get; set; }
-
         public ActivityViewModel Activity { get; set; }
 
         public ApplicationUserViewModel ApplicationUser { get; set; }

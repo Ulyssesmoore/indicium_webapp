@@ -13,8 +13,6 @@ namespace indicium_webapp.Models
     {
         public int SignUpID { get; set; }
 
-        public string Status { get; set; }
-
         public int ActivityID { get; set; }
 
         public virtual Activity Activity { get; set; }

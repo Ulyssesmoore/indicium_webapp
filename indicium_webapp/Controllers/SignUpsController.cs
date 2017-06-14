@@ -41,7 +41,6 @@ namespace indicium_webapp.Controllers
             IEnumerable<SignUpViewModel> signupviewmodel = signups.Select(signup => new SignUpViewModel
             {
                 SignUpID = signup.SignUpID,
-                Status = signup.Status,
                 Activity = new ActivityViewModel {
                     ActivityID = signup.Activity.ActivityID,
                     Name = signup.Activity.Name,
@@ -49,7 +48,6 @@ namespace indicium_webapp.Controllers
                     StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
                     EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
                     NeedsSignUp = signup.Activity.NeedsSignUp,
-                    Price = signup.Activity.Price,
                     ActivityType = signup.Activity.ActivityType,
                     SignUps = signup.Activity.SignUps
                 }
@@ -79,7 +77,6 @@ namespace indicium_webapp.Controllers
             SignUpViewModel signupviewmodel = new SignUpViewModel
             {
                 SignUpID = signup.SignUpID,
-                Status = signup.Status,
                 ApplicationUser = new ApplicationUserViewModel {
                     FirstName = signup.ApplicationUser.FirstName,
                     LastName = signup.ApplicationUser.LastName,
@@ -103,7 +100,6 @@ namespace indicium_webapp.Controllers
                     StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     NeedsSignUp = signup.Activity.NeedsSignUp,
-                    Price = signup.Activity.Price,
                     ActivityType = signup.Activity.ActivityType,
                     SignUps = signup.Activity.SignUps
                 }
@@ -176,7 +172,6 @@ namespace indicium_webapp.Controllers
             SignUpViewModel signupviewmodel = new SignUpViewModel
             {
                 SignUpID = signup.SignUpID,
-                Status = signup.Status,
                 ApplicationUser = new ApplicationUserViewModel {
                     FirstName = signup.ApplicationUser.FirstName,
                     LastName = signup.ApplicationUser.LastName,
@@ -200,7 +195,6 @@ namespace indicium_webapp.Controllers
                     StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     NeedsSignUp = signup.Activity.NeedsSignUp,
-                    Price = signup.Activity.Price,
                     ActivityType = signup.Activity.ActivityType,
                     SignUps = signup.Activity.SignUps
                 }

@@ -27,6 +27,7 @@ namespace indicium_webapp.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Bestuur")]
         // GET: ApplicationUsers
         public async Task<IActionResult> Index(
             string studyTypesList,

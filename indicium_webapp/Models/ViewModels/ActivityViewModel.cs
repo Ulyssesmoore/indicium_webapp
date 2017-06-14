@@ -37,9 +37,6 @@ namespace indicium_webapp.Models.ViewModels
         [Display(Name = "Inschrijving verplicht")]
         public bool NeedsSignUp { get; set; }
 
-        [Display(Name = "Prijs")]
-        public double Price { get; set; }
-
         [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Activiteittype")]
         public virtual ActivityType ActivityType { get; set; }
