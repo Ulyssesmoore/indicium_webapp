@@ -57,6 +57,11 @@ namespace indicium_webapp.Controllers
                 // Cast string to enum and filter
                 users = users.Where(u => u.Status.Equals((Status)Enum.Parse(typeof(Status), statusFilter)));
             }
+            else
+            {
+                // If there isn't a status filter, filter out these members, cause they are cluttering the desired results
+                users = users.Where(u => u.Status != Status.Nieuw || u.Status != Status.Uitgeschreven);
+            }
 
             var applicationusers = await users.AsNoTracking().ToListAsync();
 
