@@ -119,7 +119,7 @@ namespace indicium_webapp.Controllers
                     EndDateTime = DateTime.ParseExact(activityviewmodel.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
                     NeedsSignUp = activityviewmodel.NeedsSignUp,
                     Price = activityviewmodel.Price,
-                    ActivityTypeID = activityviewmodel.ActivityTypeID
+                    ActivityType = activityviewmodel.ActivityType
                 };
                 
                 _context.Add(activity);
@@ -158,7 +158,7 @@ namespace indicium_webapp.Controllers
             };
 
             var types = _context.ActivityType.ToListAsync().Result;
-            ViewBag.ActivityTypeID = new SelectList(types, "ActivityTypeID", "Name", activityviewmodel.ActivityTypeID);
+            ViewBag.ActivityType = new SelectList(types, "ActivityTypeID", "Name", activityviewmodel.ActivityType);
 
             return View(activityviewmodel);
         }
@@ -187,7 +187,7 @@ namespace indicium_webapp.Controllers
                         EndDateTime = DateTime.ParseExact(activityviewmodel.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
                         NeedsSignUp = activityviewmodel.NeedsSignUp,
                         Price = activityviewmodel.Price,
-                        ActivityTypeID = activityviewmodel.ActivityTypeID
+                        ActivityType = activityviewmodel.ActivityType
                     };
 
                     _context.Update(activity);

@@ -44,6 +44,14 @@ namespace indicium_webapp.Models
 
         public string LastName { get; set; }
 
+        public string Name
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
+
         public Sex Sex { get; set; }
 
         public DateTime Birthday { get; set; }

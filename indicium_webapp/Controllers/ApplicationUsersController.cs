@@ -172,8 +172,7 @@ namespace indicium_webapp.Controllers
                     applicationUser.StudyType = (StudyType) Convert.ToInt32(applicationuserviewmodel.StudyType);
                     applicationUser.PhoneNumber = applicationuserviewmodel.PhoneNumber;
                     
-                    var getCurrentUserRole = _userManager.GetRolesAsync(GetCurrentUserAsync()).Result[0];
-                    if (getCurrentUserRole == "Secretaris")
+                    if (_userManager.GetRolesAsync(GetCurrentUserAsync()).Result.Contains("Secretaris"))
                     {
                         applicationUser.Status = applicationuserviewmodel.Status;
                     }
