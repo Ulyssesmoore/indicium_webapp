@@ -60,7 +60,7 @@ namespace indicium_webapp.Controllers
             else
             {
                 // If there isn't a status filter, filter out these members, cause they are cluttering the desired results
-                users = users.Where(u => u.Status != Status.Nieuw || u.Status != Status.Uitgeschreven);
+                users = users.Where(u => u.Status != Status.Nieuw).Where(u => u.Status != Status.Uitgeschreven);
             }
 
             var applicationusers = await users.AsNoTracking().ToListAsync();
