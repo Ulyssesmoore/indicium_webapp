@@ -525,6 +525,7 @@ namespace indicium_webapp.Controllers
         //
         // GET /Account/AccessDenied
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

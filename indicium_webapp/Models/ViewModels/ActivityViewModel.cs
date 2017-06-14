@@ -42,9 +42,6 @@ namespace indicium_webapp.Models.ViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Activiteittype")]
-        public int ActivityTypeID { get; set; }
-        
-        [Display(Name = "Activiteittype")]
         public virtual ActivityType ActivityType { get; set; }
 
         [Display(Name = "Inschrijvingen")]

@@ -13,6 +13,7 @@ using indicium_webapp.Data;
 using indicium_webapp.Models;
 using indicium_webapp.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Newtonsoft.Json;
 
 namespace indicium_webapp
 {
@@ -48,7 +49,9 @@ namespace indicium_webapp
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -61,6 +64,8 @@ namespace indicium_webapp
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseStatusCodePages();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

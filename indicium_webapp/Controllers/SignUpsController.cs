@@ -245,22 +245,12 @@ namespace indicium_webapp.Controllers
 
             GuestViewModel guestviewmodel = new GuestViewModel
             {
-                Activity = new ActivityViewModel {
-                    ActivityID = activity.ActivityID,
-                    Name = activity.Name,
-                    Description = activity.Description,
-                    StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    NeedsSignUp = activity.NeedsSignUp,
-                    Price = activity.Price,
-                    ActivityType = activity.ActivityType,
-                    SignUps = activity.SignUps
-                }
+                Activity = activity
             };
 
             if (activity.NeedsSignUp == false)
             {
-                return NotFound();
+                return Forbid();
             }
             
             return View(guestviewmodel);

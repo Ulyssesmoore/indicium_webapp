@@ -6,6 +6,7 @@ using indicium_webapp.Data;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace indicium_webapp.Controllers.api.v1
 {
@@ -21,18 +22,22 @@ namespace indicium_webapp.Controllers.api.v1
 
         // GET: api/v1/activities
         [HttpGet]
-        public async Task<IEnumerable<Activity>> Get()
+        public IEnumerable<Activity> Get()
         {
-            return await _context.Activity.Include(t => t.ActivityType)
-                .ToListAsync();
+            return _context.Activity
+                .Include(t => t.ActivityType)
+                .Include(t => t.SignUps)
+                .ToList();
         }
 
         // GET: api/v1/activities/{id}
         [HttpGet("{id}")]
-        public async Task<Activity> Get(int? id)
+        public Activity Get(int? id)
         {
-            return await _context.Activity
-                .SingleOrDefaultAsync(m => m.ActivityID == id);
+            return _context.Activity
+                .Include(t => t.ActivityType)
+                .Include(t => t.SignUps)
+                .SingleOrDefault(m => m.ActivityID == id);
         }
     }
 }

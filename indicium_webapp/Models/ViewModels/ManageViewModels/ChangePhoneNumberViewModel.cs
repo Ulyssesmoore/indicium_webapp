@@ -8,7 +8,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class ChangePhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Phone]
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
