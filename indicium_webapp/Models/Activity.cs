@@ -25,6 +25,8 @@ namespace indicium_webapp.Models
 
         public DateTime EndDateTime { get; set; }
 
+        public string Location { get; set; }
+
         public bool NeedsSignUp { get; set; }
 
         public int ActivityTypeID { get; set; }
