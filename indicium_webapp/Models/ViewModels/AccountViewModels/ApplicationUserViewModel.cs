@@ -27,6 +27,9 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Achternaam")]
         public string LastName { get; set; }
+
+        [Display(Name = "Naam")]
+        public string Name { get; }
         
         [EmailAddress]
         [Display(Name = "E-mailadres")]

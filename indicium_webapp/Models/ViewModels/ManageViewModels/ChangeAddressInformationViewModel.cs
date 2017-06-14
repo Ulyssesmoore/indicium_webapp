@@ -8,23 +8,23 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class ChangeAddressInformationViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         public string AddressCity { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         public string AddressPostalCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         public string AddressNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         public string AddressStreet { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
         public string AddressCountry { get; set; }
     }
