@@ -46,7 +46,10 @@ namespace indicium_webapp
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -64,6 +67,8 @@ namespace indicium_webapp
                 SiteKey = "6LcBQCUUAAAAAPROnay3Ou7Lvq66EQFr9jDMo9tU",
                 SecretKey = "6LcBQCUUAAAAALetMU06AjBwY0RBeAvfjy-f5Hqz"
             });
+
+            services.Configure<AuthMessageSenderOptions>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
