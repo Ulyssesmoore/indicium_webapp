@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * jQuery JavaScript Library v@VERSION
  * http://jquery.com/
  *
@@ -11,4 +11,5 @@
  *
  * Date: @DATE
  */
-(function( window, undefined ) {
+//function (window, undefined) {
+//};

@@ -70,5 +70,7 @@ namespace indicium_webapp.Models
         public Status Status { get; set; }
 
         public virtual ICollection<SignUp> SignUps { get; set; }
+
+        public bool IsHuman { get; set; }
     }
 }

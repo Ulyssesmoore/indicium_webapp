@@ -220,7 +220,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        private bool SignUpExists(int signUpId)
+        
+    private bool SignUpExists(int signUpId)
         {
             return _context.SignUp.Any(e => e.SignUpID == signUpId);
         }

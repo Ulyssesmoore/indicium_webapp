@@ -36,4 +36,9 @@
     <Folder Include="Views\Shared\DisplayTemplates\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
+   <ItemGroup>
+     <Reference Include="Recaptcha">
+       <HintPath>References\Recaptcha.dll</HintPath>
+     </Reference>
+   </ItemGroup>
 </Project>

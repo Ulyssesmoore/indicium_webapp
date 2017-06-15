@@ -366,5 +366,6 @@ namespace indicium_webapp.Controllers
         {
             return _userManager.GetUserAsync(User).Result;
         }
+
     }
 }

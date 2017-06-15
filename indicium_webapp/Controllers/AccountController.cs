@@ -493,9 +493,9 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        #region Helpers
+            #region Helpers
 
-        private void AddErrors(IdentityResult result)
+            private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {

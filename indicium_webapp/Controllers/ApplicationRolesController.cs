@@ -190,5 +190,6 @@ namespace indicium_webapp.Controllers
         {
             return _context.ApplicationRole.Any(e => e.Id == id);
         }
+
     }
 }
