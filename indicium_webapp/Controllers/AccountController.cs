@@ -16,6 +16,7 @@ using indicium_webapp.Services;
 using indicium_webapp.Data;
 using indicium_webapp.Models.InterfaceItemModels;
 using Microsoft.EntityFrameworkCore;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace indicium_webapp.Controllers
 {
@@ -146,6 +147,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Register
+        [ValidateRecaptcha]
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

@@ -14,6 +14,7 @@ using indicium_webapp.Models;
 using indicium_webapp.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace indicium_webapp
 {
@@ -56,10 +57,13 @@ namespace indicium_webapp
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddSingleton<IConfigurationRoot>(Configuration);
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddMvc();
 
-            services.AddScoped<ValidateReCaptcha>();
+            services.AddRecaptcha(new RecaptchaOptions
+            {
+                SiteKey = "6LcBQCUUAAAAAPROnay3Ou7Lvq66EQFr9jDMo9tU",
+                SecretKey = "6LcBQCUUAAAAALetMU06AjBwY0RBeAvfjy-f5Hqz"
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

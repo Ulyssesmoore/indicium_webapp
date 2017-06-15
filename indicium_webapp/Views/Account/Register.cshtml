@@ -1,11 +1,16 @@
 ﻿@model RegisterViewModel
 @ViewData["Message"]
 
-<script src='https://www.google.com/recaptcha/api.js'></script>
+@addTagHelper *, PaulMiami.AspNetCore.Mvc.Recaptcha
 
 @{
     ViewData["Title"] = "Register";
 }
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<recaptcha-script />
 
 <h2>Inschrijfformulier Indicium</h2>
 
@@ -135,7 +140,8 @@
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
     </div>
-    <div class="form-group g-recaptcha" data-sitekey="6LcBQCUUAAAAAPROnay3Ou7Lvq66EQFr9jDMo9tU">
+    <div>
+        <recaptcha />
     </div>
     <div class="form-group">
            <button type="submit" class="btn btn-default">Registreren</button>
