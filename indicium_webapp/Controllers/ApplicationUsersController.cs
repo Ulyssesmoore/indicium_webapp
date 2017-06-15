@@ -167,7 +167,6 @@ namespace indicium_webapp.Controllers
                     applicationUser.AddressPostalCode = applicationuserviewmodel.AddressPostalCode;
                     applicationUser.AddressCity = applicationuserviewmodel.AddressCity;
                     applicationUser.AddressCountry = applicationuserviewmodel.AddressCountry;
-                    applicationUser.Iban = applicationuserviewmodel.Iban;
                     applicationUser.StudentNumber = Convert.ToInt32(applicationuserviewmodel.StudentNumber);
                     applicationUser.StartdateStudy = DateTime.ParseExact(applicationuserviewmodel.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL"));
                     applicationUser.StudyType = (StudyType) Convert.ToInt32(applicationuserviewmodel.StudyType);
@@ -317,7 +316,6 @@ namespace indicium_webapp.Controllers
                 AddressPostalCode = applicationUser.AddressPostalCode,
                 AddressCity = applicationUser.AddressCity,
                 AddressCountry = applicationUser.AddressCountry,
-                Iban = applicationUser.Iban,
                 StudentNumber = applicationUser.StudentNumber.ToString(),
                 StartdateStudy = applicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                 StudyType = applicationUser.StudyType.ToString(),

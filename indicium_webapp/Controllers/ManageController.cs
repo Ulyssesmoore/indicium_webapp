@@ -72,7 +72,6 @@ namespace indicium_webapp.Controllers
                 StudyType = user.StudyType,
                 Sex = user.Sex,
                 Birthday = user.Birthday,
-                Iban = user.Iban
             };
             return View(model);
         }
@@ -225,7 +224,6 @@ namespace indicium_webapp.Controllers
             {
                 Birthday = user.Birthday,
                 Sex = user.Sex,
-                Iban = user.Iban
             };
             return View(model);
         }
@@ -245,7 +243,6 @@ namespace indicium_webapp.Controllers
             if (user != null)
             {
                 // Overwrites values in currently logged in user to match the new data
-                user.Iban = model.Iban;
                 user.Sex = model.Sex;
                 user.Birthday = model.Birthday;
 
