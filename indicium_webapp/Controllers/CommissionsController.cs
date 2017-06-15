@@ -50,7 +50,18 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            return View(createCommissionViewModel(commission));
+            CommissionViewModel commissionViewModel = createCommissionViewModel(commission);
+
+            var members = _context.CommissionMember.Where(c => c.CommissionID == commission.CommissionID && c.Status == CommisionMemberStatus.Lid)
+                .ToListAsync()
+                .Result;
+
+            foreach (var member in members)
+            {
+                commissionViewModel.Members.Add(_context.ApplicationUser.Find(member.ApplicationUserID));
+            }
+
+            return View(commissionViewModel);
         }
 
         // GET: Commissions/Create

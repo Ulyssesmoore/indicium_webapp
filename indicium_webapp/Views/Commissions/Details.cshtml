@@ -24,7 +24,41 @@
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CommissionID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.CommissionID">Bewerken</a> |
+    <a asp-action="Index">Terug naar overzicht</a>
+</div>
+
+<hr/>
+
+<div>
+    <h4>Leden</h4>
+    
+    @if (Model.Members != null && Model.Members.Any())
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Studentnummer</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Members)
+                {
+                    <tr>
+                        <td><a asp-controller="applicationusers" asp-action="details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></td>
+                        <td>@item.StudentNumber</td>
+                        <td><a class="btn btn-danger" role="button">Uit commissie zetten</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Deze commissie heeft nog geen leden. Misschien moeten ze nog goedgekeurd worden?</p>
+    }
 </div>
