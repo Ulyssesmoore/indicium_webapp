@@ -159,6 +159,7 @@
     </script>
 
     <script>
+        amountused = 0;
         window.onload = function () {
             var firstname = document.getElementById("FirstName"),
                 lastname = document.getElementById("LastName"),
@@ -199,12 +200,13 @@
             }
         };
 
-        $('#zip_code').focusout(function () {
-            var location = $('#zip_code').val();
+        $('#zip_code').focusout(function () { 
+            var location = $('#zip_code').val().replace(" ", "");
             var patt = new RegExp("^[0-9]{4}\s?[a-zA-Z]{2}$");
-            if (patt.test(location))
+            if (patt.test(location)&&amountused < 3)
             {
                 getAddress(location);
+                amountused++;
             }  
         });
 
@@ -233,9 +235,6 @@
                             switch (element3) {
                                 case 'locality':
                                     city = element2.long_name;
-                                    break;
-                                case 'street_address':
-                                    street = element2.long_name;
                                     break;
                             };
                         });
