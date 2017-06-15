@@ -9,9 +9,10 @@ using indicium_webapp.Models;
 namespace indicium_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170613130008_commission-koppeltabel")]
+    partial class commissionkoppeltabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
@@ -31,6 +32,8 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<string>("Name");
 
                     b.Property<bool>("NeedsSignUp");
+
+                    b.Property<double>("Price");
 
                     b.Property<DateTime>("StartDateTime");
 
@@ -199,6 +202,8 @@ namespace indicium_webapp.Data.Migrations
                     b.Property<string>("ApplicationUserID");
 
                     b.Property<int?>("GuestID");
+
+                    b.Property<string>("Status");
 
                     b.HasKey("SignUpID");
 

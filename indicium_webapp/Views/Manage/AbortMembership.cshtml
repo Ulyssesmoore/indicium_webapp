@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Lidmaatschap Opzeggen";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<hr />
+
+<h4>Lidmaatschap opzeggen</h4>
+<p class="text-danger">Nog een inspirationeel en toch ook een klein beetje emotioneel stukje over hoe verschrikkelijk 
+    het opzeggen van een lidmaatschap wel niet zal zijn voor de studievereniging, de wereld en de walvissen.. ;(</p>
+<form asp-controller="Manage" asp-action="ConfirmedAbortMembership" method="post" class="form-horizontal">
+    <button type="submit" class="btn btn-default">Hef lidmaatschap op</button>
+</form>

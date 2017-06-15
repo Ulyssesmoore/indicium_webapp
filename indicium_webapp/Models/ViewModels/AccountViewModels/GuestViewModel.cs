@@ -4,23 +4,28 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models
+namespace indicium_webapp.Models.ViewModels.AccountViewModels
 {
     public class GuestViewModel
     {
-        [Required]
-        [StringLength(50, ErrorMessage = "Voornaam mag maximaal 50 karakters.")]
+        public int GuestID { get; set; }
+        
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [StringLength(50, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [Display(Name = "Voornaam")]
         public string FirstName { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "Achternaam mag maximaal 100 karakters.")]
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [StringLength(100, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [Display(Name = "Achternaam")]
         public string LastName { get; set; }
 
-        [Required]
-        [Display(Name = "E-mailAdres")] 
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [EmailAddress]
+        [Display(Name = "E-mailadres")] 
         public string Email { get; set; }
+
+        public Activity Activity { get; set; }
 
     }
 }

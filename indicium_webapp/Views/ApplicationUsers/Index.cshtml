@@ -27,6 +27,8 @@
     </div>
 </form>
 
+<p>Gebruikers met de status Nieuw of Uitgeschreven staan standaard niet in de lijst, alleen als er explicit om gevraagd wordt doormiddel van een filter hierboven.</p>
+
 <hr />
 
 <table class="table" id="userTable">
@@ -37,9 +39,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sex)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Birthday)
@@ -56,6 +55,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.StudentNumber)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -67,9 +69,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sex)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Birthday)
@@ -85,6 +84,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StudentNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
                 <a class="btn btn-success" role="button" asp-action="Details" asp-route-id="@item.Id"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>

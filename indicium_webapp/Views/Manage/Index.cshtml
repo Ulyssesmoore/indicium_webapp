@@ -22,7 +22,7 @@
 
     <h5>Contactgegevens</h5>
     <dl class="dl-horizontal">
-        
+
         <dt>Telefoonnummer:</dt>
         <dd>@Model.PhoneNumber</dd>
         <dd>
@@ -71,4 +71,8 @@
             <a asp-controller="Manage" asp-action="ChangeEducationalInformation" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
+
+    <h5>Lidmaatschap opzeggen</h5>
+    <p class="text-danger">Informatief stuk over hoe verschrikkelijk het opzeggen van een lidmaatschap wel niet is.</p>
+    <a asp-controller="Manage" asp-action="AbortMembership" class="btn-bracketed">Hef lidmaatschap op</a>
 </div>

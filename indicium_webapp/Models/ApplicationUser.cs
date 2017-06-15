@@ -37,11 +37,20 @@ namespace indicium_webapp.Models
         public ApplicationUser()
         {
             SignUps = new HashSet<SignUp>();
+            Commissions = new HashSet<CommissionMember>();
         }
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string Name
+        {
+            get
+            {
+                return FirstName + " " + LastName;
+            }
+        }
 
         public Sex Sex { get; set; }
 
@@ -71,6 +80,6 @@ namespace indicium_webapp.Models
 
         public virtual ICollection<SignUp> SignUps { get; set; }
 
-        public bool IsHuman { get; set; }
+        public virtual ICollection<CommissionMember> Commissions { get; set; }
     }
 }

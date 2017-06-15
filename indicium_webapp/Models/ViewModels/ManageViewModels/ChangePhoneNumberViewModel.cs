@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models.ManageViewModels
+namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
-    public class AddPhoneNumberViewModel
+    public class ChangePhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Phone]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
     }
 }

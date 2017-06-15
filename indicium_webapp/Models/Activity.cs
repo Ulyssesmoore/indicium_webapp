@@ -25,15 +25,15 @@ namespace indicium_webapp.Models
 
         public DateTime EndDateTime { get; set; }
 
+        public string Location { get; set; }
+
         public bool NeedsSignUp { get; set; }
-
-        public double Price { get; set; }
-
-        public virtual ICollection<SignUp> SignUps { get; set; }
 
         public int ActivityTypeID { get; set; }
 
         // Property to help select related data
         public virtual ActivityType ActivityType { get; set; }
+
+        public virtual ICollection<SignUp> SignUps { get; set; }
     }
 }

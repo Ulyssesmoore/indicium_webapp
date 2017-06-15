@@ -40,19 +40,11 @@
                 <input asp-for="EndDateTime" class="form-control datetimepicker" />
                 <span asp-validation-for="EndDateTime" class="text-danger"></span>
             </div>
-        </div>       
-        <div class="form-group">
-            <label asp-for="Price" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
         </div>
         <div class="form-group">
             <label asp-for="ActivityTypeID" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <select asp-for="ActivityTypeID" asp-items="(IEnumerable<SelectListItem>)ViewBag.ActivityTypeID" class="form-control"></select>
-                <span asp-validation-for="Price" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

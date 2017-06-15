@@ -11,15 +11,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using indicium_webapp.Models;
-using indicium_webapp.Models.AccountViewModels;
+using indicium_webapp.Models.ViewModels.AccountViewModels;
 using indicium_webapp.Services;
 using indicium_webapp.Data;
+using indicium_webapp.Models.InterfaceItemModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace indicium_webapp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -28,6 +31,7 @@ namespace indicium_webapp.Controllers
         private readonly string _externalCookieScheme;
 
         public AccountController(
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
@@ -35,6 +39,7 @@ namespace indicium_webapp.Controllers
             ISmsSender smsSender,
             ILoggerFactory loggerFactory)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
@@ -120,8 +125,23 @@ namespace indicium_webapp.Controllers
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
+            RegisterViewModel model = new RegisterViewModel();
+
+            var checkBoxListItems = new List<CheckBoxListItem>();
+            foreach (Commission commission in _context.Commission.ToListAsync().Result)
+            {
+                checkBoxListItems.Add(new CheckBoxListItem()
+                {
+                    ID = commission.CommissionID.ToString(),
+                    Display = commission.Name + " - " + commission.Description,
+                    IsChecked = false
+                });
+            }
+
+            model.Commissions = checkBoxListItems;
+
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            return View(model);
         }
 
         //
@@ -166,9 +186,26 @@ namespace indicium_webapp.Controllers
                     await _userManager.AddToRoleAsync(user, "Lid");
                     _logger.LogInformation(3, "User created a new account with password and role.");
                     ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
+
+                    // Save the commission interests:
+                    var selectedCommissions = model.Commissions.Where(x => x.IsChecked).Select(x => x.ID).ToList();
+                    foreach (string commissionID in selectedCommissions)
+                    {
+                        _context.CommissionMember.Add(new CommissionMember()
+                        {
+                            // We have to fetch the ID, cause we don't have it yet because this user was just created
+                            ApplicationUserID = _userManager.FindByEmailAsync(model.Email).Result.Id,
+                            CommissionID = Int32.Parse(commissionID),
+                            Status = CommisionMemberStatus.Interesse
+
+                        });
+
+                        await _context.SaveChangesAsync();
+                    }
+
                     return View("login");
                 }
-                AddErrors(result);
+                AddErrors(result);              
             }
 
             // If we got this far, something failed, redisplay form
@@ -488,6 +525,7 @@ namespace indicium_webapp.Controllers
         //
         // GET /Account/AccessDenied
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

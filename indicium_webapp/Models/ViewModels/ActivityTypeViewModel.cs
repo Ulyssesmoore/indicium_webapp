@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models
+namespace indicium_webapp.Models.ViewModels
 {
     public class ActivityTypeViewModel
     {
         public int ActivityTypeID { get; set; }
         
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [StringLength(50, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [Display(Name = "Naam")]
         public string Name { get; set; }
 

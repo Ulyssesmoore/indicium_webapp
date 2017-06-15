@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace indicium_webapp.Models.AccountViewModels
+namespace indicium_webapp.Models.ViewModels.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [EmailAddress]
         public string Email { get; set; }
     }
