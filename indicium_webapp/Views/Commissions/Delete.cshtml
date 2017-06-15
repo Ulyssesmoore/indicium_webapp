@@ -1,14 +1,14 @@
-@model indicium_webapp.Models.Commission
+@model CommissionViewModel
 
 @{
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Commissie verwijderen</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Weet je zeker dat je dit wilt verwijderen?</h3>
 <div>
-    <h4>Commission</h4>
+    <h4>Commissie</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="CommissionID" />
@@ -28,8 +28,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="Index">Back to List</a>
+            <input type="submit" value="Verwijderen" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
         </div>
     </form>
 </div>

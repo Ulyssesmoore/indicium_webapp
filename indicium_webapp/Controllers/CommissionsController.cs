@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
+using indicium_webapp.Models.ViewModels;
 
 namespace indicium_webapp.Controllers
 {
@@ -22,7 +23,16 @@ namespace indicium_webapp.Controllers
         // GET: Commissions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Commission.ToListAsync());
+            var commissions = await _context.Commission.ToListAsync();
+
+            IEnumerable<CommissionViewModel> commissionModels = commissions.Select(commission => new CommissionViewModel
+            {
+                CommissionID = commission.CommissionID,
+                Name = commission.Name,
+                Description = commission.Description
+            });
+
+            return View(commissionModels);
         }
 
         // GET: Commissions/Details/5
@@ -40,7 +50,7 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            return View(commission);
+            return View(createCommissionViewModel(commission));
         }
 
         // GET: Commissions/Create
@@ -54,15 +64,16 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommissionID,Name,Description")] Commission commission)
+        public async Task<IActionResult> Create(CommissionViewModel commissionViewModel)
         {
             if (ModelState.IsValid)
             {
+                var commission = createCommission(commissionViewModel);
                 _context.Add(commission);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(commission);
+            return View(commissionViewModel);
         }
 
         // GET: Commissions/Edit/5
@@ -78,7 +89,7 @@ namespace indicium_webapp.Controllers
             {
                 return NotFound();
             }
-            return View(commission);
+            return View(createCommissionViewModel(commission));
         }
 
         // POST: Commissions/Edit/5
@@ -86,8 +97,10 @@ namespace indicium_webapp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommissionID,Name,Description")] Commission commission)
+        public async Task<IActionResult> Edit(int id, CommissionViewModel commissionViewModel)
         {
+            Commission commission = createCommission(commissionViewModel);
+
             if (id != commission.CommissionID)
             {
                 return NotFound();
@@ -131,7 +144,7 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            return View(commission);
+            return View(createCommissionViewModel(commission));
         }
 
         // POST: Commissions/Delete/5
@@ -148,6 +161,26 @@ namespace indicium_webapp.Controllers
         private bool CommissionExists(int id)
         {
             return _context.Commission.Any(e => e.CommissionID == id);
+        }
+
+        private CommissionViewModel createCommissionViewModel(Commission commission)
+        {
+            return new CommissionViewModel
+            {
+                CommissionID = commission.CommissionID,
+                Name = commission.Name,
+                Description = commission.Description,
+            };
+        }
+
+        private Commission createCommission(CommissionViewModel commissionViewModel)
+        {
+            return new Commission
+            {
+                CommissionID = commissionViewModel.CommissionID,
+                Name = commissionViewModel.Name,
+                Description = commissionViewModel.Description,
+            };
         }
     }
 }
