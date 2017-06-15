@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using indicium_webapp.Models.ViewModels.AccountViewModels;
 using indicium_webapp.Models.ViewModels;
 using System.Globalization;
-
+using indicium_webapp.Services;
 
 namespace indicium_webapp.Controllers
 {
@@ -22,12 +22,17 @@ namespace indicium_webapp.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IEmailSender _emailSender;
 
-        public SignUpsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public SignUpsController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailSender = emailSender;
         }
 
         // GET: SignUps
@@ -133,6 +138,8 @@ namespace indicium_webapp.Controllers
                         // Saves the signup to the database.
                         _context.Add(signUp);
                         await _context.SaveChangesAsync();
+
+                        await _emailSender.SendCalendarInviteAsync(signUp.ApplicationUser.Email, signUp.Activity);
 
                         return RedirectToAction("Index");
                     }

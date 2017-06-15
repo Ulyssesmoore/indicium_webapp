@@ -179,16 +179,6 @@ namespace indicium_webapp.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                    // Send an email with this link
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                    //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
-                    await _userManager.AddToRoleAsync(user, "Lid");
-                    _logger.LogInformation(3, "User created a new account with password and role.");
-                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
-
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
@@ -196,11 +186,9 @@ namespace indicium_webapp.Controllers
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
 
-                    // Comment out following line to prevent a new user automatically logged on.
-                    // await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-
+                    await _userManager.AddToRoleAsync(user, "Lid");
+                    _logger.LogInformation(3, "User created a new account with password and role.");
+                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
 
                     // Save the commission interests:
                     var selectedCommissions = model.Commissions.Where(x => x.IsChecked).Select(x => x.ID).ToList();
@@ -546,9 +534,17 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-            #region Helpers
+        public static int Age(DateTime birthday)
+        {
+            DateTime now = DateTime.Today;
+            int age = now.Year - birthday.Year;
+            if (now < birthday.AddYears(age)) age--;
 
-            private void AddErrors(IdentityResult result)
+            return age;
+        }
+        #region Helpers
+
+        private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
