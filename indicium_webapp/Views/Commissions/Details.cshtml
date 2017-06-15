@@ -6,59 +6,71 @@
 
 <h2>Commissie details</h2>
 
-<div>
-    <h4>Commissie</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-md-4">
+        <h4>Commissie</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.CommissionID">Bewerken</a> |
+            <a asp-action="Index">Terug naar overzicht</a>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h4>Leden</h4>
+        <hr />
+    
+        @if (Model.Members != null && Model.Members.Any())
+        {
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Studentnummer</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.CommissionMembers)
+                {
+                    <tr>
+                        <td><a asp-controller="applicationusers" asp-action="details" asp-route-id="@item.ApplicationUser.Id">@Html.DisplayFor(modelItem => item.ApplicationUser.Name)</a></td>
+                        <td>@item.ApplicationUser.StudentNumber</td>
+                        <td><a class="btn btn-danger" role="button" asp-action="DisapproveMember" asp-route-id="@item.CommissionMemberID">Uit commissie verwijderen</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Deze commissie heeft nog geen leden. Misschien moeten ze nog goedgekeurd worden?</p>
+        }
+    </div>
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CommissionID">Bewerken</a> |
-    <a asp-action="Index">Terug naar overzicht</a>
+    
 </div>
+
+
 
 <hr/>
 
 <div>
-    <h4>Leden</h4>
     
-    @if (Model.Members != null && Model.Members.Any())
-    {
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Studentnummer</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Members)
-                {
-                    <tr>
-                        <td><a asp-controller="applicationusers" asp-action="details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></td>
-                        <td>@item.StudentNumber</td>
-                        <td><a class="btn btn-danger" role="button">Uit commissie zetten</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>Deze commissie heeft nog geen leden. Misschien moeten ze nog goedgekeurd worden?</p>
-    }
 </div>
