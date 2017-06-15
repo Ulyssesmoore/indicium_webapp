@@ -135,6 +135,13 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="Commissions" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <p>Heb je interesse om mee te helpen in een of meerdere commissies?</p>
+            @Html.EditorFor(x => x.Commissions)
+        </div>
+    </div>
+    <div class="form-group">
         <recaptcha />
     </div>
     <div class="form-group">
