@@ -155,7 +155,7 @@ namespace indicium_webapp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             Console.Write(true);
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && )
             {
                 var user = new ApplicationUser {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
@@ -533,9 +533,17 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-            #region Helpers
+        public static int Age(DateTime birthday)
+        {
+            DateTime now = DateTime.Today;
+            int age = now.Year - birthday.Year;
+            if (now < birthday.AddYears(age)) age--;
 
-            private void AddErrors(IdentityResult result)
+            return age;
+        }
+        #region Helpers
+
+        private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
