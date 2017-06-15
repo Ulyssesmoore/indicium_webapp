@@ -72,6 +72,13 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="AddressPostalCode" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input id="zip_code" asp-for="AddressPostalCode" class="form-control" />
+            <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
         <label asp-for="AddressStreet" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input id="street" asp-for="AddressStreet" class="form-control" />
@@ -83,13 +90,6 @@
         <div class="col-md-10">
             <input asp-for="AddressNumber" class="form-control" />
             <span asp-validation-for="AddressNumber" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="AddressPostalCode" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input id="zip_code" asp-for="AddressPostalCode" class="form-control" />
-            <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
@@ -150,6 +150,10 @@
             $('.datetimepicker').datetimepicker({
                 locale: 'nl',
                 format: 'DD-MM-YYYY'
+            });
+            $('.datetimepicker2').datetimepicker({
+                locale: 'nl',
+                format: 'YYYY'
             });
         });
     </script>

@@ -48,25 +48,30 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public string Birthday { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(100, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [DataType(DataType.Text)]
         [Display(Name = "Straat")]
         public string AddressStreet { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(5, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [DataType(DataType.Text)]
         [Display(Name = "Huisnummer")]
         public string AddressNumber { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(7, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [DataType(DataType.Text)]
         [Display(Name = "Postcode")]
         public string AddressPostalCode { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [RegularExpression(@"^[0-9]{4}\s?[a-zA-Z]{2}$", ErrorMessage = "Deze invoer is geen postcode")]
         [Display(Name = "Woonplaats")]
         public string AddressCity { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Land")]
         public string AddressCountry { get; set; }
 
@@ -79,8 +84,8 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Date)]
-        [Display(Name = "Begindatum studie")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
+        [Display(Name = "Beginjaar studie")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0: yyyy}")]
         public string StartdateStudy { get; set; }
         
         [Required(ErrorMessage = "{0} is verplicht.")]
