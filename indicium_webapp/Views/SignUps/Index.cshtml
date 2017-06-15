@@ -49,12 +49,6 @@
                         @Html.DisplayFor(modelItem => item.Activity.NeedsSignUp)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Activity.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
                         <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>
                         <a class="btn btn-danger" asp-action="delete" asp-route-id="@item.Activity.ActivityID">Uitschrijven</a>
                     </td>
