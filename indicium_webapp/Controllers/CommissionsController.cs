@@ -52,12 +52,12 @@ namespace indicium_webapp.Controllers
 
             CommissionViewModel commissionViewModel = createCommissionViewModel(commission);
 
-            var members = _context.CommissionMember.Where(c => c.CommissionID == commission.CommissionID && c.Status == CommisionMemberStatus.Lid)
-                .ToListAsync()
-                .Result;
+            var members = await _context.CommissionMember.Where(c => c.CommissionID == commission.CommissionID && c.Status == CommisionMemberStatus.Lid)
+                .ToListAsync();
 
             foreach (var member in members)
             {
+                commissionViewModel.CommissionMembers.Add(member);
                 commissionViewModel.Members.Add(_context.ApplicationUser.Find(member.ApplicationUserID));
             }
 
@@ -169,9 +169,117 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Commissions/ApproveOverview
+        public async Task<IActionResult> ApproveOverview()
+        {
+            var commissions = await _context.Commission.ToListAsync();
+            var commissionViewModels = new List<CommissionViewModel>();
+
+            foreach (var commission in commissions)
+            {
+                CommissionViewModel commissionViewModel = createCommissionViewModel(commission);
+
+                var members = await _context.CommissionMember.Where(c => c.CommissionID == commission.CommissionID && c.Status == CommisionMemberStatus.Interesse)
+                    .ToListAsync();
+
+                // Skip commissions who don't have any members to approve
+                if (members.Where(m => m.Status == CommisionMemberStatus.Interesse).Count() > 0)
+                {
+                    foreach (var member in members)
+                    {
+                        ApplicationUser applicationUser = _context.ApplicationUser.Find(member.ApplicationUserID);
+
+                        // Don't make it possible to approve members who haven't been approved yet as a user
+                        if (applicationUser.Status == Status.Lid)
+                            commissionViewModel.Members.Add(applicationUser);
+                            commissionViewModel.CommissionMembers.Add(member);
+                    }
+
+                    commissionViewModels.Add(commissionViewModel);
+                }              
+            }
+
+            return View(commissionViewModels);
+        }
+
+        // POST: Commissions/ApproveMember
+        public async Task<IActionResult> ApproveMember(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CommissionMember commissionMember = await _context.CommissionMember.SingleOrDefaultAsync(m => m.CommissionMemberID == id);
+
+            if (commissionMember == null)
+            {
+                return NotFound();
+            }
+
+            commissionMember.Status = CommisionMemberStatus.Lid;
+
+            try
+            {
+                _context.Update(commissionMember);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CommissionMemberExists(commissionMember.CommissionMemberID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        // POST: Commissions/ApproveMember
+        public async Task<IActionResult> DisapproveMember(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CommissionMember commissionMember = await _context.CommissionMember.SingleOrDefaultAsync(m => m.CommissionMemberID == id);
+
+            if (commissionMember == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _context.Remove(commissionMember);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CommissionMemberExists(commissionMember.CommissionMemberID))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
         private bool CommissionExists(int id)
         {
             return _context.Commission.Any(e => e.CommissionID == id);
+        }
+
+        private bool CommissionMemberExists(int id)
+        {
+            return _context.CommissionMember.Any(m => m.CommissionMemberID == id);
         }
 
         private CommissionViewModel createCommissionViewModel(Commission commission)

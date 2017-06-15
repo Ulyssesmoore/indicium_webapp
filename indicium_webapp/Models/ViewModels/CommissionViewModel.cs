@@ -10,6 +10,7 @@ namespace indicium_webapp.Models.ViewModels
         public CommissionViewModel()
         {
             Members = new HashSet<ApplicationUser>();
+            CommissionMembers = new HashSet<CommissionMember>();
         }
 
         public int CommissionID { get; set; }
@@ -26,5 +27,7 @@ namespace indicium_webapp.Models.ViewModels
 
         [Display(Name = "Leden")]
         public virtual ICollection<ApplicationUser> Members { get; set; }
+
+        public virtual ICollection<CommissionMember> CommissionMembers { get; set; }
     }
 }

@@ -1,0 +1,45 @@
+@model IEnumerable<CommissionViewModel>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Commissie Interesses</h2>
+
+<div>
+    <p>De onderstaande gebruikers hebben aangegeven interesse te hebben in een commissie</p>
+    <hr/>
+    
+    @if (Model != null && Model.Any())
+    {
+        foreach (var commission in Model)
+        {
+            <h4>@Html.DisplayFor(modelItem => commission.Name)</h4>
+            <hr/>
+            <table class="table table-responsive">
+                <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Studentnummer</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var member in commission.CommissionMembers)
+                {
+                    <tr>
+                        <td><a asp-controller="applicationusers" asp-action="details" asp-route-id="@member.ApplicationUser.Id">@Html.DisplayFor(modelItem => member.ApplicationUser.Name)</a></td>
+                        <td>@member.ApplicationUser.StudentNumber</td>
+                        <td><a class="btn btn-success" role="button" asp-action="ApproveMember" asp-route-id="@member.CommissionMemberID">Goedkeuren</a></td>
+                        <td><a class="btn btn-danger" role="button" asp-action="DisapproveMember" asp-route-id="@member.CommissionMemberID">Afkeuren</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    }
+    else
+    {
+        <p>Er zijn geen commissieleden om goed te keuren.</p>
+    }
+</div>
