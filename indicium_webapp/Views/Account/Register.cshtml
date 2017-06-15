@@ -207,7 +207,8 @@
             {
                 getAddress(location);
                 amountused++;
-            }  
+            } 
+            Session["amount"] = Session["amount"]++;
         });
 
         function getAddress(location) {
