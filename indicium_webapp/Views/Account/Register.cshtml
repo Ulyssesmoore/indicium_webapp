@@ -10,6 +10,7 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD0OB49cA3HdaxvLz-VMjkDwkD3HhA77Hg "></script>
 <recaptcha-script />
 
 <h2>Inschrijfformulier Indicium</h2>
@@ -87,29 +88,22 @@
     <div class="form-group">
         <label asp-for="AddressPostalCode" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="AddressPostalCode" class="form-control" />
+            <input id="zip_code" asp-for="AddressPostalCode" class="form-control" />
             <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="AddressCity" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="AddressCity" class="form-control" />
+            <input id="city" asp-for="AddressCity" class="form-control" />
             <span asp-validation-for="AddressCity" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <label asp-for="AddressCountry" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="AddressCountry" class="form-control" />
+            <input id="country" asp-for="AddressCountry" class="form-control" />
             <span asp-validation-for="AddressCountry" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label asp-for="Iban" class="col-md-2 control-label"></label>
-        <div class="col-md-10">
-            <input asp-for="Iban" class="form-control" />
-            <span asp-validation-for="Iban" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
@@ -140,13 +134,12 @@
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
     </div>
-    <div>
+    <div class="form-group">
         <recaptcha />
     </div>
     <div class="form-group">
            <button type="submit" class="btn btn-default">Registreren</button>
     </div> 
-    
 </form>
 
 @section Scripts {
@@ -200,6 +193,39 @@
                     suggestedEmail.innerHTML = '';
                 }
             }
+        };
+
+        $('#zip_code').focusout(function () {
+            var location = $('#zip_code').val();
+            getAddress(location);
+        });
+
+        function getAddress(location) {
+            geocoder = new google.maps.Geocoder();
+            var city;
+            var country;
+            geocoder.geocode({ 'address': location }, function (results, status) {
+                if (status == 'OK') {
+                    console.log(results[0].formatted_address);
+                    results[0].address_components.forEach(function (element2) {
+                        element2.types.forEach(function (element3) {
+                            switch (element3) {
+                                case 'locality':
+                                    city = element2.long_name;
+                                    break;
+                                case 'country':
+                                    country = element2.long_name;
+                                    break;
+                            };
+                        });
+                    });
+                    $('#city').val(city);
+                    $('#country').val(country);
+                }
+                else {
+                    console.log("Geocode was not successful for the following reason: " + status);
+                };
+            });
         };
     </script>
 

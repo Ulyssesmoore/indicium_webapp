@@ -66,8 +66,6 @@ namespace indicium_webapp.Models
 
         public string AddressCountry { get; set; }
 
-        public string Iban { get; set; }
-
         public int StudentNumber { get; set; }
 
         public DateTime StartdateStudy { get; set; }
