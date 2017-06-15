@@ -155,7 +155,7 @@ namespace indicium_webapp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             Console.Write(true);
-            if (ModelState.IsValid && )
+            if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
