@@ -361,8 +361,10 @@ namespace indicium_webapp.Controllers
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                await _emailSender.SendEmailAsync(model.Email, "Wachtwoord Resetten",
+                   $"Klik op de volgende link om jouw wachtwoord te resetten: <a href='{callbackUrl}'>link</a><br>" +
+                   $"Groet,<b>" +
+                   $"Indicium");
                 return View("ForgotPasswordConfirmation");
             }
 
