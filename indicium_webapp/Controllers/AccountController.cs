@@ -148,7 +148,8 @@ namespace indicium_webapp.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             Console.Write(true);
-            if (ModelState.IsValid)
+            bool isOld = !(Age(DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"))) < 16);
+            if (ModelState.IsValid && isOld)
             {
                 var user = new ApplicationUser {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
@@ -164,7 +165,7 @@ namespace indicium_webapp.Controllers
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry = "Nederland",
-                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StartdateStudy = Int32.Parse(model.StartdateStudy),
                     RegistrationDate = DateTime.Today,
                     StudyType = (StudyType)Convert.ToInt32(model.StudyType)
                 };
@@ -182,7 +183,7 @@ namespace indicium_webapp.Controllers
                         $"Indicium");
 
                     await _userManager.AddToRoleAsync(user, "Lid");
-                    _logger.LogInformation(3, "User created a new account with password and role.");
+                    _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
                     ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
 
                     // Save the commission interests:
@@ -200,12 +201,16 @@ namespace indicium_webapp.Controllers
 
                         await _context.SaveChangesAsync();
                     }
-
+                    
                     return View("login");
                 }
                 AddErrors(result);              
             }
 
+            if (!isOld)
+            {
+                ModelState.AddModelError(string.Empty, "U bent niet oud genoeg om een account aan te maken");
+            }
             // If we got this far, something failed, redisplay form
             return View(model);
         }

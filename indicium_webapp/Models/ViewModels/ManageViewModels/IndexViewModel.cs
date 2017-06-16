@@ -22,7 +22,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 
         public string PhoneNumber { get; set; }
 
-        public DateTime StartdateStudy { get; set; }
+        public int StartdateStudy { get; set; }
 
         public Sex Sex { get; set; }
 

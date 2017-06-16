@@ -86,9 +86,8 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         public string StudentNumber { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Date)]
         [Display(Name = "Beginjaar studie")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0: yyyy}")]
+        [Range(2010, 2030)]
         public string StartdateStudy { get; set; }
         
         [Required(ErrorMessage = "{0} is verplicht.")]
