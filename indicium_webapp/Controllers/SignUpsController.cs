@@ -70,29 +70,34 @@ namespace indicium_webapp.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, SignUpViewModel model)
+        public async Task<IActionResult> Create(int id)
         {
             if (id <= 0)
             {
                 return NotFound();
             }
 
+            SignUpViewModel model = new SignUpViewModel();
+
             if (ModelState.IsValid)
             {
+                SignUp signUp = new SignUp();
+                Activity activityResult = _context.Activity.Find(id);
+                
                 // Assigns the currently logged in user Id and activity Id to the signup. 
-                model.ApplicationUser.Id = GetCurrentUserAsync().Id;
-                model.Activity.ActivityID = id;
+                signUp.ApplicationUser = GetCurrentUserAsync();
+                signUp.Activity = activityResult;
 
                 // Validates if activity needs a signup and if user is not already signed up to said activity.
-                if (_context.Activity.Find(id).NeedsSignUp)
+                if (activityResult.NeedsSignUp)
                 {
                     if (!UserSignedUp(id))
                     {
                         // Saves the signup to the database.
-                        _context.Add(CreateSignUp(model));
+                        _context.Add(signUp);
                         await _context.SaveChangesAsync();
 
-                        await _emailSender.SendCalendarInviteAsync(model.ApplicationUser.Email, CreateActivity(model.Activity));
+                        await _emailSender.SendCalendarInviteAsync(signUp.ApplicationUser.Email, signUp.Activity);
 
                         return RedirectToAction("Index");
                     }
@@ -171,15 +176,20 @@ namespace indicium_webapp.Controllers
             {
                 return Forbid();
             }
+
+            GuestViewModel model = new GuestViewModel
+            {
+                Activity = activityResult
+            };
             
-            return View(CreateGuestViewModel(activityResult));
+            return View(model);
         }
 
         // POST: SignUps/Guest/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Guest(int? id, GuestViewModel model)
+        public async Task<IActionResult> Guest(int? id, SignUpViewModel model)
         {
             if (id == null)
             {
@@ -216,56 +226,22 @@ namespace indicium_webapp.Controllers
             return _userManager.GetUserAsync(User).Result;
         }
         
-        private SignUp CreateSignUp(SignUpViewModel model)
-        {
-            return new SignUp
-            {
-                ActivityID = model.Activity.ActivityID,
-                ApplicationUserID = model.ApplicationUser.Id,
-                GuestID = model.Guest.GuestID
-            };
-        }
-        
-        private SignUp CreateGuestSignUp(int id, GuestViewModel model)
+        private SignUp CreateGuestSignUp(int id, SignUpViewModel model)
         {
             var activityResult = _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
             
             var test = new SignUp
             {
-                ActivityID = id,
+                ActivityID = model.SignUpID,
                 Guest = new Guest
                 {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email
+                    FirstName = model.Guest.FirstName,
+                    LastName = model.Guest.LastName,
+                    Email = model.Guest.Email
                 }
             };
 
             return test;
-        }
-        
-        private Activity CreateActivity(ActivityViewModel model)
-        {
-            var activityTypeResult = _context.ActivityType.SingleOrDefault(activityType => activityType.ActivityTypeID == Convert.ToInt32(model.ActivityTypeID));
-            
-            return new Activity
-            {
-                ActivityID = model.ActivityID,
-                Name = model.Name,
-                Description = model.Description,
-                StartDateTime = DateTime.ParseExact(model.StartDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
-                EndDateTime = DateTime.ParseExact(model.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
-                NeedsSignUp = model.NeedsSignUp,
-                ActivityType = activityTypeResult
-            };
-        }
-        
-        private GuestViewModel CreateGuestViewModel(Activity activity)
-        {
-            return new GuestViewModel
-            {
-                Activity = activity
-            };
         }
         
         private SignUpViewModel CreateSignUpViewModel(SignUp signUp)
