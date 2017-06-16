@@ -12,7 +12,7 @@ using indicium_webapp.Models.ViewModels.AccountViewModels;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize(Roles = "Bestuur, Secretaris")]
+    [Authorize(Roles = "Secretaris")]
     public class ApplicationRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,42 +25,10 @@ namespace indicium_webapp.Controllers
         // GET: ApplicationRoles
         public async Task<IActionResult> Index()
         {
-            var applicationrole = await _context.ApplicationRole.ToListAsync();
+            var applicationRolesResult = await _context.ApplicationRole.ToListAsync();
+            IEnumerable<ApplicationRoleViewModel> model = applicationRolesResult.Select(CreateApplicationRoleViewModel);
 
-            IEnumerable<ApplicationRoleViewModel> applicationroleviewmodel = applicationrole.Select(role => new ApplicationRoleViewModel
-            {
-                Id = role.Id,
-                Name = role.Name,
-                Description = role.Description
-            });
-
-            return View(applicationroleviewmodel);
-        }
-
-        // GET: ApplicationRoles/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var applicationrole = await _context.ApplicationRole
-                .SingleOrDefaultAsync(m => m.Id == id);
-            
-            if (applicationrole == null)
-            {
-                return NotFound();
-            }
-
-            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
-            {
-                Id = applicationrole.Id,
-                Name = applicationrole.Name,
-                Description = applicationrole.Description
-            };
-
-            return View(applicationroleviewmodel);
+            return View(model);
         }
 
         // GET: ApplicationRoles/Create
@@ -72,17 +40,18 @@ namespace indicium_webapp.Controllers
         // POST: ApplicationRoles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Id,Name,NormalizedName,ConcurrencyStamp")] ApplicationRole applicationRole)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ApplicationRoleViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(applicationRole);
+                _context.Add(CreateApplicationRole(model));
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction("Index");
             }
-            return View(applicationRole);
+
+            return View(model);
         }
 
         // GET: ApplicationRoles/Edit/5
@@ -93,32 +62,25 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationrole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
+            var applicationRoleResult = await _context.ApplicationRole.SingleOrDefaultAsync(applicationRole => applicationRole.Id == id);
 
-            if (applicationrole == null)
+            if (applicationRoleResult == null)
             {
                 return NotFound();
             }
             
-            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
-            {
-                Id = applicationrole.Id,
-                Name = applicationrole.Name,
-                Description = applicationrole.Description
-            };
-
-            return View(applicationroleviewmodel);
+            return View(CreateApplicationRoleViewModel(applicationRoleResult));
         }
 
         // POST: ApplicationRoles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ApplicationRoleViewModel applicationroleviewmodel)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, ApplicationRoleViewModel model)
         {
-            var newApplicationRole = _context.ApplicationRole.Find(id);
-            if (id != applicationroleviewmodel.Id || newApplicationRole == null)
+            var applicationRole = _context.ApplicationRole.Find(id);
+
+            if (id != model.Id || applicationRole == null)
             {
                 return NotFound();
             }
@@ -127,16 +89,16 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    newApplicationRole.Id = applicationroleviewmodel.Id;
-                    newApplicationRole.Name = applicationroleviewmodel.Name;
-                    newApplicationRole.Description = applicationroleviewmodel.Description;
+                    applicationRole.Id = model.Id;
+                    applicationRole.Name = model.Name;
+                    applicationRole.Description = model.Description;
                     
-                    _context.Update(newApplicationRole);
+                    _context.Update(applicationRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.ApplicationRole.Any(e => e.Id == applicationroleviewmodel.Id))
+                    if (!ApplicationRoleExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -145,9 +107,11 @@ namespace indicium_webapp.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction("Index");
             }
-            return View(applicationroleviewmodel);
+
+            return View(model);
         }
 
         // GET: ApplicationRoles/Delete/5
@@ -158,38 +122,50 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationrole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
+            var applicationRoleResult = await _context.ApplicationRole.SingleOrDefaultAsync(applicationRole => applicationRole.Id == id);
             
-            if (applicationrole == null)
+            if (applicationRoleResult == null)
             {
                 return NotFound();
             }
 
-            ApplicationRoleViewModel applicationroleviewmodel = new ApplicationRoleViewModel
-            {
-                Id = applicationrole.Id,
-                Name = applicationrole.Name,
-                Description = applicationrole.Description
-            };
-
-            return View(applicationroleviewmodel);
+            return View(CreateApplicationRoleViewModel(applicationRoleResult));
         }
 
         // POST: ApplicationRoles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var applicationRole = await _context.ApplicationRole.SingleOrDefaultAsync(m => m.Id == id);
-            _context.ApplicationRole.Remove(applicationRole);
+            var applicationRoleResult = await _context.ApplicationRole.SingleOrDefaultAsync(applicationRole => applicationRole.Id == id);
+            
+            _context.ApplicationRole.Remove(applicationRoleResult);
             await _context.SaveChangesAsync();
+            
             return RedirectToAction("Index");
         }
 
         private bool ApplicationRoleExists(string id)
         {
-            return _context.ApplicationRole.Any(e => e.Id == id);
+            return _context.ApplicationRole.Any(applicationRole => applicationRole.Id == id);
         }
 
+        private ApplicationRole CreateApplicationRole(ApplicationRoleViewModel model)
+        {
+            return new ApplicationRole {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description
+            };
+        }
+        
+        private ApplicationRoleViewModel CreateApplicationRoleViewModel(ApplicationRole applicationRole)
+        {
+            return new ApplicationRoleViewModel
+            {
+                Id = applicationRole.Id,
+                Name = applicationRole.Name,
+                Description = applicationRole.Description
+            };
+        }
     }
 }

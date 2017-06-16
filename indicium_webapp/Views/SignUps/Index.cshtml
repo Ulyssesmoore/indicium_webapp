@@ -24,9 +24,6 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Activity.EndDateTime)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Activity.NeedsSignUp)
-                    </th>
                 <th></th>
             </tr>
         </thead>
@@ -44,9 +41,6 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Activity.EndDateTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Activity.NeedsSignUp)
                     </td>
                     <td>
                         <a class="btn btn-success" asp-action="details" asp-route-id="@item.SignUpID"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></a>

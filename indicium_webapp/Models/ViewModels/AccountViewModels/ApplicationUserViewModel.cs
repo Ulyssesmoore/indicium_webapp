@@ -29,7 +29,10 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         public string LastName { get; set; }
 
         [Display(Name = "Naam")]
-        public string Name { get; }
+        public string Name
+        {
+            get { return FirstName + " " + LastName; }
+        }
         
         [EmailAddress]
         [Display(Name = "E-mailadres")]

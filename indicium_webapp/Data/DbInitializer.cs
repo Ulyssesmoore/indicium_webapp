@@ -22,59 +22,53 @@ namespace indicium_webapp.Data
 
             context.Database.EnsureCreated();
 
-            if (context.Roles.Any())
+            if (!context.Roles.Any())
             {
-                return; // DB has been seeded already
+                var roles = new ApplicationRole[]
+                {
+                    new ApplicationRole { Name = "Lid", NormalizedName = "LID", Description = "Een standaard lid"},
+                    new ApplicationRole { Name = "Bestuur", NormalizedName = "BESTUUR", Description = "Een bestuurslid"},
+                    new ApplicationRole { Name = "Secretaris", NormalizedName = "SECRETARIS", Description = "Een bestuurslid belast met secratariaat"},
+                };
+
+                foreach (ApplicationRole r in roles)
+                {
+                    context.Roles.Add(r);
+                }
+
+                context.SaveChanges();
             }
 
-            var roles = new ApplicationRole[]
+            /*
+            var email = "usergenerated@test.test";
+            if (!context.ApplicationUser.Any(x => x.Email == email))
             {
-                new ApplicationRole { Name = "Lid", NormalizedName = "LID", Description = "Een standaard lid"},
-                new ApplicationRole { Name = "Bestuur", NormalizedName = "BESTUUR", Description = "Een bestuurslid"},
-                new ApplicationRole { Name = "Secretaris", NormalizedName = "SECRETARIS", Description = "Een bestuurslid belast met secratariaat"},
-            };          
+                var user = new ApplicationUser
+                {
+                    StudentNumber = 1234567,
+                    FirstName = "a",
+                    LastName = "a",
+                    PhoneNumber = "1",
+                    UserName = email,
+                    Email = email,
+                    Sex = (Sex)0,
+                    Birthday = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    AddressCity = "a",
+                    AddressStreet = "a",
+                    AddressNumber = "1",
+                    AddressPostalCode = "a",
+                    AddressCountry = "Nederland",
+                    StartdateStudy = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    RegistrationDate = DateTime.Today,
+                    StudyType = (StudyType)1,
+                    Status = (Status)2
+                };
 
-            foreach (ApplicationRole r in roles)
-            {
-                context.Roles.Add(r);
+                userManager.AddPasswordAsync(user, "Helloworld01!");
+                userManager.CreateAsync(user);
+                userManager.AddToRoleAsync(user, "Secretaris");
             }
-
-            context.SaveChanges();
-
-            // DIT WERKT NIET
-
-            //if (!context.ApplicationUser.Any(u => u.FirstName == "Admin"))
-            //{
-            //    var user = new ApplicationUser
-            //    {
-            //        StudentNumber = 0000000,
-            //        FirstName = "Admin",
-            //        LastName = "Admin",
-            //        PhoneNumber = "123456789",
-            //        UserName = "admin@admin.com",
-            //        Email = "admin@admin.com",
-            //        Sex = Sex.Man,
-            //        Birthday = DateTime.ParseExact("01-01-1997", "dd-MM-yyyy", new CultureInfo("nl-NL")),
-            //        AddressCity = "Admindam",
-            //        AddressStreet = "Adminstraat",
-            //        AddressNumber = "1",
-            //        AddressPostalCode = "1234Ab",
-            //        AddressCountry = "Adminland",
-            //        StartdateStudy = DateTime.ParseExact("01-01-2015", "dd-MM-yyyy", new CultureInfo("nl-NL")),
-            //        RegistrationDate = DateTime.Today,
-            //        StudyType = StudyType.SIE,
-            //        Status = Status.Lid
-            //    };
-
-            //    await userManager.CreateAsync(user, "admin");
-
-            //    foreach (var role in roles)
-            //    {
-            //        await userManager.AddToRoleAsync(user, role.Name);
-            //    }
-
-            //    context.SaveChanges();
-            //}
+            */
         }
     }
 }

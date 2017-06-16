@@ -20,6 +20,12 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Display(Name = "Achternaam")]
         public string LastName { get; set; }
 
+        [Display(Name = "Naam")]
+        public string Name
+        {
+            get { return FirstName + " " + LastName; }
+        }
+
         [Required(ErrorMessage = "{0} is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mailadres")] 

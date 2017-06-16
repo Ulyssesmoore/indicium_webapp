@@ -32,7 +32,7 @@ namespace indicium_webapp.Models
         public int ActivityTypeID { get; set; }
 
         // Property to help select related data
-        public virtual ActivityType ActivityType { get; set; }
+        public ActivityType ActivityType { get; set; }
 
         public virtual ICollection<SignUp> SignUps { get; set; }
     }

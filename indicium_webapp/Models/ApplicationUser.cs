@@ -46,10 +46,7 @@ namespace indicium_webapp.Models
 
         public string Name
         {
-            get
-            {
-                return FirstName + " " + LastName;
-            }
+            get { return FirstName + " " + LastName; }
         }
 
         public Sex Sex { get; set; }

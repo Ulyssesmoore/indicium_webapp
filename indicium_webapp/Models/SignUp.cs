@@ -16,15 +16,15 @@ namespace indicium_webapp.Models
 
         public int ActivityID { get; set; }
 
-        public virtual Activity Activity { get; set; }
+        public Activity Activity { get; set; }
 
         public string ApplicationUserID { get; set; }
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         public int? GuestID { get; set; }
 
-        public virtual Guest Guest { get; set; }
+        public Guest Guest { get; set; }
 
         // Validation to make sure there's at least a ApplicationUser or Guest coupled to the signup
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -1,9 +1,6 @@
-@using indicium_webapp.Models
+@model ActivityViewModel
 
 @inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-
-@model ActivityViewModel
 
 @{
     ViewData["Title"] = "Activiteit details";
@@ -14,39 +11,6 @@
 
 <div>
     <h4>Activiteit</h4>
-
-    <div class="form-actions no-color">
-        @if (Model.NeedsSignUp)
-        {
-            @if (SignInManager.IsSignedIn(User))
-            {
-                @if (@ViewBag.SignedUp)
-                {
-                    <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
-                }
-                else
-                {
-                    <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
-                        <button type="submit" class="btn btn-primary">Inschrijven</button>
-                    </form>
-                }
-            }
-            else
-            {
-                <a class="btn btn-primary" asp-controller="signups" asp-action="guest" asp-route-id="@Model.ActivityID">Inschrijven</a>
-            }
-        }
-
-        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
-        {
-            <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
-        }
-        <a asp-action="Calendar" class="btn btn-default">Terug naar kalender</a>
-        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
-        {
-            <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
-        }
-    </div>
 
     <hr />
 
@@ -88,6 +52,40 @@
             @Html.DisplayFor(model => model.NeedsSignUp)
         </dd>
     </dl>
+
+    <div class="form-actions no-color">
+        @if (Model.NeedsSignUp)
+        {
+            @if (SignInManager.IsSignedIn(User))
+            {
+                @if (@ViewBag.LoggedInUserSignedUp)
+                {
+                    <a class="btn btn-danger" asp-controller="signups" asp-action="delete" asp-route-id="@Model.ActivityID">Uitschrijven</a>
+                }
+                else
+                {
+                    <form asp-area="" asp-controller="signups" asp-action="create" asp-route-id="@Model.ActivityID" method="post" style="display: inline-block">
+                        <button type="submit" class="btn btn-primary">Inschrijven</button>
+                    </form>
+                }
+            }
+            else
+            {
+                <a class="btn btn-primary" asp-controller="signups" asp-action="guest" asp-route-id="@Model.ActivityID">Inschrijven</a>
+            }
+        }
+
+        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
+        }
+
+        <a asp-action="Calendar" class="btn btn-default">Terug naar kalender</a>
+        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        {
+            <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
+        }
+    </div>
 </div>
 
 <div>
@@ -95,79 +93,99 @@
     {
         <hr/>
 
-        <h4>Inschrijvingen</h4>
+        <h3>Inschrijvingen</h3>
 
         @if (Model.SignUps != null && Model.SignUps.Any())
         {
-            @if (ViewBag.applicationUserResult)
-            {
-                <h5>Ingeschreven leden</h5>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                @if (ViewBag.ApplicationUsersSignedUpCount > 0)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Leden (@ViewBag.ApplicationUsersSignedUpCount)</a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Studentnummer</th>
+                                            <th>Naam</th>
+                                            <th>Geslacht</th>
+                                            <th>Studietype</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.SignUps)
+                                        {
+                                            @if (item.ApplicationUser != null)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a asp-controller="signups" asp-action="details" asp-route-id="@item.SignUpID">
+                                                            @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Sex)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ApplicationUser.StudyType)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Studentnummer</th>
-                            <th>Naam</th>
-                            <th>Geslacht</th>
-                            <th>Studietype</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.SignUps)
-                        {
-                            @if (item.ApplicationUser != null)
-                            {
-                                <tr>
-                                    <td>
-                                        <a asp-controller="signups" asp-action="details" asp-route-id="@item.SignUpID">
-                                            @Html.DisplayFor(modelItem => item.ApplicationUser.StudentNumber)
-                                        </a>
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Name)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ApplicationUser.Sex)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ApplicationUser.StudyType)
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            }
-
-            @if (ViewBag.guestResult)
-            {
-                <h5>Gasten</h5>
-                
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Naam</th>
-                            <th>E-mail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.SignUps)
-                        {
-                            @if (item.Guest != null)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Guest.FirstName) @Html.DisplayFor(modelItem => item.Guest.LastName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Guest.Email)
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            }
+                @if (ViewBag.GuestsSignedUpCount > 0)
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Gasten (@ViewBag.GuestsSignedUpCount)</a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Naam</th>
+                                            <th>E-mail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.SignUps)
+                                        {
+                                            @if (item.Guest != null)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Guest.Name)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Guest.Email)
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
         }
         else
         {

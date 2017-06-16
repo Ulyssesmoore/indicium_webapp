@@ -28,8 +28,6 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 
         public DateTime Birthday { get; set; }
 
-        public string Iban { get; set; }
-
         public StudyType StudyType { get; set; }
 
         //public bool BrowserRemembered { get; set; }
