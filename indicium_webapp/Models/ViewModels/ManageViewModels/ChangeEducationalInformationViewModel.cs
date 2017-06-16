@@ -14,9 +14,8 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         public StudyType StudyType { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Begindatum studie")]
-        public DateTime StartdateStudy { get; set; }
+        [Range(2010, 2030)]
+        public int StartdateStudy { get; set; }
     }
 }

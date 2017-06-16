@@ -143,7 +143,7 @@ namespace indicium_webapp.Controllers
                     applicationUser.AddressCity = model.AddressCity;
                     applicationUser.AddressCountry = model.AddressCountry;
                     applicationUser.StudentNumber = Convert.ToInt32(model.StudentNumber);
-                    applicationUser.StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL"));
+                    applicationUser.StartdateStudy =Int32.Parse(model.StartdateStudy);
                     applicationUser.StudyType = (StudyType) Convert.ToInt32(model.StudyType);
                     applicationUser.PhoneNumber = model.PhoneNumber;
                     applicationUser.Status = model.Status;
@@ -276,7 +276,7 @@ namespace indicium_webapp.Controllers
                 AddressCity = model.AddressCity,
                 AddressCountry = model.AddressCountry,
                 StudentNumber = Convert.ToInt32(model.StudentNumber),
-                StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                StartdateStudy = Int32.Parse(model.StartdateStudy),
                 StudyType = (StudyType) Convert.ToInt32(model.StudyType),
                 PhoneNumber = model.PhoneNumber,
                 Status = model.Status

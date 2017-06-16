@@ -65,7 +65,7 @@ namespace indicium_webapp.Models
 
         public int StudentNumber { get; set; }
 
-        public DateTime StartdateStudy { get; set; }
+        public int StartdateStudy { get; set; }
 
         public StudyType StudyType { get; set; }
 
