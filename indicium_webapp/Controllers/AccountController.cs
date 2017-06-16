@@ -363,7 +363,7 @@ namespace indicium_webapp.Controllers
                 var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Wachtwoord Resetten",
                    $"Klik op de volgende link om jouw wachtwoord te resetten: <a href='{callbackUrl}'>link</a><br>" +
-                   $"Groet,<b>" +
+                   $"Groet,<br>" +
                    $"Indicium");
                 return View("ForgotPasswordConfirmation");
             }
