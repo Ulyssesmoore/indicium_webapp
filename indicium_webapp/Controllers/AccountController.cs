@@ -183,8 +183,10 @@ namespace indicium_webapp.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
                         new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    await _emailSender.SendEmailAsync(model.Email, "Bevestig E-mailadres",
+                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a>" +
+                        $"Groet,<br>" +
+                        $"Indicium");
 
                     await _userManager.AddToRoleAsync(user, "Lid");
                     _logger.LogInformation(3, "User created a new account with password and role.");
