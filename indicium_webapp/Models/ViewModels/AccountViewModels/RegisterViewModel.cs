@@ -72,10 +72,6 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Display(Name = "Land")]
         public string AddressCountry { get; set; }
 
-        [RegularExpression(@"^(NL([0-9]{2})([A-Z]{4})([0-9]{10}))$", ErrorMessage = "Ongeldige ingave")]
-        [Display(Name = "IBAN")]
-        public string Iban { get; set; }
-
         [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(7, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} karakters lang zijn.", MinimumLength = 7)]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Must be numeric")]

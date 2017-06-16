@@ -51,8 +51,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/Login
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -64,9 +63,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -122,8 +119,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/Register
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
             RegisterViewModel model = new RegisterViewModel();
@@ -147,10 +143,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Register
-        [ValidateRecaptcha]
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [ValidateRecaptcha, HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -219,8 +212,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Logout
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -230,9 +222,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
@@ -243,8 +233,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ExternalLoginCallback
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
@@ -285,9 +274,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
             if (ModelState.IsValid)
@@ -318,8 +305,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /Account/ConfirmEmail
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -337,8 +323,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ForgotPassword
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -346,9 +331,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -376,8 +359,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ForgotPasswordConfirmation
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -385,8 +367,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ResetPassword
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
         {
             return code == null ? View("Error") : View();
@@ -394,9 +375,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ResetPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -420,8 +399,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ResetPasswordConfirmation
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -429,8 +407,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/SendCode
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
         {
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -445,9 +422,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -483,8 +458,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/VerifyCode
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
         {
             // Require that the user has already logged in via username/password or external login
@@ -498,9 +472,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/VerifyCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -530,8 +502,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET /Account/AccessDenied
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

@@ -19,11 +19,11 @@ namespace indicium_webapp.Models
 
         public int CommissionID { get; set; }
 
-        public virtual Commission Commission { get; set; }
+        public Commission Commission { get; set; }
 
         public string ApplicationUserID { get; set; }
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
         public CommisionMemberStatus Status { get; set; }
     }

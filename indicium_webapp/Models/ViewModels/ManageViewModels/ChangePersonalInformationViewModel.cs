@@ -17,11 +17,6 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Geboortedag")]
-        public DateTime Birthday { get; set; }
-       
-        [DataType(DataType.Text)]
-        [RegularExpression(@"^(NL([0-9]{2})([A-Z]{4})([0-9]{10}))$")]
-        [Display(Name = "Iban")]
-        public string Iban { get; set; }        
+        public DateTime Birthday { get; set; }       
     }
 }

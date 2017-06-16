@@ -24,10 +24,7 @@ namespace indicium_webapp.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
-        public SignUpsController(ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+        public SignUpsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
@@ -38,27 +35,14 @@ namespace indicium_webapp.Controllers
         // GET: SignUps
         public async Task<IActionResult> Index()
         {
-            var signups = await _context.SignUp
-                .Include(m => m.Activity)
-                .Where(m => m.ApplicationUserID == GetCurrentUserAsync().Id)
+            var signUpsResult = await _context.SignUp
+                .Include(signUp => signUp.Activity).ThenInclude(signUp => signUp.ActivityType)
+                .Where(signUp => signUp.ApplicationUserID == GetCurrentUserAsync().Id)
                 .ToListAsync();
             
-            IEnumerable<SignUpViewModel> signupviewmodel = signups.Select(signup => new SignUpViewModel
-            {
-                SignUpID = signup.SignUpID,
-                Activity = new ActivityViewModel {
-                    ActivityID = signup.Activity.ActivityID,
-                    Name = signup.Activity.Name,
-                    Description = signup.Activity.Description,
-                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
-                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
-                    NeedsSignUp = signup.Activity.NeedsSignUp,
-                    ActivityType = signup.Activity.ActivityType,
-                    SignUps = signup.Activity.SignUps
-                }
-            });
+            IEnumerable<SignUpViewModel> model = signUpsResult.Select(CreateSignUpViewModel);
 
-            return View(signupviewmodel);
+            return View(model);
         }
 
         // GET: SignUps/Details/5
@@ -69,55 +53,24 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signup = await _context.SignUp
-                .Include(m => m.Activity)
-                .Include(m => m.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.SignUpID == id);
+            var signUpResult = await _context.SignUp
+                .Include(signUp => signUp.Activity).ThenInclude(signUp => signUp.ActivityType)
+                .Include(signUp => signUp.ApplicationUser)
+                .SingleOrDefaultAsync(signUp => signUp.SignUpID == id);
 
-            if (signup == null)
+            if (signUpResult == null)
             {
                 return NotFound();
             }
 
-            SignUpViewModel signupviewmodel = new SignUpViewModel
-            {
-                SignUpID = signup.SignUpID,
-                ApplicationUser = new ApplicationUserViewModel {
-                    FirstName = signup.ApplicationUser.FirstName,
-                    LastName = signup.ApplicationUser.LastName,
-                    Sex = signup.ApplicationUser.Sex.ToString(),
-                    Birthday = signup.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    AddressStreet = signup.ApplicationUser.AddressStreet,
-                    AddressNumber = signup.ApplicationUser.AddressNumber,
-                    AddressPostalCode = signup.ApplicationUser.AddressPostalCode,
-                    AddressCity = signup.ApplicationUser.AddressCity,
-                    AddressCountry = signup.ApplicationUser.AddressCountry,
-                    StudentNumber = signup.ApplicationUser.StudentNumber.ToString(),
-                    StartdateStudy = signup.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    StudyType = signup.ApplicationUser.StudyType.ToString(),
-                    PhoneNumber = signup.ApplicationUser.PhoneNumber
-                },
-                Activity = new ActivityViewModel {
-                    ActivityID = signup.Activity.ActivityID,
-                    Name = signup.Activity.Name,
-                    Description = signup.Activity.Description,
-                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    NeedsSignUp = signup.Activity.NeedsSignUp,
-                    ActivityType = signup.Activity.ActivityType,
-                    SignUps = signup.Activity.SignUps
-                }
-            };
-
-            return View(signupviewmodel);
+            return View(CreateSignUpViewModel(signUpResult));
         }
 
         // POST: SignUps/Create/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, SignUp signUp)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int id, SignUpViewModel model)
         {
             if (id <= 0)
             {
@@ -127,8 +80,8 @@ namespace indicium_webapp.Controllers
             if (ModelState.IsValid)
             {
                 // Assigns the currently logged in user Id and activity Id to the signup. 
-                signUp.ApplicationUserID = GetCurrentUserAsync().Id;
-                signUp.ActivityID = id;
+                model.ApplicationUser.Id = GetCurrentUserAsync().Id;
+                model.Activity.ActivityID = id;
 
                 // Validates if activity needs a signup and if user is not already signed up to said activity.
                 if (_context.Activity.Find(id).NeedsSignUp)
@@ -136,10 +89,10 @@ namespace indicium_webapp.Controllers
                     if (!UserSignedUp(id))
                     {
                         // Saves the signup to the database.
-                        _context.Add(signUp);
+                        _context.Add(CreateSignUp(model));
                         await _context.SaveChangesAsync();
 
-                        await _emailSender.SendCalendarInviteAsync(signUp.ApplicationUser.Email, signUp.Activity);
+                        await _emailSender.SendCalendarInviteAsync(model.ApplicationUser.Email, CreateActivity(model.Activity));
 
                         return RedirectToAction("Index");
                     }
@@ -154,7 +107,7 @@ namespace indicium_webapp.Controllers
                 }
             }
 
-            return View(signUp);
+            return View(model);
         }
 
         // GET: SignUps/Delete/5
@@ -165,57 +118,27 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var signup = await _context.SignUp
-                .Include(m => m.Activity)
-                .Include(m => m.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Id);
+            var signUpResult = await _context.SignUp
+                .Include(signUp => signUp.Activity)
+                .ThenInclude(signUp => signUp.ActivityType)
+                .Include(signUp => signUp.ApplicationUser)
+                .SingleOrDefaultAsync(signUp => signUp.ActivityID == id && signUp.ApplicationUserID == GetCurrentUserAsync().Id);
 
-            if (signup == null)
+            if (signUpResult == null)
             {
                 return NotFound();
             }
 
-            SignUpViewModel signupviewmodel = new SignUpViewModel
-            {
-                SignUpID = signup.SignUpID,
-                ApplicationUser = new ApplicationUserViewModel {
-                    FirstName = signup.ApplicationUser.FirstName,
-                    LastName = signup.ApplicationUser.LastName,
-                    Sex = signup.ApplicationUser.Sex.ToString(),
-                    Birthday = signup.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    AddressStreet = signup.ApplicationUser.AddressStreet,
-                    AddressNumber = signup.ApplicationUser.AddressNumber,
-                    AddressPostalCode = signup.ApplicationUser.AddressPostalCode,
-                    AddressCity = signup.ApplicationUser.AddressCity,
-                    AddressCountry = signup.ApplicationUser.AddressCountry,
-                    StudentNumber = signup.ApplicationUser.StudentNumber.ToString(),
-                    StartdateStudy = signup.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    StudyType = signup.ApplicationUser.StudyType.ToString(),
-                    PhoneNumber = signup.ApplicationUser.PhoneNumber,
-                },
-                Activity = new ActivityViewModel {
-                    ActivityID = signup.Activity.ActivityID,
-                    Name = signup.Activity.Name,
-                    Description = signup.Activity.Description,
-                    StartDateTime = signup.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    EndDateTime = signup.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    NeedsSignUp = signup.Activity.NeedsSignUp,
-                    ActivityType = signup.Activity.ActivityType,
-                    SignUps = signup.Activity.SignUps
-                }
-            };
-
-            return View(signupviewmodel);
+            return View(CreateSignUpViewModel(signUpResult));
         }
 
         // POST: SignUps/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var signUp = await _context.SignUp.SingleOrDefaultAsync(m => m.ActivityID == id && m.ApplicationUserID == GetCurrentUserAsync().Id);
+            var signUpResult = await _context.SignUp.SingleOrDefaultAsync(signUp => signUp.ActivityID == id && signUp.ApplicationUserID == GetCurrentUserAsync().Id);
 
-            _context.SignUp.Remove(signUp);
+            _context.SignUp.Remove(signUpResult);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
@@ -235,51 +158,41 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+            var activityResult = await _context.Activity
+                .Include(activity => activity.ActivityType)
+                .SingleOrDefaultAsync(activity => activity.ActivityID == id);
 
-            if (activity == null)
+            if (activityResult == null)
             {
                 return NotFound();
             }
 
-            GuestViewModel guestviewmodel = new GuestViewModel
-            {
-                Activity = activity
-            };
-
-            if (activity.NeedsSignUp == false)
+            if (activityResult.NeedsSignUp == false)
             {
                 return Forbid();
             }
             
-            return View(guestviewmodel);
+            return View(CreateGuestViewModel(activityResult));
         }
 
         // POST: SignUps/Guest/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [AllowAnonymous]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Guest(int id, Guest guest)
+        [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Guest(int? id, GuestViewModel model)
         {
-            if (id <= 0)
+            if (id == null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var activity = await _context.Activity.SingleOrDefaultAsync(m => m.ActivityID == id);
+                var activityResult = await _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
 
-                if (activity.NeedsSignUp)
+                if (activityResult.NeedsSignUp)
                 {
-                    SignUp signup = new SignUp {
-                        ActivityID = activity.ActivityID,
-                        Guest = guest
-                    };
-                    
-                    _context.Add(signup);
+                    _context.Add(CreateGuestSignUp(activityResult.ActivityID, model));
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Calendar", "activities");
@@ -290,22 +203,102 @@ namespace indicium_webapp.Controllers
                 }
             }
 
-            return View(guest);
-        }
-
-        private bool SignUpExists(int signUpId)
-        {
-            return _context.SignUp.Any(e => e.SignUpID == signUpId);
+            return View(model);
         }
 
         private bool UserSignedUp(int activityId)
         {
-            return _context.SignUp.Any(e => e.ActivityID == activityId && e.ApplicationUserID == GetCurrentUserAsync().Id);
+            return _context.SignUp.Any(signUp => signUp.ActivityID == activityId && signUp.ApplicationUserID == GetCurrentUserAsync().Id);
         }
 
         private ApplicationUser GetCurrentUserAsync()
         {
             return _userManager.GetUserAsync(User).Result;
+        }
+        
+        private SignUp CreateSignUp(SignUpViewModel model)
+        {
+            return new SignUp
+            {
+                ActivityID = model.Activity.ActivityID,
+                ApplicationUserID = model.ApplicationUser.Id,
+                GuestID = model.Guest.GuestID
+            };
+        }
+        
+        private SignUp CreateGuestSignUp(int id, GuestViewModel model)
+        {
+            var activityResult = _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
+            
+            var test = new SignUp
+            {
+                ActivityID = id,
+                Guest = new Guest
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email
+                }
+            };
+
+            return test;
+        }
+        
+        private Activity CreateActivity(ActivityViewModel model)
+        {
+            var activityTypeResult = _context.ActivityType.SingleOrDefault(activityType => activityType.ActivityTypeID == Convert.ToInt32(model.ActivityTypeID));
+            
+            return new Activity
+            {
+                ActivityID = model.ActivityID,
+                Name = model.Name,
+                Description = model.Description,
+                StartDateTime = DateTime.ParseExact(model.StartDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                EndDateTime = DateTime.ParseExact(model.EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                NeedsSignUp = model.NeedsSignUp,
+                ActivityType = activityTypeResult
+            };
+        }
+        
+        private GuestViewModel CreateGuestViewModel(Activity activity)
+        {
+            return new GuestViewModel
+            {
+                Activity = activity
+            };
+        }
+        
+        private SignUpViewModel CreateSignUpViewModel(SignUp signUp)
+        {
+            return new SignUpViewModel
+            {
+                SignUpID = signUp.SignUpID,
+                ApplicationUser = new ApplicationUserViewModel {
+                    FirstName = signUp.ApplicationUser.FirstName,
+                    LastName = signUp.ApplicationUser.LastName,
+                    Sex = signUp.ApplicationUser.Sex.ToString(),
+                    Birthday = signUp.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    AddressStreet = signUp.ApplicationUser.AddressStreet,
+                    AddressNumber = signUp.ApplicationUser.AddressNumber,
+                    AddressPostalCode = signUp.ApplicationUser.AddressPostalCode,
+                    AddressCity = signUp.ApplicationUser.AddressCity,
+                    AddressCountry = signUp.ApplicationUser.AddressCountry,
+                    StudentNumber = signUp.ApplicationUser.StudentNumber.ToString(),
+                    StartdateStudy = signUp.ApplicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StudyType = signUp.ApplicationUser.StudyType.ToString(),
+                    PhoneNumber = signUp.ApplicationUser.PhoneNumber
+                },
+                Activity = new ActivityViewModel {
+                    ActivityID = signUp.Activity.ActivityID,
+                    Name = signUp.Activity.Name,
+                    Description = signUp.Activity.Description,
+                    StartDateTime = signUp.Activity.StartDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    EndDateTime = signUp.Activity.EndDateTime.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    NeedsSignUp = signUp.Activity.NeedsSignUp,
+                    ActivityType = signUp.Activity.ActivityType,
+                    SignUps = signUp.Activity.SignUps
+                }
+            };
         }
     }
 }

@@ -21,6 +21,11 @@ namespace indicium_webapp.Models
 
         public string LastName { get; set; }
 
+        public string Name
+        {
+            get { return FirstName + " " + LastName; }
+        }
+
         public string Email { get; set; }
 
         public virtual ICollection<SignUp> SignUps { get; set; }

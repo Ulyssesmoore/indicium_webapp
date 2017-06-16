@@ -24,14 +24,14 @@ namespace indicium_webapp.Models.ViewModels
         [DataType(DataType.DateTime)]
         [Display(Name = "Startdatum")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy HH:mm}")]
-        public String StartDateTime { get; set; }
+        public string StartDateTime { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(100, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [DataType(DataType.DateTime)]
         [Display(Name = "Einddatum")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy HH:mm}")]
-        public String EndDateTime { get; set; }
+        public string EndDateTime { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Inschrijving verplicht")]
@@ -39,7 +39,10 @@ namespace indicium_webapp.Models.ViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Activiteittype")]
-        public virtual ActivityType ActivityType { get; set; }
+        public string ActivityTypeID { get; set; }
+
+        [Display(Name = "Activiteittype")]
+        public ActivityType ActivityType { get; set; }
 
         [Display(Name = "Inschrijvingen")]
         public virtual ICollection<SignUp> SignUps { get; set; }

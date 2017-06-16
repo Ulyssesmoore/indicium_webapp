@@ -27,13 +27,8 @@ namespace indicium_webapp.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Bestuur")]
         // GET: ApplicationUsers
-        public async Task<IActionResult> Index(
-            string studyTypesList,
-            string nameFilter, 
-            string studyFilter,
-            string statusFilter)
+        public async Task<IActionResult> Index(string studyTypesList, string nameFilter, string studyFilter, string statusFilter)
         {
             ViewData["NameFilter"] = nameFilter;
             ViewData["StudyFilter"] = studyFilter;
@@ -64,28 +59,10 @@ namespace indicium_webapp.Controllers
                 users = users.Where(u => u.Status != Status.Nieuw).Where(u => u.Status != Status.Uitgeschreven);
             }
 
-            var applicationusers = await users.AsNoTracking().ToListAsync();
+            var applicationUsersResult = await users.AsNoTracking().ToListAsync();
+            IEnumerable<ApplicationUserViewModel> model = applicationUsersResult.Select(CreateApplicationUserViewModel);
 
-            IEnumerable<ApplicationUserViewModel> applicationuserviewmodel = applicationusers.Select(CreateApplicationUserViewModel);
-
-            return View(applicationuserviewmodel);
-        }
-
-        // GET: ApplicationUsers/Approval
-        [Authorize(Roles = "Secretaris")]
-        public async Task<IActionResult> Approval()
-        {
-            var users = from u in _context.ApplicationUser select u;
-
-            users = users.OrderBy(u => u.RegistrationDate);
-
-            var applicationUsers = await users.AsNoTracking()
-                .Where(x => x.Status == Status.Nieuw)
-                .ToListAsync();
-
-            IEnumerable<ApplicationUserViewModel> applicationUserViewmodel = applicationUsers.Select(CreateApplicationUserViewModel);
-
-            return View(applicationUserViewmodel);
+            return View(model);
         }
 
         // GET: ApplicationUsers/Details/5
@@ -96,20 +73,18 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationUser = await _context.ApplicationUser
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
             
-            if (applicationUser == null)
+            if (applicationUserResult == null)
             {
                 return NotFound();
             }
 
-            ApplicationUserViewModel applicationUserViewmodel = CreateApplicationUserViewModel(applicationUser);
-
-            return View(applicationUserViewmodel);
+            return View(CreateApplicationUserViewModel(applicationUserResult));
         }
 
         // GET: ApplicationUsers/Edit/5
+        [Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -117,14 +92,12 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationUser = await _context.ApplicationUser.SingleOrDefaultAsync(m => m.Id == id);
+            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
 
-            if (applicationUser == null)
+            if (applicationUserResult == null)
             {
                 return NotFound();
             }
-
-            ApplicationUserViewModel applicationUserViewmodel = CreateApplicationUserViewModel(applicationUser);
 
             var checkBoxListItems = new List<CheckBoxListItem>();
             foreach (var role in _context.ApplicationRole.ToListAsync().Result)
@@ -133,23 +106,25 @@ namespace indicium_webapp.Controllers
                 {
                     ID = role.Id,
                     Display = role.Name,
-                    IsChecked = _userManager.IsInRoleAsync(applicationUser, role.Name).Result
+                    IsChecked = _userManager.IsInRoleAsync(applicationUserResult, role.Name).Result
                 });
             }
-            applicationUserViewmodel.Roles = checkBoxListItems;
+            
+            ApplicationUserViewModel model = CreateApplicationUserViewModel(applicationUserResult);
+            model.Roles = checkBoxListItems;
 
-            return View(applicationUserViewmodel);
+            return View(model);
         }
 
         // POST: ApplicationUsers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ApplicationUserViewModel applicationuserviewmodel)
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Secretaris")]
+        public async Task<IActionResult> Edit(string id, ApplicationUserViewModel model)
         {
             var applicationUser = _context.ApplicationUser.Find(id);
-            if (id != applicationuserviewmodel.Id || applicationUser == null)
+            
+            if (id != model.Id || applicationUser == null)
             {
                 return NotFound();
             }
@@ -158,29 +133,25 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    applicationUser.FirstName = applicationuserviewmodel.FirstName;
-                    applicationUser.LastName = applicationuserviewmodel.LastName;
-                    applicationUser.Sex = (Sex) Convert.ToInt32(applicationuserviewmodel.Sex);
-                    applicationUser.Birthday = DateTime.ParseExact(applicationuserviewmodel.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"));
-                    applicationUser.AddressStreet = applicationuserviewmodel.AddressStreet;
-                    applicationUser.AddressNumber = applicationuserviewmodel.AddressNumber;
-                    applicationUser.AddressPostalCode = applicationuserviewmodel.AddressPostalCode;
-                    applicationUser.AddressCity = applicationuserviewmodel.AddressCity;
-                    applicationUser.AddressCountry = applicationuserviewmodel.AddressCountry;
-                    applicationUser.StudentNumber = Convert.ToInt32(applicationuserviewmodel.StudentNumber);
-                    applicationUser.StartdateStudy = DateTime.ParseExact(applicationuserviewmodel.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL"));
-                    applicationUser.StudyType = (StudyType) Convert.ToInt32(applicationuserviewmodel.StudyType);
-                    applicationUser.PhoneNumber = applicationuserviewmodel.PhoneNumber;
+                    applicationUser.FirstName = model.FirstName;
+                    applicationUser.LastName = model.LastName;
+                    applicationUser.Sex = (Sex) Convert.ToInt32(model.Sex);
+                    applicationUser.Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"));
+                    applicationUser.AddressStreet = model.AddressStreet;
+                    applicationUser.AddressNumber = model.AddressNumber;
+                    applicationUser.AddressPostalCode = model.AddressPostalCode;
+                    applicationUser.AddressCity = model.AddressCity;
+                    applicationUser.AddressCountry = model.AddressCountry;
+                    applicationUser.StudentNumber = Convert.ToInt32(model.StudentNumber);
+                    applicationUser.StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL"));
+                    applicationUser.StudyType = (StudyType) Convert.ToInt32(model.StudyType);
+                    applicationUser.PhoneNumber = model.PhoneNumber;
+                    applicationUser.Status = model.Status;
                     
-                    if (_userManager.GetRolesAsync(GetCurrentUserAsync()).Result.Contains("Secretaris"))
-                    {
-                        applicationUser.Status = applicationuserviewmodel.Status;
-                    }
-
                     _context.Update(applicationUser);
                     await _context.SaveChangesAsync();
 
-                    foreach (var role in applicationuserviewmodel.Roles.ToList())
+                    foreach (var role in model.Roles.ToList())
                     {
                         // Get the role values from the database, because Name has dissappeared from 
                         // the above role and we need name for the methods below
@@ -205,7 +176,7 @@ namespace indicium_webapp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApplicationUserExists(applicationuserviewmodel.Id))
+                    if (!ApplicationUserExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -214,94 +185,104 @@ namespace indicium_webapp.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction("Index");
             }
             
-            return View(applicationuserviewmodel);
+            return View(model);
         }
 
-        // POST: ApplicationUsers/Approve/5
-        [HttpPost]
+        // GET: ApplicationUsers/Approval
         [Authorize(Roles = "Secretaris")]
+        public async Task<IActionResult> Approval()
+        {
+            var users = from u in _context.ApplicationUser select u;
+
+            users = users.OrderBy(user => user.RegistrationDate);
+
+            var applicationUsersResult = await users.AsNoTracking()
+                .Where(applicationUser => applicationUser.Status == Status.Nieuw)
+                .ToListAsync();
+
+            return View(applicationUsersResult.Select(CreateApplicationUserViewModel));
+        }
+        
+        // POST: ApplicationUsers/Approve/5
+        [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Approve(string id)
         {
-            var newApplicationUser = _context.ApplicationUser.Find(id);
-            if (newApplicationUser == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    newApplicationUser.Status = Status.Lid;
-
-                    _context.Update(newApplicationUser);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApplicationUserExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Approval");
-            }
-            return View(newApplicationUser);
+            await ApproveApplicationUser(id, Status.Lid);
+            
+            return RedirectToAction("Approval");
         }
 
         // POST: ApplicationUsers/Disapprove/5
-        [HttpPost]
-        [Authorize(Roles = "Secretaris")]
+        [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Disapprove(string id)
         {
-            var newApplicationUser = _context.ApplicationUser.Find(id);
-            if (newApplicationUser == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    newApplicationUser.Status = Status.Afgekeurd;
-
-                    _context.Update(newApplicationUser);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ApplicationUserExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Approval");
-            }
-            return View(newApplicationUser);
+            await ApproveApplicationUser(id, Status.Afgekeurd);
+            
+            return RedirectToAction("Approval");
         }
 
+        private async Task<bool> ApproveApplicationUser(string id, Status status)
+        {
+            var result = false;
+            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);            
+
+            try
+            {
+                applicationUserResult.Status = status;
+
+                _context.Update(applicationUserResult);
+                await _context.SaveChangesAsync();
+
+                result = true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return result;
+        }
+        
         private bool ApplicationUserExists(string id)
         {
             return _context.ApplicationUser.Any(e => e.Id == id);
         }
 
-        private ApplicationUser GetCurrentUserAsync()
+        private ApplicationUser CreateApplicationUser(ApplicationUserViewModel model)
         {
-            return _userManager.GetUserAsync(User).Result;
+            return new ApplicationUser
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Sex = (Sex) Convert.ToInt32(model.Sex),
+                Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                AddressStreet = model.AddressStreet,
+                AddressNumber = model.AddressNumber,
+                AddressPostalCode = model.AddressPostalCode,
+                AddressCity = model.AddressCity,
+                AddressCountry = model.AddressCountry,
+                StudentNumber = Convert.ToInt32(model.StudentNumber),
+                StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                StudyType = (StudyType) Convert.ToInt32(model.StudyType),
+                PhoneNumber = model.PhoneNumber,
+                Status = model.Status
+            };
         }
-
+        
         private ApplicationUserViewModel CreateApplicationUserViewModel(ApplicationUser applicationUser)
         {
             return new ApplicationUserViewModel

@@ -132,6 +132,9 @@
         </form>
     }
     
-    <a asp-action="edit" asp-route-id="@Model.Id" class="btn btn-primary">Bewerken</a>
+    @if (User.IsInRole("Secretaris"))
+    {
+        <a asp-action="edit" asp-route-id="@Model.Id" class="btn btn-primary">Bewerken</a>
+    }
     <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
 </div>

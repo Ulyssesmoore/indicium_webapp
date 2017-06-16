@@ -38,6 +38,17 @@ namespace indicium_webapp.Controllers
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
 
+        public enum ManageMessageId
+        {
+            ChangePasswordSuccess,
+            ChangeEmailSuccess,
+            ChangeEducationalInformationSuccess,
+            ChangePersonalInformationSuccess,
+            ChangeAddressInformationSuccess,
+            ChangePhoneNumberSuccess,
+            Error
+        }
+
         //
         // GET: /Manage/Index
         [HttpGet]
@@ -86,8 +97,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangePassword
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -120,8 +130,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/AbortMembership
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmedAbortMembership()
         {
             System.Diagnostics.Debug.WriteLine("\n\nMethode aangeroepen!! \n\n");
@@ -164,8 +173,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangeEmail
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
         {
             if (!ModelState.IsValid)
@@ -230,8 +238,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangePersonalInformation
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePersonalInformation(ChangePersonalInformationViewModel model)
         {
             System.Diagnostics.Debug.WriteLine("\n\n Methode!! :D\n\n");
@@ -275,8 +282,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangeEducationalInformation
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeEducationalInformation(ChangeEducationalInformationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -323,8 +329,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangeAddressInformation
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeAddressInformation(ChangeAddressInformationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -369,8 +374,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Manage/ChangePhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePhoneNumber(ChangePhoneNumberViewModel model)
         {
             if (!ModelState.IsValid)
@@ -398,17 +402,6 @@ namespace indicium_webapp.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-        }
-
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            ChangeEmailSuccess,
-            ChangeEducationalInformationSuccess,
-            ChangePersonalInformationSuccess,
-            ChangeAddressInformationSuccess,
-            ChangePhoneNumberSuccess,
-            Error
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()
