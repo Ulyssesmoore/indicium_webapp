@@ -265,3 +265,4 @@ __pycache__/
 
 ## Ignore settings file
 appsettings.json
+appsettings.Development.json

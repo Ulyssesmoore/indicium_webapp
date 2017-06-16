@@ -46,17 +46,17 @@ namespace indicium_webapp.Data
                 var user = new ApplicationUser
                 {
                     StudentNumber = 1234567,
-                    FirstName = "a",
-                    LastName = "a",
-                    PhoneNumber = "1",
+                    FirstName = "Voornaam",
+                    LastName = "Achternaam",
+                    PhoneNumber = "123456789",
                     UserName = email,
                     Email = email,
                     Sex = (Sex)0,
                     Birthday = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    AddressCity = "a",
-                    AddressStreet = "a",
+                    AddressCity = "Stad",
+                    AddressStreet = "Straat",
                     AddressNumber = "1",
-                    AddressPostalCode = "a",
+                    AddressPostalCode = "1234AB",
                     AddressCountry = "Nederland",
                     StartdateStudy = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
                     RegistrationDate = DateTime.Today,
@@ -64,7 +64,7 @@ namespace indicium_webapp.Data
                     Status = (Status)2
                 };
 
-                userManager.AddPasswordAsync(user, "Helloworld01!");
+                userManager.AddPasswordAsync(user, "Wachtwoord");
                 userManager.CreateAsync(user);
                 userManager.AddToRoleAsync(user, "Secretaris");
             }
