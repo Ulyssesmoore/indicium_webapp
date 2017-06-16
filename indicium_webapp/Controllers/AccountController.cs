@@ -164,7 +164,7 @@ namespace indicium_webapp.Controllers
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry = "Nederland",
-                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StartdateStudy = Int32.Parse(model.StartdateStudy),
                     RegistrationDate = DateTime.Today,
                     StudyType = (StudyType)Convert.ToInt32(model.StudyType)
                 };
