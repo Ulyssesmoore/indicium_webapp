@@ -51,8 +51,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/Login
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -64,9 +63,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -122,8 +119,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/Register
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
         {
             RegisterViewModel model = new RegisterViewModel();
@@ -147,10 +143,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Register
-        [ValidateRecaptcha]
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [ValidateRecaptcha, HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -172,7 +165,7 @@ namespace indicium_webapp.Controllers
                     AddressNumber = model.AddressNumber,
                     AddressPostalCode = model.AddressPostalCode,
                     AddressCountry = "Nederland",
-                    StartdateStudy = DateTime.ParseExact(model.StartdateStudy, "dd-MM-yyyy", new CultureInfo("nl-NL")),
+                    StartdateStudy = Int32.Parse(model.StartdateStudy),
                     RegistrationDate = DateTime.Today,
                     StudyType = (StudyType)Convert.ToInt32(model.StudyType)
                 };
@@ -184,8 +177,10 @@ namespace indicium_webapp.Controllers
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
                         new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Bevestig je email",
-                        $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    await _emailSender.SendEmailAsync(model.Email, "Bevestig E-mailadres",
+                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a>" +
+                        $"Groet,<br>" +
+                        $"Indicium");
 
                     await _userManager.AddToRoleAsync(user, "Lid");
                     _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
@@ -222,8 +217,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/Logout
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -233,9 +227,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
@@ -246,8 +238,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ExternalLoginCallback
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
@@ -288,9 +279,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
             if (ModelState.IsValid)
@@ -321,8 +310,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /Account/ConfirmEmail
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -340,8 +328,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ForgotPassword
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -349,9 +336,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -363,13 +348,14 @@ namespace indicium_webapp.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                //return View("ForgotPasswordConfirmation");
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                await _emailSender.SendEmailAsync(model.Email, "Wachtwoord Resetten",
+                   $"Klik op de volgende link om jouw wachtwoord te resetten: <a href='{callbackUrl}'>link</a><br>" +
+                   $"Groet,<br>" +
+                   $"Indicium");
+                return View("ForgotPasswordConfirmation");
             }
 
             // If we got this far, something failed, redisplay form
@@ -378,8 +364,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ForgotPasswordConfirmation
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -387,8 +372,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ResetPassword
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
         {
             return code == null ? View("Error") : View();
@@ -396,9 +380,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/ResetPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -422,8 +404,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/ResetPasswordConfirmation
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -431,8 +412,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/SendCode
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
         {
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -447,9 +427,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> SendCode(SendCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -485,8 +463,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /Account/VerifyCode
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
         {
             // Require that the user has already logged in via username/password or external login
@@ -500,9 +477,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /Account/VerifyCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -532,8 +507,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET /Account/AccessDenied
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public IActionResult AccessDenied()
         {
             return View();

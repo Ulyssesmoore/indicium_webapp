@@ -46,10 +46,7 @@ namespace indicium_webapp.Models
 
         public string Name
         {
-            get
-            {
-                return FirstName + " " + LastName;
-            }
+            get { return FirstName + " " + LastName; }
         }
 
         public Sex Sex { get; set; }
@@ -68,7 +65,7 @@ namespace indicium_webapp.Models
 
         public int StudentNumber { get; set; }
 
-        public DateTime StartdateStudy { get; set; }
+        public int StartdateStudy { get; set; }
 
         public StudyType StudyType { get; set; }
 

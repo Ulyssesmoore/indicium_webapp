@@ -18,16 +18,12 @@ namespace indicium_webapp.Controllers
         [Route("/about")]
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
         [Route("/contact")]
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 

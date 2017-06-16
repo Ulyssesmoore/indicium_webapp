@@ -8,7 +8,7 @@
 <h2>Activiteitenkalender</h2>
 <hr />
 
-@if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+@if (User.IsInRole("Bestuur") || User.IsInRole("Secretaris"))
 {
     <p>
         <a asp-action="Create" class="btn btn-primary">Toevoegen</a>

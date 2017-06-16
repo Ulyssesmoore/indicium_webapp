@@ -35,7 +35,7 @@ namespace indicium_webapp.Services
                 "<b>Beschrijving:</b> " + ical.Description + "<br>" +
                 "<b>Wanneer:</b> " + ical.DateTimeStart.ToUniversalTime().ToString() + "<br>" +
                 "<b>Waar:</b> " + ical.Location + "<br><br>" +
-                "<i>Tip: klik op de bijlage om dit event toe tevoegen aan jouw agenda.<i>";
+                "<i>Tip: klik op de bijlage om dit event toe te voegen aan jouw agenda.<i>";
 
             bodyBuilder.Attachments.Add("event.ics", icalFile);
 
