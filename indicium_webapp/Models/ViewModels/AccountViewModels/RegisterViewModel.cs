@@ -73,7 +73,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         public string AddressCountry { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [StringLength(7, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} karakters lang zijn.", MinimumLength = 7)]
+        [StringLength(7, ErrorMessage = "Het {0} moet {1} karakters zijn.", MinimumLength = 7)]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Must be numeric")]
         [DataType(DataType.Text)]
         [Display(Name = "Studentnummer")]

@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+    <style type="text/css">
+        .color-picker {
+            max-width: 280px;
+        }
+    </style>
+}
+
 <h2>Activiteittype toevoegen</h2>
 
 <form asp-action="Create">
@@ -22,21 +30,30 @@
         <div class="form-group">
             <label asp-for="BackgroundColor" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="BackgroundColor" class="form-control" />
+                <div id="cp1" class="input-group color-picker">
+                    <input asp-for="BackgroundColor" type="text" class="form-control"/>
+                    <span class="input-group-addon"><i></i></span>
+                </div>
                 <span asp-validation-for="BackgroundColor" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="BorderColor" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="BorderColor" class="form-control" />
+                <div id="cp2" class="input-group color-picker">
+                    <input asp-for="BorderColor" type="text" class="form-control" />
+                    <span class="input-group-addon"><i></i></span>
+                </div>
                 <span asp-validation-for="BorderColor" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="TextColor" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TextColor" class="form-control" />
+                <div id="cp3" class="input-group color-picker">
+                    <input asp-for="TextColor" type="text" class="form-control" />
+                    <span class="input-group-addon"><i></i></span>
+                </div>
                 <span asp-validation-for="TextColor" class="text-danger"></span>
             </div>
         </div>
@@ -54,4 +71,12 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function() {
+            $('#cp1').colorpicker({format: "hex",color: '#fff'});
+            $('#cp2').colorpicker({format: "hex",color: '#fff'});
+            $('#cp3').colorpicker({format: "hex",color: '#fff'});
+        });
+    </script>
 }
