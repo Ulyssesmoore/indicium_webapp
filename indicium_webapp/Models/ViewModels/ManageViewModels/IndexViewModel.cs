@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
@@ -26,7 +27,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 
         public Sex Sex { get; set; }
 
-        public DateTime Birthday { get; set; }
+        public string Birthday { get; set; }
 
         public StudyType StudyType { get; set; }
 
