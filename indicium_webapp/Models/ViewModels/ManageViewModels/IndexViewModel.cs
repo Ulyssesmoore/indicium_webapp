@@ -27,7 +27,9 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 
         public Sex Sex { get; set; }
 
-        public string Birthday { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime Birthday { get; set; }
 
         public StudyType StudyType { get; set; }
 

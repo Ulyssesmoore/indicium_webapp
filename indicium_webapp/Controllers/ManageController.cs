@@ -82,7 +82,7 @@ namespace indicium_webapp.Controllers
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType,
                 Sex = user.Sex,
-                Birthday = user.Birthday.ToString("dd MMMM yyyy")
+                Birthday = user.Birthday
             };
             return View(model);
         }
