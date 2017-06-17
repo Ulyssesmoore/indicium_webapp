@@ -12,6 +12,7 @@ using indicium_webapp.Models.ViewModels.ManageViewModels;
 using indicium_webapp.Services;
 using indicium_webapp.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace indicium_webapp.Controllers
 {
@@ -82,7 +83,7 @@ namespace indicium_webapp.Controllers
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType,
                 Sex = user.Sex,
-                Birthday = user.Birthday
+                Birthday = user.Birthday.ToString("dd-MMMM-yyyy", new CultureInfo("nl-NL"))
             };
             return View(model);
         }
