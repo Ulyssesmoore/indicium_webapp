@@ -65,12 +65,12 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(7, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
+        [RegularExpression(@"^[0-9]{4}\s?[a-zA-Z]{2}$", ErrorMessage = "Deze invoer is geen postcode")]
         [DataType(DataType.Text)]
         [Display(Name = "Postcode")]
         public string AddressPostalCode { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [RegularExpression(@"^[0-9]{4}\s?[a-zA-Z]{2}$", ErrorMessage = "Deze invoer is geen postcode")]
         [Display(Name = "Woonplaats")]
         public string AddressCity { get; set; }
 
@@ -79,7 +79,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         public string AddressCountry { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [StringLength(7, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} karakters lang zijn.", MinimumLength = 7)]
+        [StringLength(7, ErrorMessage = "Het {0} moet {1} karakters zijn.", MinimumLength = 7)]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Ingave mag alleen nummers bevatten.")]
         [DataType(DataType.Text)]
         [Display(Name = "Studentnummer")]

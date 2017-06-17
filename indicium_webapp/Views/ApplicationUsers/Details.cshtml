@@ -116,7 +116,12 @@
             @Html.DisplayNameFor(model => model.Roles)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Roles)
+            <ul>
+                @foreach (var role in ViewBag.Roles)
+                {
+                    <li>@role</li>
+                }
+            </ul>
         </dd>
     </dl>
 </div>

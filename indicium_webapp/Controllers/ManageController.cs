@@ -82,7 +82,7 @@ namespace indicium_webapp.Controllers
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType,
                 Sex = user.Sex,
-                Birthday = user.Birthday,
+                Birthday = user.Birthday.ToString("dd MMMM yyyy")
             };
             return View(model);
         }
@@ -133,7 +133,6 @@ namespace indicium_webapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmedAbortMembership()
         {
-            System.Diagnostics.Debug.WriteLine("\n\nMethode aangeroepen!! \n\n");
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
@@ -241,7 +240,6 @@ namespace indicium_webapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePersonalInformation(ChangePersonalInformationViewModel model)
         {
-            System.Diagnostics.Debug.WriteLine("\n\n Methode!! :D\n\n");
             if (!ModelState.IsValid)
             {
                 return View(model);

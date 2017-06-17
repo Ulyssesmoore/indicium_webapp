@@ -14,7 +14,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         public StudyType StudyType { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
-        [Display(Name = "Begindatum studie")]
+        [Display(Name = "Beginjaar studie")]
         [Range(2010, 2030)]
         public int StartdateStudy { get; set; }
     }

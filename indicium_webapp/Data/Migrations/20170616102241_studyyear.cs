@@ -8,20 +8,27 @@ namespace indicium_webapp.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.DropColumn(
+                name: "StartdateStudy",
+                table: "AspNetUsers");
+
+            migrationBuilder.AddColumn<int>(
                 name: "StartdateStudy",
                 table: "AspNetUsers",
-                nullable: false,
-                oldClrType: typeof(DateTime));
+                nullable: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<DateTime>(
+            migrationBuilder.DropColumn(
+                name: "StartdateStudy",
+                table: "AspNetUsers");
+
+            migrationBuilder.AddColumn<DateTime>(
                 name: "StartdateStudy",
                 table: "AspNetUsers",
                 nullable: false,
-                oldClrType: typeof(int));
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }
     }
 }

@@ -10,7 +10,7 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyD0OB49cA3HdaxvLz-VMjkDwkD3HhA77Hg "></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCI6DDwVctCYDwSarPBjJKRsKjgz5gNa_o "></script>
 <recaptcha-script />
 
 <h2>Inschrijfformulier Indicium</h2>
@@ -67,7 +67,7 @@
     <div class="form-group">
         <label asp-for="Birthday" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="Birthday" class="form-control datetimepicker" placeholder="dd-mm-yyyy" />
+            <input asp-for="Birthday" class="form-control datetimepicker" placeholder="dd-mm-jjjj" />
             <span asp-validation-for="Birthday" class="text-danger"></span>
         </div>
     </div>
@@ -116,7 +116,7 @@
     <div class="form-group">
         <label asp-for="StartdateStudy" class="col-md-2 control-label"></label>
         <div class="col-md-10">
-            <input asp-for="StartdateStudy" class="form-control datetimepicker" placeholder="dd-mm-yyyy" />
+            <input asp-for="StartdateStudy" class="form-control datetimepicker2" placeholder="jjjj" />
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
@@ -160,7 +160,8 @@
             });
             $('.datetimepicker2').datetimepicker({
                 locale: 'nl',
-                format: 'YYYY'
+                format: 'YYYY',
+                viewMode: "years"
             });
         });
     </script>

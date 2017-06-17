@@ -189,7 +189,7 @@ namespace indicium_webapp.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Guest(int? id, SignUpViewModel model)
+        public async Task<IActionResult> Guest(int? id, GuestViewModel model)
         {
             if (id == null)
             {
@@ -226,22 +226,22 @@ namespace indicium_webapp.Controllers
             return _userManager.GetUserAsync(User).Result;
         }
         
-        private SignUp CreateGuestSignUp(int id, SignUpViewModel model)
+        private SignUp CreateGuestSignUp(int id, GuestViewModel model)
         {
-            var activityResult = _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
+            Activity activityResult = _context.Activity.SingleOrDefault(activity => activity.ActivityID == id);
             
-            var test = new SignUp
+            SignUp SignUp = new SignUp
             {
-                ActivityID = model.SignUpID,
+                Activity = activityResult,
                 Guest = new Guest
                 {
-                    FirstName = model.Guest.FirstName,
-                    LastName = model.Guest.LastName,
-                    Email = model.Guest.Email
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email
                 }
             };
 
-            return test;
+            return SignUp;
         }
         
         private SignUpViewModel CreateSignUpViewModel(SignUp signUp)
