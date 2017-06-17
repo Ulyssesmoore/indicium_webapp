@@ -80,6 +80,8 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
+            ViewBag.Roles = await _userManager.GetRolesAsync(applicationUserResult);
+
             return View(CreateApplicationUserViewModel(applicationUserResult));
         }
 
