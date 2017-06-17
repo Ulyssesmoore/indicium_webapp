@@ -300,7 +300,7 @@ namespace indicium_webapp.Controllers
                 AddressCity = applicationUser.AddressCity,
                 AddressCountry = applicationUser.AddressCountry,
                 StudentNumber = applicationUser.StudentNumber.ToString(),
-                StartdateStudy = applicationUser.StartdateStudy.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
+                StartdateStudy = applicationUser.StartdateStudy.ToString(),
                 StudyType = applicationUser.StudyType.ToString(),
                 PhoneNumber = applicationUser.PhoneNumber,
                 Email = applicationUser.Email,
