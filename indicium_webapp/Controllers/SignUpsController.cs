@@ -230,7 +230,7 @@ namespace indicium_webapp.Controllers
         {
             Activity activityResult = _context.Activity.SingleOrDefault(activity => activity.ActivityID == id);
             
-            SignUp SignUp = new SignUp
+            SignUp signUp = new SignUp
             {
                 Activity = activityResult,
                 Guest = new Guest
@@ -241,7 +241,7 @@ namespace indicium_webapp.Controllers
                 }
             };
 
-            return SignUp;
+            return signUp;
         }
         
         private SignUpViewModel CreateSignUpViewModel(SignUp signUp)

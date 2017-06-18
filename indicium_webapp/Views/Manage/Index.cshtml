@@ -34,7 +34,7 @@
     <h5>Persoonsgegevens</h5>
     <dl class="dl-horizontal">
         <dt>Geboortedatum:</dt>
-        <dd>@Model.Birthday</dd>
+        <dd>@Html.DisplayFor(model => model.Birthday)</dd>
         <dt>Geslacht:</dt>
         <dd>@Model.Sex</dd>
         <dd>
@@ -44,16 +44,16 @@
 
     <h5>Adresgegevens:</h5>
     <dl class="dl-horizontal">
-        <dt>Land:</dt>
-        <dd>@Model.AddressCountry</dd>
-        <dt>Plaats:</dt>
-        <dd>@Model.AddressCity</dd>
         <dt>Postcode:</dt>
         <dd>@Model.AddressPostalCode</dd>
+        <dt>Huisnummer:</dt>
+        <dd>@Model.AddressNumber</dd>
         <dt>Straat:</dt>
         <dd>@Model.AddressStreet</dd>
-        <dt>Nummer:</dt>
-        <dd>@Model.AddressNumber</dd>
+        <dt>Woonplaats:</dt>
+        <dd>@Model.AddressCity</dd>
+        <dt>Land:</dt>
+        <dd>@Model.AddressCountry</dd>
         <dd>
             <a asp-controller="Manage" asp-action="ChangeAddressInformation" class="btn-bracketed">Wijzig</a>
         </dd>

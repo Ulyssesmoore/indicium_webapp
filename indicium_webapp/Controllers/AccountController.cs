@@ -179,7 +179,8 @@ namespace indicium_webapp.Controllers
 
                     await _userManager.AddToRoleAsync(user, "Lid");
                     _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
-                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring kan echter nog even duren.");
+                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring door de secretaris kan echter nog even duren. Er is " +
+                        "een E-mail verstuurd naar het opgegeven adres. Voor u kunt inloggen, moet u deze  bevestigen.");
 
                     // Save the commission interests:
                     var selectedCommissions = model.Commissions.Where(x => x.IsChecked).Select(x => x.ID).ToList();
