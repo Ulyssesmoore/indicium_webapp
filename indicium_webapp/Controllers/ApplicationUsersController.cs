@@ -304,7 +304,8 @@ namespace indicium_webapp.Controllers
                 StudyType = applicationUser.StudyType.ToString(),
                 PhoneNumber = applicationUser.PhoneNumber,
                 Email = applicationUser.Email,
-                Status = applicationUser.Status
+                Status = applicationUser.Status,
+                RegistrationDate = applicationUser.RegistrationDate
             };
         }
     }

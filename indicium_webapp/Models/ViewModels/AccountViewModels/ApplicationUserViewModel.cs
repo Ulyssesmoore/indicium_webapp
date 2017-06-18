@@ -101,6 +101,9 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
 
+        [DataType(DataType.Date)]
+        [Display(Name = "Registratiedatum")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime RegistrationDate { get; set; }
 
         public Status Status { get; set; }
