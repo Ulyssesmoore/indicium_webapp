@@ -183,21 +183,23 @@ namespace indicium_webapp.Controllers
                         "een E-mail verstuurd naar het opgegeven adres. Voor u kunt inloggen, moet u deze bevestigen.");
 
                     // Save the commission interests:
-                    var selectedCommissions = model.Commissions.Where(x => x.IsChecked).Select(x => x.ID).ToList();
-                    foreach (string commissionID in selectedCommissions)
+                    if (model.Commissions != null)
                     {
-                        _context.CommissionMember.Add(new CommissionMember()
+                        var selectedCommissions = model.Commissions.Where(x => x.IsChecked).Select(x => x.ID).ToList();
+                        foreach (string commissionID in selectedCommissions)
                         {
-                            // We have to fetch the ID, cause we don't have it yet because this user was just created
-                            ApplicationUserID = _userManager.FindByEmailAsync(model.Email).Result.Id,
-                            CommissionID = Int32.Parse(commissionID),
-                            Status = CommisionMemberStatus.Interesse
+                            _context.CommissionMember.Add(new CommissionMember()
+                            {
+                                // We have to fetch the ID, cause we don't have it yet because this user was just created
+                                ApplicationUserID = _userManager.FindByEmailAsync(model.Email).Result.Id,
+                                CommissionID = Int32.Parse(commissionID),
+                                Status = CommisionMemberStatus.Interesse
 
-                        });
+                            });
 
-                        await _context.SaveChangesAsync();
-                    }
-                    
+                            await _context.SaveChangesAsync();
+                        }
+                    }                    
                     return View("login");
                 }
                 AddErrors(result);              
@@ -206,7 +208,9 @@ namespace indicium_webapp.Controllers
             if (!isOld)
             {
                 ModelState.AddModelError(string.Empty, "U bent niet oud genoeg om een account aan te maken");
+                model.Commissions = createCommissionCheckBoxList(); // We need to recreate the list for whatever reason.
             }
+
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -330,7 +334,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        public static int Age(DateTime birthday)
+        private static int Age(DateTime birthday)
         {
             DateTime now = DateTime.Today;
             int age = now.Year - birthday.Year;
@@ -338,6 +342,23 @@ namespace indicium_webapp.Controllers
 
             return age;
         }
+
+        private List<CheckBoxListItem> createCommissionCheckBoxList()
+        {
+            List<CheckBoxListItem> checkBoxListItems = new List<CheckBoxListItem>();
+            foreach (Commission commission in _context.Commission.ToListAsync().Result)
+            {
+                checkBoxListItems.Add(new CheckBoxListItem()
+                {
+                    ID = commission.CommissionID.ToString(),
+                    Display = commission.Name + " - " + commission.Description,
+                    IsChecked = false
+                });
+            }
+
+            return checkBoxListItems;
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
