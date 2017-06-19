@@ -64,7 +64,7 @@ namespace indicium_webapp.Data
             //    await userManager.AddPasswordAsync(user, "Wachtwoord");
             //    await userManager.CreateAsync(user);
             //    await userManager.AddToRoleAsync(user, "Secretaris");
-            }
+            //}
 
         }
     }

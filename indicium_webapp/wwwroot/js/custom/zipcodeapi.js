@@ -1,4 +1,6 @@
 // zip code api implementation
+var amountused = 0;
+
 $('#zip_code').focusout(function () { 
     var location = $('#zip_code').val().replace(" ", "");
     var patt = new RegExp("^[0-9]{4}\s?[a-zA-Z]{2}$");
