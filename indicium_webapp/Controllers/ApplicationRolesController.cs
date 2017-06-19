@@ -55,9 +55,7 @@ namespace indicium_webapp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, ApplicationRoleViewModel model)
         {
-            var applicationRole = _context.ApplicationRole.Find(id);
-
-            if (id != model.Id || applicationRole == null)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -66,10 +64,7 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    applicationRole.Id = model.Id;
-                    applicationRole.Description = model.Description;
-                    
-                    _context.Update(applicationRole);
+                    _context.Update(CreateApplicationRole(model));
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -93,6 +88,15 @@ namespace indicium_webapp.Controllers
         private bool ApplicationRoleExists(string id)
         {
             return _context.ApplicationRole.Any(applicationRole => applicationRole.Id == id);
+        }
+        
+        private ApplicationRole CreateApplicationRole(ApplicationRoleViewModel model)
+        {
+            ApplicationRole applicationRole = _context.ApplicationRole.Find(model.Id);
+            
+            applicationRole.Description = model.Description;
+
+            return applicationRole;
         }
         
         private ApplicationRoleViewModel CreateApplicationRoleViewModel(ApplicationRole applicationRole)

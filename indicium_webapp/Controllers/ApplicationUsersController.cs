@@ -124,9 +124,7 @@ namespace indicium_webapp.Controllers
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Edit(string id, ApplicationUserViewModel model)
         {
-            var applicationUser = _context.ApplicationUser.Find(id);
-            
-            if (id != model.Id || applicationUser == null)
+            if (id != model.Id)
             {
                 return NotFound();
             }
@@ -135,22 +133,9 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
-                    applicationUser.FirstName = model.FirstName;
-                    applicationUser.LastName = model.LastName;
-                    applicationUser.Sex = (Sex) Convert.ToInt32(model.Sex);
-                    applicationUser.Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"));
-                    applicationUser.AddressStreet = model.AddressStreet;
-                    applicationUser.AddressNumber = model.AddressNumber;
-                    applicationUser.AddressPostalCode = model.AddressPostalCode;
-                    applicationUser.AddressCity = model.AddressCity;
-                    applicationUser.AddressCountry = model.AddressCountry;
-                    applicationUser.StudentNumber = Convert.ToInt32(model.StudentNumber);
-                    applicationUser.StartdateStudy =Int32.Parse(model.StartdateStudy);
-                    applicationUser.StudyType = (StudyType) Convert.ToInt32(model.StudyType);
-                    applicationUser.PhoneNumber = model.PhoneNumber;
-                    applicationUser.Status = model.Status;
+                    ApplicationUser applicationUser = CreateApplicationUser(model);
                     
-                    _context.Update(applicationUser);
+                    _context.Update(CreateApplicationUser(model));
                     await _context.SaveChangesAsync();
 
                     foreach (var role in model.Roles.ToList())
@@ -266,23 +251,24 @@ namespace indicium_webapp.Controllers
 
         private ApplicationUser CreateApplicationUser(ApplicationUserViewModel model)
         {
-            return new ApplicationUser
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Sex = (Sex) Convert.ToInt32(model.Sex),
-                Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL")),
-                AddressStreet = model.AddressStreet,
-                AddressNumber = model.AddressNumber,
-                AddressPostalCode = model.AddressPostalCode,
-                AddressCity = model.AddressCity,
-                AddressCountry = model.AddressCountry,
-                StudentNumber = Convert.ToInt32(model.StudentNumber),
-                StartdateStudy = Int32.Parse(model.StartdateStudy),
-                StudyType = (StudyType) Convert.ToInt32(model.StudyType),
-                PhoneNumber = model.PhoneNumber,
-                Status = model.Status
-            };
+            var applicationUser = _context.ApplicationUser.Find(model.Id);
+            
+            applicationUser.FirstName = model.FirstName;
+            applicationUser.LastName = model.LastName;
+            applicationUser.Sex = (Sex) Convert.ToInt32(model.Sex);
+            applicationUser.Birthday = DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"));
+            applicationUser.AddressStreet = model.AddressStreet;
+            applicationUser.AddressNumber = model.AddressNumber;
+            applicationUser.AddressPostalCode = model.AddressPostalCode;
+            applicationUser.AddressCity = model.AddressCity;
+            applicationUser.AddressCountry = model.AddressCountry;
+            applicationUser.StudentNumber = Convert.ToInt32(model.StudentNumber);
+            applicationUser.StartdateStudy =Int32.Parse(model.StartdateStudy);
+            applicationUser.StudyType = (StudyType) Convert.ToInt32(model.StudyType);
+            applicationUser.PhoneNumber = model.PhoneNumber;
+            applicationUser.Status = model.Status;
+
+            return applicationUser;
         }
         
         private ApplicationUserViewModel CreateApplicationUserViewModel(ApplicationUser applicationUser)
