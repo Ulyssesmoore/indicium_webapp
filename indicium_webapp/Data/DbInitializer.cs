@@ -14,11 +14,8 @@ namespace indicium_webapp.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            var roleStore = new RoleStore<ApplicationRole>(context);
-            var roleManager = new RoleManager<ApplicationRole>(roleStore, null, null, null, null, null);
-
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore, null, null, null, null, null, null, null, null);
+            //var userStore = new UserStore<ApplicationUser>(context);
+            //var userManager = new UserManager<ApplicationUser>(userStore, null, null, null, null, null, null, null, null);
 
             context.Database.EnsureCreated();
 
@@ -39,36 +36,36 @@ namespace indicium_webapp.Data
                 context.SaveChanges();
             }
 
-            /*
-            var email = "usergenerated@test.test";
-            if (!context.ApplicationUser.Any(x => x.Email == email))
-            {
-                var user = new ApplicationUser
-                {
-                    StudentNumber = 1234567,
-                    FirstName = "Voornaam",
-                    LastName = "Achternaam",
-                    PhoneNumber = "123456789",
-                    UserName = email,
-                    Email = email,
-                    Sex = (Sex)0,
-                    Birthday = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    AddressCity = "Stad",
-                    AddressStreet = "Straat",
-                    AddressNumber = "1",
-                    AddressPostalCode = "1234AB",
-                    AddressCountry = "Nederland",
-                    StartdateStudy = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
-                    RegistrationDate = DateTime.Today,
-                    StudyType = (StudyType)1,
-                    Status = (Status)2
-                };
+            // DOES NOT FULLY WORK
+            //var email = "usergenerated@test.test";
+            //if (!context.ApplicationUser.Any(x => x.Email == email))
+            //{
+            //    var user = new ApplicationUser
+            //    {
+            //        StudentNumber = 1234567,
+            //        FirstName = "Voornaam",
+            //        LastName = "Achternaam",
+            //        PhoneNumber = "123456789",
+            //        UserName = email,
+            //        Email = email,
+            //        Sex = (Sex)0,
+            //        Birthday = DateTime.ParseExact("14-06-2017", "dd-MM-yyyy", new CultureInfo("nl-NL")),
+            //        AddressCity = "Stad",
+            //        AddressStreet = "Straat",
+            //        AddressNumber = "1",
+            //        AddressPostalCode = "1234AB",
+            //        AddressCountry = "Nederland",
+            //        StartdateStudy = 2016,
+            //        RegistrationDate = DateTime.Today,
+            //        StudyType = (StudyType)1,
+            //        Status = (Status)2
+            //    };
 
-                userManager.AddPasswordAsync(user, "Wachtwoord");
-                userManager.CreateAsync(user);
-                userManager.AddToRoleAsync(user, "Secretaris");
+            //    await userManager.AddPasswordAsync(user, "Wachtwoord");
+            //    await userManager.CreateAsync(user);
+            //    await userManager.AddToRoleAsync(user, "Secretaris");
             }
-            */
+
         }
     }
 }
