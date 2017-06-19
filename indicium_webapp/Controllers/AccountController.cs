@@ -74,7 +74,7 @@ namespace indicium_webapp.Controllers
 
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
                 
                 if (result.Succeeded) {
                     if (applicationUser.Status == Status.Lid || applicationUser.Status == Status.Alumni) {
@@ -95,11 +95,11 @@ namespace indicium_webapp.Controllers
                         return View(model);
                     }
                 }
-
-                if (result.IsLockedOut)
+                else if (result.IsLockedOut)
                 {
                     _logger.LogWarning(3, "User account locked out.");
-                    return View("Lockout");
+                    ModelState.AddModelError(string.Empty, "Dit account is uitgeschakeld, probeer het later opnieuw.");
+                    return View(model);
                 }
                 else
                 {

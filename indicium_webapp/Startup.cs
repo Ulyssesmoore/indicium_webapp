@@ -15,6 +15,7 @@ using indicium_webapp.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using Microsoft.AspNetCore.Identity;
 
 namespace indicium_webapp
 {
@@ -49,6 +50,10 @@ namespace indicium_webapp
             services.AddIdentity<ApplicationUser, IdentityRole>(config =>
                 {
                     config.SignIn.RequireConfirmedEmail = true;
+                    config.Lockout = new LockoutOptions()
+                    {
+                        DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15)
+                    };
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
