@@ -13,6 +13,8 @@ using indicium_webapp.Models.ViewModels.AccountViewModels;
 using indicium_webapp.Models.ViewModels;
 using System.Globalization;
 using indicium_webapp.Services;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
+using static indicium_webapp.Controllers.ActivitiesController;
 
 namespace indicium_webapp.Controllers
 {
@@ -30,6 +32,8 @@ namespace indicium_webapp.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+
+
         }
 
         // GET: SignUps
@@ -99,16 +103,16 @@ namespace indicium_webapp.Controllers
 
                         await _emailSender.SendCalendarInviteAsync(signUp.ApplicationUser.Email, signUp.Activity);
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Calendar", "Activities", new { Message = ActivityMessageId.GuestSignUpSuccess });
                     }
                     else
                     {
-                        return RedirectToAction("Details", "activities", new { id });
+                        return RedirectToAction("Details", "Activities", new { id });
                     }
                 }
                 else
                 {
-                    return RedirectToAction("Details", "activities", new { id });
+                    return RedirectToAction("Details", "Activities", new { id });
                 }
             }
 
@@ -155,7 +159,7 @@ namespace indicium_webapp.Controllers
         {
             if (_signInManager.IsSignedIn(User))
             {
-                return Forbid();
+                return RedirectToAction("Details", "Activities", new { id });
             }
             
             if (id == null)
@@ -177,10 +181,8 @@ namespace indicium_webapp.Controllers
                 return Forbid();
             }
 
-            GuestViewModel model = new GuestViewModel
-            {
-                Activity = activityResult
-            };
+            SignUpViewModel model = new SignUpViewModel();
+            model.Activity = CreateActivitiesViewModel(activityResult);
             
             return View(model);
         }
@@ -188,8 +190,8 @@ namespace indicium_webapp.Controllers
         // POST: SignUps/Guest/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Guest(int? id, GuestViewModel model)
+        [ValidateRecaptcha, AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Guest(int? id, SignUpViewModel model)
         {
             if (id == null)
             {
@@ -205,11 +207,11 @@ namespace indicium_webapp.Controllers
                     _context.Add(CreateGuestSignUp(activityResult.ActivityID, model));
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Calendar", "activities");
+                    return RedirectToAction("Calendar", "Activities", new { Message = ActivityMessageId.GuestSignUpSuccess });
                 }
                 else
                 {
-                    return RedirectToAction("Details", "activities", new { id });
+                    return RedirectToAction("Guest", new { id });
                 }
             }
 
@@ -226,7 +228,7 @@ namespace indicium_webapp.Controllers
             return _userManager.GetUserAsync(User).Result;
         }
         
-        private SignUp CreateGuestSignUp(int id, GuestViewModel model)
+        private SignUp CreateGuestSignUp(int id, SignUpViewModel model)
         {
             Activity activityResult = _context.Activity.SingleOrDefault(activity => activity.ActivityID == id);
             
@@ -235,13 +237,28 @@ namespace indicium_webapp.Controllers
                 Activity = activityResult,
                 Guest = new Guest
                 {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email
+                    FirstName = model.Guest.FirstName,
+                    LastName = model.Guest.LastName,
+                    Email = model.Guest.Email
                 }
             };
 
             return signUp;
+        }
+
+        private ActivityViewModel CreateActivitiesViewModel(Activity activity)
+        {
+            return new ActivityViewModel
+            {
+                ActivityID = activity.ActivityID,
+                Name = activity.Name,
+                Description = activity.Description,
+                StartDateTime = activity.StartDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                EndDateTime = activity.EndDateTime.ToString("dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")),
+                NeedsSignUp = activity.NeedsSignUp,
+                SignUps = activity.SignUps,
+                ActivityType = activity.ActivityType
+            };
         }
         
         private SignUpViewModel CreateSignUpViewModel(SignUp signUp)
@@ -252,6 +269,7 @@ namespace indicium_webapp.Controllers
                 ApplicationUser = new ApplicationUserViewModel {
                     FirstName = signUp.ApplicationUser.FirstName,
                     LastName = signUp.ApplicationUser.LastName,
+                    Email = signUp.ApplicationUser.Email,
                     Sex = signUp.ApplicationUser.Sex.ToString(),
                     Birthday = signUp.ApplicationUser.Birthday.ToString("dd-MM-yyyy", new CultureInfo("nl-NL")),
                     AddressStreet = signUp.ApplicationUser.AddressStreet,

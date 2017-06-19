@@ -31,29 +31,6 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ApplicationRoles/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ApplicationRoles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ApplicationRoleViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(CreateApplicationRole(model));
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
         // GET: ApplicationRoles/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -90,7 +67,6 @@ namespace indicium_webapp.Controllers
                 try
                 {
                     applicationRole.Id = model.Id;
-                    applicationRole.Name = model.Name;
                     applicationRole.Description = model.Description;
                     
                     _context.Update(applicationRole);
@@ -114,48 +90,9 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ApplicationRoles/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var applicationRoleResult = await _context.ApplicationRole.SingleOrDefaultAsync(applicationRole => applicationRole.Id == id);
-            
-            if (applicationRoleResult == null)
-            {
-                return NotFound();
-            }
-
-            return View(CreateApplicationRoleViewModel(applicationRoleResult));
-        }
-
-        // POST: ApplicationRoles/Delete/5
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var applicationRoleResult = await _context.ApplicationRole.SingleOrDefaultAsync(applicationRole => applicationRole.Id == id);
-            
-            _context.ApplicationRole.Remove(applicationRoleResult);
-            await _context.SaveChangesAsync();
-            
-            return RedirectToAction("Index");
-        }
-
         private bool ApplicationRoleExists(string id)
         {
             return _context.ApplicationRole.Any(applicationRole => applicationRole.Id == id);
-        }
-
-        private ApplicationRole CreateApplicationRole(ApplicationRoleViewModel model)
-        {
-            return new ApplicationRole {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description
-            };
         }
         
         private ApplicationRoleViewModel CreateApplicationRoleViewModel(ApplicationRole applicationRole)

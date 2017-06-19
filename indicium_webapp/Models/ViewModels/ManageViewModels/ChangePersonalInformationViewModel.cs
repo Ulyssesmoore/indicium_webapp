@@ -16,7 +16,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Geboortedag")]
+        [Display(Name = "Geboortedatum")]
         public DateTime Birthday { get; set; }       
     }
 }

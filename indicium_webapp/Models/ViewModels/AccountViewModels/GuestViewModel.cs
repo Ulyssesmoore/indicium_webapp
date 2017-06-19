@@ -31,7 +31,5 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Display(Name = "E-mailadres")] 
         public string Email { get; set; }
 
-        public Activity Activity { get; set; }
-
     }
 }

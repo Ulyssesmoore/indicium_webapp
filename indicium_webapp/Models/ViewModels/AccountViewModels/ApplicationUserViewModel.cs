@@ -87,7 +87,6 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Beginjaar studie")]
-        [Range(2010, 2030)]
         public string StartdateStudy { get; set; }
         
         [Required(ErrorMessage = "{0} is verplicht.")]

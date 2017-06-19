@@ -25,12 +25,7 @@ namespace indicium_webapp.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
-        public ManageController(
-          UserManager<ApplicationUser> userManager,
-          SignInManager<ApplicationUser> signInManager,
-          ApplicationDbContext context,
-          IEmailSender emailSender,
-          ILoggerFactory loggerFactory)
+        public ManageController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context, IEmailSender emailSender, ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,7 +53,7 @@ namespace indicium_webapp.Controllers
             ViewData["StatusMessage"] =
                 message == ManageMessageId.ChangePasswordSuccess ? "Je wachtwoord is veranderd."
                 : message == ManageMessageId.Error ? "Er heeft een fout plaatsgevonden."
-                : message == ManageMessageId.ChangeEmailSuccess ? "Je email-adres is met succes gewijzigd."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Je e-mailadres is met succes gewijzigd."
                 : message == ManageMessageId.ChangePersonalInformationSuccess ? "Je persoonlijke gegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
@@ -66,13 +61,16 @@ namespace indicium_webapp.Controllers
                 : "";
 
             var user = await GetCurrentUserAsync();
+
             if (user == null)
             {
                 return View("Error");
             }
+
             var model = new IndexViewModel
             {
-                Name = user.FirstName + " " + user.LastName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 Email = user.Email,
                 AddressCity = user.AddressCity,
                 AddressPostalCode = user.AddressPostalCode,
@@ -83,8 +81,13 @@ namespace indicium_webapp.Controllers
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType,
                 Sex = user.Sex,
-                Birthday = user.Birthday.ToString("dd MMMM yyyy", new CultureInfo("nl-NL"))
+                Birthday = user.Birthday.ToString("dd MMMM yyyy", new CultureInfo("nl-NL")),
+                StudentNumber = user.StudentNumber.ToString()
             };
+            
+            var loggedInUser = await GetCurrentUserAsync();
+            ViewBag.Roles = await _userManager.GetRolesAsync(loggedInUser);
+
             return View(model);
         }
 
@@ -273,6 +276,7 @@ namespace indicium_webapp.Controllers
 
             var model = new ChangeEducationalInformationViewModel
             {
+                StudentNumber = user.StudentNumber.ToString(),
                 StartdateStudy = user.StartdateStudy,
                 StudyType = user.StudyType
             };
@@ -405,7 +409,7 @@ namespace indicium_webapp.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(HttpContext.User);
+            return _userManager.GetUserAsync(User);
         }
 
         #endregion

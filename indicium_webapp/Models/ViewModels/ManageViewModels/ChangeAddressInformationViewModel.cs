@@ -10,22 +10,27 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
     {
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
-        public string AddressCity { get; set; }
-
+        [Display(Name = "Straat")]
+        public string AddressStreet { get; set; }
+        
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
-        public string AddressPostalCode { get; set; }
-
-        [Required(ErrorMessage = "{0} is verplicht.")]
-        [DataType(DataType.Text)]
+        [Display(Name = "Huisnummer")]
         public string AddressNumber { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
-        public string AddressStreet { get; set; }
+        [Display(Name = "Postcode")]
+        public string AddressPostalCode { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.Text)]
+        [Display(Name = "Woonplaats")]
+        public string AddressCity { get; set; }
+
+        [Required(ErrorMessage = "{0} is verplicht.")]
+        [DataType(DataType.Text)]
+        [Display(Name = "Land")]
         public string AddressCountry { get; set; }
     }
 }

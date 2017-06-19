@@ -28,6 +28,11 @@ namespace indicium_webapp.Controllers
             _signInManager = signInManager;
         }
 
+        public enum ActivityMessageId
+        {
+            GuestSignUpSuccess
+        }
+
         // GET: Activities
         public async Task<IActionResult> Index()
         {
@@ -190,8 +195,10 @@ namespace indicium_webapp.Controllers
 
         // GET: Activities/Calendar
         [AllowAnonymous]
-        public IActionResult Calendar()
+        public IActionResult Calendar(ActivityMessageId? message = null)
         {
+            ViewData["StatusMessage"] = message == ActivityMessageId.GuestSignUpSuccess ? "Je inschrijving is gelukt." : "";
+            
             return View();
         }
 

@@ -3,10 +3,21 @@
 @{
     ViewData["Title"] = "Activiteitenkalender";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var statusMessage = @ViewData["StatusMessage"];
 }
 
 <h2>Activiteitenkalender</h2>
 <hr />
+
+@if (statusMessage != null && statusMessage != "")
+{
+    <div class="alert alert-success alert-dismissible fade in text-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <span>@statusMessage</span>
+    </div>
+}
 
 @if (User.IsInRole("Bestuur") || User.IsInRole("Secretaris"))
 {
@@ -27,7 +38,7 @@
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,agendaWeek,agendaDay,listMonth'
+                    right: 'month,agendaWeek,listMonth'
                 },
                 locale: 'nl',
                 events: function(start, end, timezone, callback) {

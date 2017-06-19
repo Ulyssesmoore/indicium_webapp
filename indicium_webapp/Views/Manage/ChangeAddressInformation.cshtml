@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Wijzig adresgegevens";
 }
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyDy6oe9lYFKfmbEd2xxpnneVD2T6SC3AEY"></script>
 
 <h2>@ViewData["Title"].</h2>
 
@@ -11,35 +10,35 @@
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="AddressPostalCode" class="col-md-2 control-label">Postcode</label>
+        <label asp-for="AddressPostalCode" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="AddressPostalCode" class="form-control" id="zip_code" />
             <span asp-validation-for="AddressPostalCode" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="AddressNumber" class="col-md-2 control-label">Huisnummer</label>
+        <label asp-for="AddressNumber" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="AddressNumber" class="form-control" />
             <span asp-validation-for="AddressNumber" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="AddressStreet" class="col-md-2 control-label">Straat</label>
+        <label asp-for="AddressStreet" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="AddressStreet" class="form-control" id="street" />
             <span asp-validation-for="AddressStreet" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="AddressCity" class="col-md-2 control-label">Woonplaats</label>
+        <label asp-for="AddressCity" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="AddressCity" class="form-control" id="city" />
             <span asp-validation-for="AddressCity" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="AddressCountry" class="col-md-2 control-label">Land</label>
+        <label asp-for="AddressCountry" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="AddressCountry" class="form-control" id="country" />
             <span asp-validation-for="AddressCountry" class="text-danger"></span>
@@ -55,66 +54,18 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCI6DDwVctCYDwSarPBjJKRsKjgz5gNa_o"></script>
+
+    <script src="~/js/custom/zipcodeapi.js"></script>
+
     <script type="text/javascript">
+        // datetimepicker
         $(function () {
             $('.datetimepicker').datetimepicker({
                 locale: 'nl',
                 format: 'DD-MM-YYYY'
             });
         });
-    </script>
-
-    <script type="text/javascript">
-
-
-        amountused = 0;
-
-        $('#zip_code').focusout(function () {
-            var location = $('#zip_code').val().replace(" ", "");
-            var patt = new RegExp("^[0-9]{4}\s?[a-zA-Z]{2}$");
-            if (patt.test(location) && amountused < 3) {
-                getAddress(location);
-                amountused++;
-            }
-        });
-
-        function getAddress(location) {
-            geocoder = new google.maps.Geocoder();
-            var city;
-            var streetname;
-            var country = 'Nederland';
-            geocoder.geocode({ 'address': location }, function (results, status) {
-                if (status == 'OK') {
-                    var result = results[0].geometry.location;
-                    geocoder.geocode({ latLng: results[0].geometry.location }, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            // get the streetname:
-                            if (results[0].types[0] == 'street_address' && results[0].address_components[1]) {
-                                streetname = results[0].address_components[1].long_name;
-                            }
-                            else if (results[0].types[0] == 'route') {
-                                streetname = results[0].address_components[0].long_name;
-                            }
-                            $('#street').val(streetname);
-                        }
-                    });
-                    results[0].address_components.forEach(function (element2) {
-                        element2.types.forEach(function (element3) {
-                            switch (element3) {
-                                case 'locality':
-                                    city = element2.long_name;
-                                    break;
-                            };
-                        });
-                    });
-                    $('#city').val(city);
-                    $('#country').val(country);
-                }
-                else {
-                    console.log("Geocode was not successful for the following reason: " + status);
-                };
-            });
-        };
     </script>
 }
 

@@ -1,42 +1,52 @@
 ﻿@model IndexViewModel
 @{
     ViewData["Title"] = "Beheer je account";
+    var statusMessage = @ViewData["StatusMessage"];
 }
 
-<h2>@ViewData["Title"].</h2>
-<p class="text-success">@ViewData["StatusMessage"]</p>
+<h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>Wijzig de instellingen van het account van @Model.Name</h4>
+    <h4>Wijzig de instellingen van het account van @Html.DisplayFor(model => model.Name).</h4>
     <hr />
 
-    <h5>Accountsgegevens</h5>
+    @if (statusMessage != null && statusMessage != "")
+    {
+        <div class="alert alert-success alert-dismissible fade in text-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span>@statusMessage</span>
+        </div>
+    }
+
+    <h5>Accountsgegevens:</h5>
     <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.Email):</dt>
+        <dd>@Html.DisplayFor(model => model.Email) <a asp-controller="Manage" asp-action="ChangeEmail" class="btn-bracketed">Wijzig</a></dd>
         <dt>Wachtwoord:</dt>
         <dd>
             <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Wijzig</a>
         </dd>
-        <dt>Email:</dt>
-        <dd>@Model.Email <a asp-controller="Manage" asp-action="ChangeEmail" class="btn-bracketed">Wijzig</a></dd>
     </dl>
 
-    <h5>Contactgegevens</h5>
+    <h5>Contactgegevens:</h5>
     <dl class="dl-horizontal">
 
-        <dt>Telefoonnummer:</dt>
-        <dd>@Model.PhoneNumber</dd>
+        <dt>@Html.DisplayNameFor(model => model.PhoneNumber):</dt>
+        <dd>@Html.DisplayFor(model => model.PhoneNumber)</dd>
         <dd>
             <a asp-controller="Manage" asp-action="ChangePhoneNumber" class="btn-bracketed">Wijzig</a>
         </dd>
     </dl>
 
 
-    <h5>Persoonsgegevens</h5>
+    <h5>Persoonsgegevens:</h5>
     <dl class="dl-horizontal">
-        <dt>Geboortedatum:</dt>
+        <dt>@Html.DisplayNameFor(model => model.Birthday):</dt>
         <dd>@Html.DisplayFor(model => model.Birthday)</dd>
-        <dt>Geslacht:</dt>
-        <dd>@Model.Sex</dd>
+        <dt>@Html.DisplayNameFor(model => model.Sex):</dt>
+        <dd>@Html.DisplayFor(model => model.Sex)</dd>
         <dd>
             <a asp-controller="Manage" asp-action="ChangePersonalInformation" class="btn-bracketed">Wijzig</a>
         </dd>
@@ -44,16 +54,16 @@
 
     <h5>Adresgegevens:</h5>
     <dl class="dl-horizontal">
-        <dt>Postcode:</dt>
-        <dd>@Model.AddressPostalCode</dd>
-        <dt>Huisnummer:</dt>
-        <dd>@Model.AddressNumber</dd>
-        <dt>Straat:</dt>
-        <dd>@Model.AddressStreet</dd>
-        <dt>Woonplaats:</dt>
-        <dd>@Model.AddressCity</dd>
-        <dt>Land:</dt>
-        <dd>@Model.AddressCountry</dd>
+        <dt>@Html.DisplayNameFor(model => model.AddressStreet):</dt>
+        <dd>@Html.DisplayFor(model => model.AddressStreet)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AddressNumber):</dt>
+        <dd>@Html.DisplayFor(model => model.AddressNumber)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AddressPostalCode):</dt>
+        <dd>@Html.DisplayFor(model => model.AddressPostalCode)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AddressCity):</dt>
+        <dd>@Html.DisplayFor(model => model.AddressCity)</dd>
+        <dt>@Html.DisplayNameFor(model => model.AddressCountry):</dt>
+        <dd>@Html.DisplayFor(model => model.AddressCountry)</dd>
         <dd>
             <a asp-controller="Manage" asp-action="ChangeAddressInformation" class="btn-bracketed">Wijzig</a>
         </dd>
@@ -61,12 +71,29 @@
 
     <h5>Studiegegevens:</h5>
     <dl class="dl-horizontal">
-        <dt>Startdatum studie:</dt>
-        <dd>@Model.StartdateStudy</dd>
-        <dt>Studietype:</dt>
-        <dd>@Model.StudyType</dd>
+        <dt>@Html.DisplayNameFor(model => model.StudentNumber):</dt>
+        <dd>@Html.DisplayFor(model => model.StudentNumber)</dd>
+        <dt>@Html.DisplayNameFor(model => model.StartdateStudy):</dt>
+        <dd>@Html.DisplayFor(model => model.StartdateStudy)</dd>
+        <dt>@Html.DisplayNameFor(model => model.StudyType):</dt>
+        <dd>@Html.DisplayFor(model => model.StudyType)</dd>
         <dd>
             <a asp-controller="Manage" asp-action="ChangeEducationalInformation" class="btn-bracketed">Wijzig</a>
+        </dd>
+    </dl>
+
+    <h5>Comissies:</h5>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Roles)
+        </dt>
+        <dd>
+            <ul>
+                @foreach (var role in ViewBag.Roles)
+                {
+                    <li>@role</li>
+                }
+            </ul>
         </dd>
     </dl>
 

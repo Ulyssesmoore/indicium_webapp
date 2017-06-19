@@ -75,13 +75,13 @@
             }
         }
 
-        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        @if (User.IsInRole("Bestuur") || User.IsInRole("Secretaris"))
         {
             <a asp-action="Edit" asp-route-id="@Model.ActivityID" class="btn btn-primary">Bewerken</a>
         }
 
         <a asp-action="Calendar" class="btn btn-default">Terug naar kalender</a>
-        @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+        @if (User.IsInRole("Bestuur") || User.IsInRole("Secretaris"))
         {
             <a asp-action="Index" class="btn btn-default">Terug naar overzicht</a>
         }
@@ -89,7 +89,7 @@
 </div>
 
 <div>
-    @if ((this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris")) && Model.NeedsSignUp)
+    @if ((User.IsInRole("Bestuur") || User.IsInRole("Secretaris")) && Model.NeedsSignUp)
     {
         <hr/>
 

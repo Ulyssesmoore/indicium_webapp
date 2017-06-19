@@ -87,7 +87,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [DataType(DataType.DateTime)]
-        [Display(Name = "Begindatum studie")]
+        [Display(Name = "Beginjaar studie")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd'-'MM'-'yyyy}")]
         public string StartdateStudy { get; set; }
         

@@ -1,41 +1,126 @@
-﻿@{
+﻿@model ContactViewModel
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@addTagHelper *, PaulMiami.AspNetCore.Mvc.Recaptcha
+
+@{
     ViewData["Title"] = "Contact";
+    var user = @ViewBag.LoggedInUser;
 }
 <h2>@ViewData["Title"]</h2>
-<h3>Algemeen Bestuur</h3>
-<adress>
-    <strong>William Loosman</strong><br />
-    Planetenbaan 35<br />  
-    3721KB Bilthoven<br />    
-    Telefoonnummer: 06 83151124<br />
-    <a href="mailto:william.loosman@student.hu.nl">william.loosman@student.hu.nl</a><br />
-    <br />
-</adress>
 
-<adress>
-    <strong>Nigel van Hattum</strong><br />
-    Planetenbaan 35<br />
-    3721KB Bilthoven<br />
-    Telefoonnummer: 06 46275558<br />
-    <a href="mailto:nigel.vanhattum@student.hu.nl">nigel.vanhattum@student.hu.nl</a><br />
-    <br />
-</adress>
+<div class="row">
+    <div class="col-md-4">
+        <h3>Algemeen Bestuur</h3>
+        <hr />
 
-<adress>
-    <strong>Olivier Verwoerd</strong><br />
-    Van Heemstralaan 30<br />
-    3741HH Baarn<br />
-    Telefoonnummer: 06 10313445<br />
-    <a href="mailto:olivier.verwoerd@student.hu.nl">olivier.verwoerd@student.hu.nl</a>
-    <br />
-</adress>
+        <adress>
+            <strong>William Loosman</strong><br />
+            Planetenbaan 35<br />  
+            3721KB Bilthoven<br />    
+            Telefoonnummer: 06 83151124<br />
+            <a href="mailto:william.loosman@student.hu.nl">william.loosman@student.hu.nl</a><br />
+            <br />
+        </adress>
 
-<h3>Penningmeester</h3>
-<adress>
-    <strong>Sander de Bruin</strong><br />
-    Bankstede 32<br />
-    3431HN Nieuwegein<br />
-    Telefoonnummer: 06 38274373<br />
-    <a href="mailto:sander.debruin@student.hu.nl">sander.debruin@student.hu.nl</a>
-    <br />
-</adress>
+        <adress>
+            <strong>Nigel van Hattum</strong><br />
+            Planetenbaan 35<br />
+            3721KB Bilthoven<br />
+            Telefoonnummer: 06 46275558<br />
+            <a href="mailto:nigel.vanhattum@student.hu.nl">nigel.vanhattum@student.hu.nl</a><br />
+            <br />
+        </adress>
+
+        <adress>
+            <strong>Olivier Verwoerd</strong><br />
+            Van Heemstralaan 30<br />
+            3741HH Baarn<br />
+            Telefoonnummer: 06 10313445<br />
+            <a href="mailto:olivier.verwoerd@student.hu.nl">olivier.verwoerd@student.hu.nl</a>
+            <br />
+        </adress>
+
+        <h3>Penningmeester</h3>
+        <adress>
+            <strong>Sander de Bruin</strong><br />
+            Bankstede 32<br />
+            3431HN Nieuwegein<br />
+            Telefoonnummer: 06 38274373<br />
+            <a href="mailto:sander.debruin@student.hu.nl">sander.debruin@student.hu.nl</a>
+            <br />
+        </adress>
+    </div>
+    <div class="col-md-8">
+        <h3>Contactformulier</h3>
+        <hr />
+
+        <form>
+            <div class="form-horizontal">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Name" class="form-control" value="@(SignInManager.IsSignedIn(User) ? user.Name : "")") />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Email" class="form-control" value="@(SignInManager.IsSignedIn(User) ? user.Email : "")") />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Subject" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Subject" class="form-control" />
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Message" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <textarea asp-for="Message" class="form-control"></textarea>
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <recaptcha />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" value="Versturen" class="btn btn-default" data-toggle="modal" data-target="#myModal" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Titel</h4>
+            </div>
+            <div class="modal-body">Demo</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <recaptcha-script />
+}

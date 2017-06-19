@@ -1,9 +1,11 @@
-@model GuestViewModel
+@model SignUpViewModel
+
+@addTagHelper *, PaulMiami.AspNetCore.Mvc.Recaptcha
 
 @{
     ViewData["Title"] = "Inschrijven";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
     var ActivityName = @Model.Activity.Name;
 }
 
@@ -13,29 +15,33 @@
     <div class="form-horizontal">
         <h4>Activiteit</h4>
         <hr />
+        
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <h5>Persoonsgegevens:</h5>
         <div class="form-group">
-            <label asp-for="FirstName" class="col-md-2 control-label"></label>
+            <label asp-for="Guest.FirstName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <input asp-for="Guest.FirstName" class="form-control" />
+                <span asp-validation-for="Guest.FirstName" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="LastName" class="col-md-2 control-label"></label>
+            <label asp-for="Guest.LastName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <input asp-for="Guest.LastName" class="form-control" />
+                <span asp-validation-for="Guest.LastName" class="text-danger"></span>
             </div>
         </div>      
         <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <label asp-for="Guest.Email" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <input asp-for="Guest.Email" class="form-control" />
+                <span asp-validation-for="Guest.Email" class="text-danger"></span>
             </div>
         </div>
 
+        <h5>Activiteitgegevens:</h5>
         <div class="form-group">
             <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Name)</label>
             <div class="col-md-10">
@@ -75,6 +81,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                <recaptcha />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Inschrijving bevestigen" class="btn btn-default" />
             </div>
         </div>
@@ -87,4 +99,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <recaptcha-script />
 }

@@ -7,12 +7,6 @@
     ViewData["Title"] = "Register";
 }
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCI6DDwVctCYDwSarPBjJKRsKjgz5gNa_o "></script>
-<recaptcha-script />
-
 <h2>Inschrijfformulier Indicium</h2>
 
 <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
@@ -142,17 +136,29 @@
         </div>
     </div>
     <div class="form-group">
-        <recaptcha />
+        <div class="col-md-offset-2 col-md-10">
+            <recaptcha />
+        </div>
     </div>
     <div class="form-group">
-           <button type="submit" class="btn btn-default">Registreren</button>
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Registreren</button>
+        </div>
     </div> 
 </form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+    <script src="~/js/custom/emailsuggestion.js"></script>
+    
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&key=AIzaSyCI6DDwVctCYDwSarPBjJKRsKjgz5gNa_o"></script>
+    <script src="~/js/custom/zipcodeapi.js"></script>
+
+    <recaptcha-script />
+
     <script type="text/javascript">
+        // fullcalendar
         $(function () {
             $('.datetimepicker').datetimepicker({
                 locale: 'nl',
@@ -164,97 +170,6 @@
                 viewMode: "years"
             });
         });
-    </script>
-
-    <script type="text/javascript">
-        amountused = 0;
-        window.onload = function () {
-            var firstname = document.getElementById("FirstName"),
-                lastname = document.getElementById("LastName"),
-                email = document.getElementById("Email"),
-                suggestedEmail = document.getElementById("suggestedemail");
-            
-            function getEmail() {
-                var result = firstname.value + '.' + lastname.value + '@@student.hu.nl';
-                return result.replace(/\s/g, '').toLowerCase();
-            }
-            
-            firstname.addEventListener('input', function() { generateEmail() });
-            lastname.addEventListener('input', function() { generateEmail() });
-            email.addEventListener('input', function() { generateEmail() });
-            
-            suggestedEmail.onclick = function() {
-                var result = getEmail();
-                
-                email.value = result;
-
-                if (email.value == result) {
-                    suggestedEmail.innerHTML = '';
-                }
-            };
-
-            function generateEmail() {
-                var result = getEmail();
-
-                if (firstname.value != '' && lastname.value != '') {
-                    if (email.value != result) {
-                        suggestedEmail.innerHTML = 'Voorgestelde email: ' + result;
-                    } else {
-                        suggestedEmail.innerHTML = '';
-                    }
-                } else {
-                    suggestedEmail.innerHTML = '';
-                }
-            }
-        };
-
-        $('#zip_code').focusout(function () { 
-            var location = $('#zip_code').val().replace(" ", "");
-            var patt = new RegExp("^[0-9]{4}\s?[a-zA-Z]{2}$");
-            if (patt.test(location)&&amountused < 3)
-            {
-                getAddress(location);
-                amountused++;
-            } 
-        });
-
-        function getAddress(location) {
-            geocoder = new google.maps.Geocoder();
-            var city;
-            var streetname;
-            var country = 'Nederland';
-            geocoder.geocode({ 'address': location }, function (results, status) {
-                if (status == 'OK') {
-                    var result = results[0].geometry.location;
-                    geocoder.geocode({ latLng: results[0].geometry.location }, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            // get the streetname:
-                            if (results[0].types[0] == 'street_address' && results[0].address_components[1]) {
-                                streetname = results[0].address_components[1].long_name;
-                            }
-                            else if (results[0].types[0] == 'route') {
-                                streetname = results[0].address_components[0].long_name;
-                            }
-                            $('#street').val(streetname);
-                        }
-                    });
-                    results[0].address_components.forEach(function (element2) {
-                        element2.types.forEach(function (element3) {
-                            switch (element3) {
-                                case 'locality':
-                                    city = element2.long_name;
-                                    break;
-                            };
-                        });
-                    });
-                    $('#city').val(city);
-                    $('#country').val(country);
-                }
-                else {
-                    console.log("Geocode was not successful for the following reason: " + status);
-                };
-            });
-        };
     </script>
 
 }

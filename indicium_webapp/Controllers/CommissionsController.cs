@@ -166,8 +166,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Commissions/ApproveOverview
-        public async Task<IActionResult> ApproveOverview()
+        // GET: Commissions/Approval
+        public async Task<IActionResult> Approval()
         {
             var commissionsResult = await _context.Commission.ToListAsync();
             var commissionViewModels = new List<CommissionViewModel>();

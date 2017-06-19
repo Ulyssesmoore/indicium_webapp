@@ -10,14 +10,20 @@
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="StartdateStudy" class="col-md-2 control-label">Startdatum Studie</label>
+        <label asp-for="StudentNumber" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="StudentNumber" class="form-control" disabled />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartdateStudy" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <input asp-for="StartdateStudy" class="form-control datetimepicker" placeholder="jjjj" />
             <span asp-validation-for="StartdateStudy" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
-        <label asp-for="StudyType" class="col-md-2 control-label">Studietype</label>
+        <label asp-for="StudyType" class="col-md-2 control-label"></label>
         <div class="col-md-10">
             <select asp-for="StudyType" asp-items="Html.GetEnumSelectList<StudyType>()" class="form-control"></select>
             <span asp-validation-for="StudyType" class="text-danger"></span>
