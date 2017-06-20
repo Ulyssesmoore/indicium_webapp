@@ -39,6 +39,12 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/statuten")]
+        public IActionResult Statuten()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
