@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace indicium_webapp.Models.ViewModels
 {
-    public class ActivityViewModel
+    public class ActivityViewModel : IValidatableObject
     {
         public int ActivityID { get; set; }
         
@@ -46,6 +47,16 @@ namespace indicium_webapp.Models.ViewModels
 
         [Display(Name = "Inschrijvingen")]
         public virtual ICollection<SignUp> SignUps { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (DateTime.ParseExact(EndDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")) < DateTime.ParseExact(StartDateTime, "dd-MM-yyyy HH:mm", new CultureInfo("nl-NL")))
+            {
+                yield return
+                  new ValidationResult(errorMessage: "Einddatum moet na de startdatum liggen",
+                                       memberNames: new[] { "EndDateTime" });
+            }
+        }
 
     }
 }
