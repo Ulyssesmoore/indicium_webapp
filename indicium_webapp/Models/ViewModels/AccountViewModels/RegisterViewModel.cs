@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using indicium_webapp.Data.ValidationAttributes;
 using indicium_webapp.Models.InterfaceItemModels;
 
 namespace indicium_webapp.Models.ViewModels.AccountViewModels
@@ -47,6 +49,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(100, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
         [DataType(DataType.DateTime)]
+        [MinimumAge(16, ErrorMessage = "De minimumleeftijd is 16 jaar.")]
         [Display(Name = "Geboortedatum")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public string Birthday { get; set; }
