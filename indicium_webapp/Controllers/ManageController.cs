@@ -144,11 +144,13 @@ namespace indicium_webapp.Controllers
                 user.Status = Status.Uitgeschreven;
                 await _signInManager.SignOutAsync();
 
-                // Insert automatic email to the users emailaddress
-
                 // Saves changes
                 _context.Update(user);
                 await _context.SaveChangesAsync();
+
+                // Send automatic email to the users emailaddress
+                await _emailSender.SendEmailAsync(user.Email, "Bevestiging uitschrijving",
+                    "Je bent uitgeschreven!");
 
                 // User has no business in the application anymore so they will be redirected to the homepage. 
                 return RedirectToAction(nameof(HomeController.Index), "Home");
