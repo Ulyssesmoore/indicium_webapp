@@ -207,6 +207,8 @@ namespace indicium_webapp.Controllers
                     _context.Add(CreateGuestSignUp(activityResult.ActivityID, model));
                     await _context.SaveChangesAsync();
 
+                    await _emailSender.SendCalendarInviteAsync(model.Guest.Email, activityResult);
+
                     return RedirectToAction("Calendar", "Activities", new { Message = ActivityMessageId.GuestSignUpSuccess });
                 }
                 else

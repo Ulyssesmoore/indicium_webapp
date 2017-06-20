@@ -142,9 +142,8 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            Console.Write(true);
-            bool isOld = !(Age(DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"))) < 16);
-            if (ModelState.IsValid && isOld)
+
+            if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
@@ -204,11 +203,6 @@ namespace indicium_webapp.Controllers
                     return View("login");
                 }
                 AddErrors(result);              
-            }
-
-            if (!isOld)
-            {
-                ModelState.AddModelError(string.Empty, "U bent niet oud genoeg om een account aan te maken");
             }
 
             model.Commissions = createCommissionCheckBoxList(); // We need to recreate the list for whatever reason.
@@ -334,15 +328,6 @@ namespace indicium_webapp.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        private static int Age(DateTime birthday)
-        {
-            DateTime now = DateTime.Today;
-            int age = now.Year - birthday.Year;
-            if (now < birthday.AddYears(age)) age--;
-
-            return age;
         }
 
         private List<CheckBoxListItem> createCommissionCheckBoxList()

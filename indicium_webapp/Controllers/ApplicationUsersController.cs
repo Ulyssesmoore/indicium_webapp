@@ -12,6 +12,7 @@ using indicium_webapp.Models;
 using System.Globalization;
 using indicium_webapp.Models.InterfaceItemModels;
 using indicium_webapp.Models.ViewModels.AccountViewModels;
+using indicium_webapp.Services;
 
 namespace indicium_webapp.Controllers
 {
@@ -20,11 +21,15 @@ namespace indicium_webapp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ApplicationUsersController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: ApplicationUsers
@@ -227,26 +232,27 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Approval");
         }
 
-        private async Task<bool> ApproveApplicationUser(string id, Status status)
+        private async Task ApproveApplicationUser(string id, Status status)
         {
-            var result = false;
             var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);            
 
-            try
+            if (applicationUserResult.Status != status)
             {
-                applicationUserResult.Status = status;
+                try
+                {
+                    applicationUserResult.Status = status;
 
-                _context.Update(applicationUserResult);
-                await _context.SaveChangesAsync();
+                    _context.Update(applicationUserResult);
+                    await _context.SaveChangesAsync();
 
-                result = true;
+                    await _emailSender.SendEmailAsync(applicationUserResult.Email, "Status gewijzigd",
+                        "Je status is gewijzigd naar: " + status);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return result;
         }
         
         private bool ApplicationUserExists(string id)
