@@ -142,9 +142,8 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            Console.Write(true);
-            bool isOld = !(Age(DateTime.ParseExact(model.Birthday, "dd-MM-yyyy", new CultureInfo("nl-NL"))) < 16);
-            if (ModelState.IsValid && isOld)
+
+            if (ModelState.IsValid)
             {
                 var user = new ApplicationUser {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
@@ -168,20 +167,6 @@ namespace indicium_webapp.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // Send an email with this link
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
-                        new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Bevestig E-mailadres",
-                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a><br>" +
-                        $"Groet,<br>" +
-                        $"Indicium");
-
-                    await _userManager.AddToRoleAsync(user, "Lid");
-                    _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
-                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring door de secretaris kan echter nog even duren. Er is " +
-                        "een E-mail verstuurd naar het opgegeven adres. Voor u kunt inloggen, moet u deze bevestigen.");
-
                     // Save the commission interests:
                     if (model.Commissions != null)
                     {
@@ -199,17 +184,28 @@ namespace indicium_webapp.Controllers
 
                             await _context.SaveChangesAsync();
                         }
-                    }                    
+                    }
+
+                    // Send an email with this link
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
+                        new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "Bevestig E-mailadres",
+                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a><br>" +
+                        $"Groet,<br>" +
+                        $"Indicium");
+
+                    await _userManager.AddToRoleAsync(user, "Lid");
+                    _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
+                    ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring door de secretaris kan echter nog even duren. Er is " +
+                        "een E-mail verstuurd naar het opgegeven adres. Voor u kunt inloggen, moet u deze bevestigen.");
+                                    
                     return View("login");
                 }
                 AddErrors(result);              
             }
 
-            if (!isOld)
-            {
-                ModelState.AddModelError(string.Empty, "U bent niet oud genoeg om een account aan te maken");
-                model.Commissions = createCommissionCheckBoxList(); // We need to recreate the list for whatever reason.
-            }
+            model.Commissions = createCommissionCheckBoxList(); // We need to recreate the list for whatever reason.
 
             // If we got this far, something failed, redisplay form
             return View(model);
@@ -332,15 +328,6 @@ namespace indicium_webapp.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        private static int Age(DateTime birthday)
-        {
-            DateTime now = DateTime.Today;
-            int age = now.Year - birthday.Year;
-            if (now < birthday.AddYears(age)) age--;
-
-            return age;
         }
 
         private List<CheckBoxListItem> createCommissionCheckBoxList()
