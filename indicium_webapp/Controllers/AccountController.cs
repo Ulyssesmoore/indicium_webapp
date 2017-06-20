@@ -173,7 +173,7 @@ namespace indicium_webapp.Controllers
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account",
                         new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Bevestig E-mailadres",
-                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a>" +
+                        $"Klik op de volgende link om jouw e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a><br>" +
                         $"Groet,<br>" +
                         $"Indicium");
 
