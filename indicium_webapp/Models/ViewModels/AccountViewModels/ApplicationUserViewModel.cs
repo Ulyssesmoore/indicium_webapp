@@ -46,7 +46,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         [Required(ErrorMessage = "{0} is verplicht.")]
         [StringLength(100, ErrorMessage = "{0} mag maximaal {1} karakter(s) zijn.")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Geboortedatum")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public string Birthday { get; set; }
