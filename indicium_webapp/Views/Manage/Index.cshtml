@@ -4,6 +4,16 @@
     var statusMessage = @ViewData["StatusMessage"];
 }
 
+@section Styles {
+    <style type="text/css">
+        dl dd ul {
+            list-style: none;
+            margin-bottom: 0px;
+            padding-left: 0px;
+        }
+    </style>
+}
+
 <h2>@ViewData["Title"]</h2>
 
 <div>
@@ -82,20 +92,21 @@
         </dd>
     </dl>
 
-    <h5>Comissies:</h5>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Roles)
-        </dt>
-        <dd>
-            <ul>
-                @foreach (var role in ViewBag.Roles)
-                {
-                    <li>@role</li>
-                }
-            </ul>
-        </dd>
-    </dl>
+    @if (Model.Commissions.Any())
+    {
+        <h5>Commissiegegevens:</h5>
+        <dl class="dl-horizontal">
+            <dt>Commissies:</dt>
+            <dd>
+                <ul>
+                    @foreach (var commission in Model.Commissions)
+                    {
+                        <li>@commission.Commission.Name</li>
+                    }
+                </ul>
+            </dd>
+        </dl>
+    }
 
     <h5>Lidmaatschap opzeggen</h5>
     <p class="text-danger">Informatief stuk over hoe verschrikkelijk het opzeggen van een lidmaatschap wel niet is.</p>

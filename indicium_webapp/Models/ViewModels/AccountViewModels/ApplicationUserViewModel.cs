@@ -86,6 +86,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
         public string StudentNumber { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Het {0} mag alleen bestaan uit nummers.")]
         [Display(Name = "Beginjaar studie")]
         public string StartdateStudy { get; set; }
         
@@ -107,7 +108,7 @@ namespace indicium_webapp.Models.ViewModels.AccountViewModels
 
         public Status Status { get; set; }
 
-        public String UserName { get; set; }
+        public string UserName { get; set; }
 
         [Display(Name = "Rollen")]
         public IEnumerable<CheckBoxListItem> Roles { get; set; }
