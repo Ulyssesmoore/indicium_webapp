@@ -134,6 +134,9 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
+            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(user => user.Id == id);
+            var oldStatus = applicationUserResult.Status;
+
             if (ModelState.IsValid)
             {
                 try
@@ -142,6 +145,12 @@ namespace indicium_webapp.Controllers
                     
                     _context.Update(CreateApplicationUser(model));
                     await _context.SaveChangesAsync();
+
+                    if (oldStatus != applicationUser.Status)
+                    {
+                        await _emailSender.SendEmailAsync(applicationUserResult.Email, "Status gewijzigd",
+                            "Je status is gewijzigd naar: " + applicationUser.Status);
+                    }
 
                     foreach (var role in model.Roles.ToList())
                     {
