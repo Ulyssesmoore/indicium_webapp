@@ -20,7 +20,7 @@ using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace indicium_webapp.Controllers
 {
-    [Route("/account"), Authorize]
+    [Route("account"), Authorize]
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -51,7 +51,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/inloggen
-        [HttpGet, AllowAnonymous, Route("/inloggen")]
+        [HttpGet, AllowAnonymous, Route("inloggen")]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -63,7 +63,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/inloggen
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("/inloggen")]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("inloggen")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -114,7 +114,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/registreren
-        [HttpGet, AllowAnonymous, Route("/registreren")]
+        [HttpGet, AllowAnonymous, Route("registreren")]
         public IActionResult Register(string returnUrl = null)
         {
             RegisterViewModel model = new RegisterViewModel();
@@ -138,7 +138,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/registreren
-        [ValidateRecaptcha, HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("/registreren")]
+        [ValidateRecaptcha, HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("registreren")]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -213,7 +213,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/uitloggen
-        [HttpPost, ValidateAntiForgeryToken, Route("/uitloggen")]
+        [HttpPost, ValidateAntiForgeryToken, Route("uitloggen")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -222,7 +222,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /account/bevestig-email
-        [HttpGet, AllowAnonymous, Route("/bevestig-email")]        
+        [HttpGet, AllowAnonymous, Route("bevestig-email")]        
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -240,7 +240,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/wachtwoord-vergeten
-        [HttpGet, AllowAnonymous, Route("/wachtwoord-vergeten")]        
+        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten")]        
         public IActionResult ForgotPassword()
         {
             return View();
@@ -248,7 +248,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/wachtwoord-vergeten
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("/wachtwoord-vergeten")]        
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("wachtwoord-vergeten")]        
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -276,7 +276,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/wachtwoord-vergeten-bevestiging
-        [HttpGet, AllowAnonymous, Route("/wachtwoord-vergeten-bevestiging")]        
+        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten-bevestiging")]        
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -284,7 +284,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/reset-wachtwoord
-        [HttpGet, AllowAnonymous, Route("/reset-wachtwoord")]        
+        [HttpGet, AllowAnonymous, Route("reset-wachtwoord")]        
         public IActionResult ResetPassword(string code = null)
         {
             return code == null ? View("Error") : View();
@@ -292,7 +292,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/reset-wachtwoord
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("/reset-wachtwoord")]        
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("reset-wachtwoord")]        
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -316,7 +316,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/reset-wachtwoord-bevestiging
-        [HttpGet, AllowAnonymous, Route("/reset-wachtwoord-bevestiging")]        
+        [HttpGet, AllowAnonymous, Route("reset-wachtwoord-bevestiging")]        
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -324,7 +324,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/geen-toegang
-        [HttpGet, AllowAnonymous, Route("/geen-toegang")]        
+        [HttpGet, AllowAnonymous, Route("geen-toegang")]        
         public IActionResult AccessDenied()
         {
             return View();

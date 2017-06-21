@@ -14,7 +14,7 @@ using indicium_webapp.Models.ViewModels;
 
 namespace indicium_webapp.Controllers
 {
-    [Route("/activiteiten"), Authorize(Roles = "Bestuur, Secretaris")]
+    [Route("activiteiten"), Authorize(Roles = "Bestuur, Secretaris")]
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -42,8 +42,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /activiteiten/details?id=1
-        [AllowAnonymous, Route("/details")]
+        // GET: /activiteiten/details/{id}
+        [AllowAnonymous, Route("details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -75,7 +75,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /activiteiten/aanmaken
-        [Route("/aanmaken")]
+        [Route("aanmaken")]
         public IActionResult Create()
         {
             var activityTypesResult = _context.ActivityType.ToListAsync().Result;
@@ -87,7 +87,7 @@ namespace indicium_webapp.Controllers
         // POST: /activiteiten/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("aanmaken")]
         public async Task<IActionResult> Create(ActivityViewModel model)
         {
             if (ModelState.IsValid)
@@ -104,8 +104,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /activiteiten/bewerken?id=1
-        [Route("/bewerken")]
+        // GET: /activiteiten/bewerken/{id}
+        [Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -130,10 +130,10 @@ namespace indicium_webapp.Controllers
             return View(CreateActivitiesViewModel(activityResult));
         }
 
-        // POST: /activiteiten/bewerken?id=1
+        // POST: /activiteiten/bewerken/{id}
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int id, ActivityViewModel model)
         {
             if (id != model.ActivityID)
@@ -180,8 +180,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /activiteiten/verwijderen?id=1
-        [Route("/verwijderen")]
+        // GET: /activiteiten/verwijderen/{id}
+        [Route("verwijderen/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -201,8 +201,8 @@ namespace indicium_webapp.Controllers
             return View(CreateActivitiesViewModel(activityResult));
         }
 
-        // POST: /activiteiten/verwijderen?id=1
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
+        // POST: /activiteiten/verwijderen/{id}
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("verwijderen/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activityResult = await _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
@@ -214,7 +214,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /activiteiten/kalender
-        [AllowAnonymous, Route("/kalender")]
+        [AllowAnonymous, Route("kalender")]
         public IActionResult Calendar(ActivityMessageId? message = null)
         {
             ViewData["StatusMessage"] = message == ActivityMessageId.GuestSignUpSuccess ? "Je inschrijving is gelukt." : "";
