@@ -14,7 +14,7 @@ using indicium_webapp.Models.ViewModels;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize(Roles = "Bestuur, Secretaris")]
+    [Route("/activiteiten"), Authorize(Roles = "Bestuur, Secretaris")]
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -33,7 +33,7 @@ namespace indicium_webapp.Controllers
             GuestSignUpSuccess
         }
 
-        // GET: Activities
+        // GET: /activiteiten
         public async Task<IActionResult> Index()
         {
             var activitiesResult = await _context.Activity.Include(activity => activity.SignUps).ToListAsync();
@@ -42,8 +42,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Activities/Details/5
-        [AllowAnonymous]
+        // GET: /activiteiten/details?id=1
+        [AllowAnonymous, Route("/details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -74,7 +74,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Activities/Create
+        // GET: /activiteiten/aanmaken
+        [Route("/aanmaken")]
         public IActionResult Create()
         {
             var activityTypesResult = _context.ActivityType.ToListAsync().Result;
@@ -83,10 +84,10 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        // POST: Activities/Create
+        // POST: /activiteiten/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
         public async Task<IActionResult> Create(ActivityViewModel model)
         {
             if (ModelState.IsValid)
@@ -103,7 +104,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Activities/Edit/5
+        // GET: /activiteiten/bewerken?id=1
+        [Route("/bewerken")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,10 +130,10 @@ namespace indicium_webapp.Controllers
             return View(CreateActivitiesViewModel(activityResult));
         }
 
-        // POST: Activities/Edit/5
+        // POST: /activiteiten/bewerken?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
         public async Task<IActionResult> Edit(int id, ActivityViewModel model)
         {
             if (id != model.ActivityID)
@@ -178,7 +180,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Activities/Delete/5
+        // GET: /activiteiten/verwijderen?id=1
+        [Route("/verwijderen")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -198,8 +201,8 @@ namespace indicium_webapp.Controllers
             return View(CreateActivitiesViewModel(activityResult));
         }
 
-        // POST: Activities/Delete/5
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        // POST: /activiteiten/verwijderen?id=1
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activityResult = await _context.Activity.SingleOrDefaultAsync(activity => activity.ActivityID == id);
@@ -210,8 +213,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Activities/Calendar
-        [AllowAnonymous]
+        // GET: /activiteiten/kalender
+        [AllowAnonymous, Route("/kalender")]
         public IActionResult Calendar(ActivityMessageId? message = null)
         {
             ViewData["StatusMessage"] = message == ActivityMessageId.GuestSignUpSuccess ? "Je inschrijving is gelukt." : "";
