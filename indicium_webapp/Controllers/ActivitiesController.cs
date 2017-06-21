@@ -133,7 +133,7 @@ namespace indicium_webapp.Controllers
         // POST: /activiteiten/bewerken/{id}
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("bewerken/{id}")]
+        [HttpPost, Route("bewerken/{id}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ActivityViewModel model)
         {
             if (id != model.ActivityID)

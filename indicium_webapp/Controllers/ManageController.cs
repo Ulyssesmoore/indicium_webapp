@@ -43,7 +43,8 @@ namespace indicium_webapp.Controllers
             ChangePersonalInformationSuccess,
             ChangeAddressInformationSuccess,
             ChangePhoneNumberSuccess,
-            Error
+            Error,
+            EmailTakenError
         }
 
         //
@@ -59,6 +60,7 @@ namespace indicium_webapp.Controllers
                 : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangePhoneNumberSuccess ? "Je telefoonnummer is met succes gewijzigd."
+                : message == ManageMessageId.EmailTakenError ? "Dit emailadres is al in gebruik"
                 : "";
 
             var applicationUserResult = await _context.ApplicationUser
@@ -188,14 +190,33 @@ namespace indicium_webapp.Controllers
                 return View(model);
             }
             var user = await GetCurrentUserAsync();
+            
+
             if (user != null)
             {
+                
                 try
                 {
                     // Generates a token, overwrites values in currently logged in user to match the new data
                     var email = model.Email.ToLower();
+
+                    if (_context.ApplicationUser.Any(u => u.NormalizedUserName == email.ToUpper()))
+                    {
+                        return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EmailTakenError });
+                    }
+
                     var token = await _userManager.GenerateChangeEmailTokenAsync(user, email);
+
+                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Manage",
+                         new { userId = user.Id, code = token }, protocol: HttpContext.Request.Scheme);
+
                     user.NewEmail = email;
+
+                    // Send token by email
+                    await _emailSender.SendEmailAsync(email, "Bevestig E-mailadres",
+                        $"Klik op de volgende link om jouw nieuwe e-mailadres te bevestigen: <a href='{callbackUrl}'>link</a><br>" +
+                        $"Groet,<br>" +
+                        $"Indicium");
 
                     // Saves changes
                     _context.Update(user);
@@ -219,34 +240,52 @@ namespace indicium_webapp.Controllers
         }
 
         //
-        // GET: /profiel/wijzig-email
-        [HttpGet, Route("bevestig-email")]
+        // GET: /profiel/bevestig-email
+        [HttpGet, Route("bevestig-email"), AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            //if (userId == null || code == null)
-            //{
-            //    return View("Error");
-            //}
-            //var user = await _userManager.FindByIdAsync(userId);
-            //var user = GetCurrentUserAsync();
-            //if (user == null)
-            //{
-            //    return View("Error");
-            //}
-            //var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (userId == null || code == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Fout 1");
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Fout 2");
+                return View("Error");
+            }
+            if (user.NewEmail == null)
+            {
+                return View("Error");
+            }
+            Boolean result;
+            try
+            {
+               
+                // Changes data according to the new email
+                await _userManager.ChangeEmailAsync(user, user.NewEmail, code);
+                user.UserName = user.NewEmail;
+                await _userManager.UpdateNormalizedUserNameAsync(user);
+                user.NewEmail = null;
+                
+                
+                // Saves changes
+                _context.Update(user);
+                await _context.SaveChangesAsync();
 
-
-            //await _userManager.ChangeEmailAsync(user, model.Email, token);
-            //user.UserName = model.Email;
-            //await _userManager.UpdateNormalizedEmailAsync(user);
-            //await _userManager.UpdateNormalizedUserNameAsync(user);
-
-            //// Relogs user to refresh the _LoginPatial.cshtml
-            //await _signInManager.SignOutAsync();
-            //await _signInManager.SignInAsync(user, false);
-
-            //return View(result.Succeeded ? "ConfirmEmail" : "Error");
-            throw new NotImplementedException();
+                // Relogs user to refresh the _LoginPatial.cshtml
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, false);
+                result = true;
+            }
+            catch (Exception)
+            {
+                result = false;
+                throw;
+            }
+            
+            return View(result ? "ConfirmEmail" : "Error");
         }
 
         //
