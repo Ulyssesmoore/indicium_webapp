@@ -16,6 +16,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Newtonsoft.Json;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace indicium_webapp
 {
@@ -74,6 +75,11 @@ namespace indicium_webapp
             });
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Cookies.ApplicationCookie.LoginPath = new PathString("/account/inloggen");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
