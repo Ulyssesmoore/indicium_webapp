@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using indicium_webapp.Data;
 using indicium_webapp.Models;
 using indicium_webapp.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace indicium_webapp.Controllers
 {
+    [Route("commissies"), Authorize(Roles = "Bestuur, Secretaris")]
     public class CommissionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +22,7 @@ namespace indicium_webapp.Controllers
             _context = context;    
         }
 
-        // GET: Commissions
+        // GET: /commissies
         public async Task<IActionResult> Index()
         {
             var commissions = await _context.Commission.ToListAsync();
@@ -29,7 +31,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Commissions/Details/5
+        // GET: /commissies/details?id=1
+        [Route("/details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,16 +64,17 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Commissions/Create
+        // GET: /commissies/aanmaken
+        [Route("/aanmaken")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Commissions/Create
+        // POST: /commissies/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
         public async Task<IActionResult> Create(CommissionViewModel model)
         {
             if (ModelState.IsValid)
@@ -84,7 +88,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Commissions/Edit/5
+        // GET: /commissies/bewerken?id=1
+        [Route("/bewerken")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,10 +107,10 @@ namespace indicium_webapp.Controllers
             return View(CreateCommissionViewModel(commissionResult));
         }
 
-        // POST: Commissions/Edit/5
+        // POST: /commissies/bewerken?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
         public async Task<IActionResult> Edit(int id, CommissionViewModel model)
         {
             if (id != model.CommissionID)
@@ -136,7 +141,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: Commissions/Delete/5
+        // GET: /commissies/verwijderen?id=1
+        [Route("/verwijderen")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,8 +160,8 @@ namespace indicium_webapp.Controllers
             return View(CreateCommissionViewModel(commissionResult));
         }
 
-        // POST: Commissions/Delete/5
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        // POST: /commissies/verwijderen?id=1
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var commissionResult = await _context.Commission.SingleOrDefaultAsync(commission => commission.CommissionID == id);
@@ -166,7 +172,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Commissions/Approval
+        // GET: /commissies/aanvragen
+        [Route("/aanvragen")]
         public async Task<IActionResult> Approval()
         {
             var commissionsResult = await _context.Commission.ToListAsync();
@@ -200,7 +207,8 @@ namespace indicium_webapp.Controllers
             return View(commissionViewModels);
         }
 
-        // POST: Commissions/ApproveMember
+        // POST: /commissies/aanvraag-goedkeuren?id=1
+        [Route("/aanvraag-goedkeuren")]
         public async Task<IActionResult> ApproveMember(int? id)
         {
             if (id == null)
@@ -236,7 +244,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Commissions/DisapproveMember
+        // POST: /commissies/aanvraag-afkeuren?id=1
+        [Route("/aanvraag-afkeuren")]
         public async Task<IActionResult> DisapproveMember(int? id)
         {
             if (id == null)

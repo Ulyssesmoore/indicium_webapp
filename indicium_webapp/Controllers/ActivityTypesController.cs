@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize(Roles = "Bestuur, Secretaris")]
+    [Route("activiteit-types"), Authorize(Roles = "Bestuur, Secretaris")]
     public class ActivityTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +22,7 @@ namespace indicium_webapp.Controllers
             _context = context;    
         }
 
-        // GET: ActivityTypes
+        // GET: /activiteit-types
         public async Task<IActionResult> Index()
         {
             var activityTypesResult = await _context.ActivityType.ToListAsync();
@@ -31,16 +31,17 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ActivityTypes/Create
+        // GET: /activiteit-types/aanmaken
+        [Route("/aanmaken")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ActivityTypes/Create
+        // POST: /activiteit-types/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
         public async Task<IActionResult> Create(ActivityTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,7 +55,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ActivityTypes/Edit/5
+        // GET: /activiteit-types/bewerken?id=1
+        [Route("/bewerken")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,10 +74,10 @@ namespace indicium_webapp.Controllers
             return View(CreateActivityTypeViewModel(activitytypeResult));
         }
 
-        // POST: ActivityTypes/Edit/5
+        // POST: /activiteit-types/bewerken?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
         public async Task<IActionResult> Edit(int id, ActivityTypeViewModel model)
         {
             if (id != model.ActivityTypeID)
@@ -106,7 +108,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ActivityTypes/Delete/5
+        // GET: /activiteit-types/verwijderen?id=1
+        [Route("/verwijderen")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,8 +127,8 @@ namespace indicium_webapp.Controllers
             return View(CreateActivityTypeViewModel(activityTypeResult));
         }
 
-        // POST: ActivityTypes/Delete/5
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        // POST: /activiteit-types/verwijderen?id=1
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activityTypeResult = await _context.ActivityType.SingleOrDefaultAsync(activityType => activityType.ActivityTypeID == id);

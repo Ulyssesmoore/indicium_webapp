@@ -17,6 +17,7 @@ using indicium_webapp.Services;
 namespace indicium_webapp.Controllers
 {
     [Authorize(Roles = "Bestuur, Secretaris")]
+    [Route("/gebruikers")]
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +33,7 @@ namespace indicium_webapp.Controllers
             _emailSender = emailSender;
         }
 
-        // GET: ApplicationUsers
+        // GET: /gebruikers
         public async Task<IActionResult> Index(string studyTypesList, string nameFilter, string studyFilter, string statusFilter)
         {
             ViewData["NameFilter"] = nameFilter;
@@ -70,7 +71,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ApplicationUsers/Details/5
+        // GET: /gebruikers/details?id=1
+        [Route("/details")]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -95,8 +97,8 @@ namespace indicium_webapp.Controllers
             return View(CreateApplicationUserViewModel(applicationUserResult));
         }
 
-        // GET: ApplicationUsers/Edit/5
-        [Authorize(Roles = "Secretaris")]
+        // GET: /gebruikers/bewerken?id=1
+        [Authorize(Roles = "Secretaris"), Route("/bewerken")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -128,10 +130,10 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // POST: ApplicationUsers/Edit/5
+        // POST: /gebruikers/bewerken?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Secretaris")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Secretaris"), Route("/bewerken")]
         public async Task<IActionResult> Edit(string id, ApplicationUserViewModel model)
         {
             if (id != model.Id)
@@ -198,8 +200,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: ApplicationUsers/Approval
-        [Authorize(Roles = "Secretaris")]
+        // GET: /gebruikers/aanvragen
+        [Authorize(Roles = "Secretaris"), Route("/aanvragen")]
         public async Task<IActionResult> Approval()
         {
             var users = from u in _context.ApplicationUser select u;
@@ -213,8 +215,8 @@ namespace indicium_webapp.Controllers
             return View(applicationUsersResult.Select(CreateApplicationUserViewModel));
         }
         
-        // POST: ApplicationUsers/Approve/5
-        [HttpPost, Authorize(Roles = "Secretaris")]
+        // POST: /gebruikers/aanvraag-goedkeuren?id=1
+        [HttpPost, Authorize(Roles = "Secretaris"), Route("/aanvragen-goedkeuren")]
         public async Task<IActionResult> Approve(string id)
         {
             ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
@@ -234,8 +236,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Approval");
         }
 
-        // POST: ApplicationUsers/Disapprove/5
-        [HttpPost, Authorize(Roles = "Secretaris")]
+        // POST: /gebruikers/aanvraag-afkeuren?id=1
+        [HttpPost, Authorize(Roles = "Secretaris"), Route("/aanvragen-afkeuren")]
         public async Task<IActionResult> Disapprove(string id)
         {
             ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);

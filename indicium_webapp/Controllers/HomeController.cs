@@ -25,7 +25,7 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
-        [Route("/about")]
+        [Route("/over")]
         public IActionResult About()
         {
             return View();

@@ -18,7 +18,7 @@ using static indicium_webapp.Controllers.ActivitiesController;
 
 namespace indicium_webapp.Controllers
 {
-    [Authorize]
+    [Route("/inschrijvingen"), Authorize]
     public class SignUpsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +36,7 @@ namespace indicium_webapp.Controllers
 
         }
 
-        // GET: SignUps
+        // GET: /inschrijvingen
         public async Task<IActionResult> Index()
         {
             var signUpsResult = await _context.SignUp
@@ -49,7 +49,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: SignUps/Details/5
+        // GET: /inschrijvingen/details?id=1
+        [Route("/details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -70,10 +71,10 @@ namespace indicium_webapp.Controllers
             return View(CreateSignUpViewModel(signUpResult));
         }
 
-        // POST: SignUps/Create/5
+        // POST: /inschrijvingen/aanmaken?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
         public async Task<IActionResult> Create(int id)
         {
             if (id <= 0)
@@ -119,7 +120,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: SignUps/Delete/5
+        // GET: /inschrijvingen/verwijderen?id=1
+        [Route("/verwijderen")] 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,8 +143,8 @@ namespace indicium_webapp.Controllers
             return View(CreateSignUpViewModel(signUpResult));
         }
 
-        // POST: SignUps/Delete/5
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        // POST: /inschrijvingen/verwijderen?id=1
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var signUpResult = await _context.SignUp.SingleOrDefaultAsync(signUp => signUp.ActivityID == id && signUp.ApplicationUserID == GetCurrentUserAsync().Id);
@@ -153,8 +155,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: SignUps/Guest/5
-        [AllowAnonymous]
+        // GET: /inschrijvingen/gast?id=1
+        [AllowAnonymous, Route("/gast")]
         public async Task<IActionResult> Guest(int? id)
         {
             if (_signInManager.IsSignedIn(User))
@@ -187,10 +189,10 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // POST: SignUps/Guest/5
+        // POST: /inschrijvingen/gast?id=1
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [ValidateRecaptcha, AllowAnonymous, HttpPost, ValidateAntiForgeryToken]
+        [ValidateRecaptcha, AllowAnonymous, HttpPost, ValidateAntiForgeryToken, Route("/gast")]
         public async Task<IActionResult> Guest(int? id, SignUpViewModel model)
         {
             if (id == null)
