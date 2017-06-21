@@ -73,6 +73,8 @@ namespace indicium_webapp.Models
 
         public Status Status { get; set; }
 
+        public string NewEmail { get; set; }
+
         public virtual ICollection<SignUp> SignUps { get; set; }
 
         public virtual ICollection<CommissionMember> Commissions { get; set; }
