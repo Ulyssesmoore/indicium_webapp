@@ -48,6 +48,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/Index
         [HttpGet]
+        [Route("/profiel")]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
@@ -94,6 +95,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
+        [Route("/profiel/wijzig-wachtwoord")]
         public IActionResult ChangePassword()
         {
             return View();
@@ -102,6 +104,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangePassword
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-wachtwoord")]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -127,6 +130,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/AbortMembership
         [HttpGet]
+        [Route("/profiel/lidmaatschap-opzeggen")]
         public IActionResult AbortMembership()
         {
             return View();
@@ -135,6 +139,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/AbortMembership
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/lidmaatschap-opzeggen")]
         public async Task<IActionResult> ConfirmedAbortMembership()
         {
             var user = await GetCurrentUserAsync();
@@ -159,6 +164,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangeEmail
         [HttpGet]
+        [Route("/profiel/wijzig-email")]
         public async Task<IActionResult> ChangeEmail()
         {
             var user = await GetCurrentUserAsync();
@@ -177,6 +183,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangeEmail
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-email")]
         public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
         {
             if (!ModelState.IsValid)
@@ -223,6 +230,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangePersonalInformation
         [HttpGet]
+        [Route("/profiel/wijzig-persoonlijke-gegevens")]
         public async Task<IActionResult> ChangePersonalInformation()
         {
             var user = await GetCurrentUserAsync();
@@ -242,6 +250,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangePersonalInformation
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-persoonlijke-gegevens")]
         public async Task<IActionResult> ChangePersonalInformation(ChangePersonalInformationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -266,6 +275,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangeEducationalInformation
         [HttpGet]
+        [Route("/profiel/wijzig-studie-gegevens")]
         public async Task<IActionResult> ChangeEducationalInformation()
         {
             var user = await GetCurrentUserAsync();
@@ -286,6 +296,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangeEducationalInformation
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-studie-gegevens")]
         public async Task<IActionResult> ChangeEducationalInformation(ChangeEducationalInformationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -311,6 +322,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangeAddressInformation
         [HttpGet]
+        [Route("/profiel/wijzig-adres-gegevens")]
         public async Task<IActionResult> ChangeAddressInformation()
         {
             var user = await GetCurrentUserAsync();
@@ -333,6 +345,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangeAddressInformation
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-adres-gegevens")]
         public async Task<IActionResult> ChangeAddressInformation(ChangeAddressInformationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -360,6 +373,7 @@ namespace indicium_webapp.Controllers
         //
         // GET: /Manage/ChangePhoneNumber
         [HttpGet]
+        [Route("/profiel/wijzig-telefoonnummer")]
         public async Task<IActionResult> ChangePhoneNumber()
         {
             var user = await GetCurrentUserAsync();
@@ -378,6 +392,7 @@ namespace indicium_webapp.Controllers
         //
         // POST: /Manage/ChangePhoneNumber
         [HttpPost, ValidateAntiForgeryToken]
+        [Route("/profiel/wijzig-telefoonnummer")]
         public async Task<IActionResult> ChangePhoneNumber(ChangePhoneNumberViewModel model)
         {
             if (!ModelState.IsValid)
