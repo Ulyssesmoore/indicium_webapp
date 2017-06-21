@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Http;
 using indicium_webapp.Models.ViewModels;
 using indicium_webapp.Models;
 using Microsoft.AspNetCore.Identity;
+using indicium_webapp.Services;
+using indicium_webapp.Models.ViewModels.HomeViewModels;
+using PaulMiami.AspNetCore.Mvc.Recaptcha;
 
 namespace indicium_webapp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
         
-        public HomeController(UserManager<ApplicationUser> userManager)
+        public HomeController(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _userManager = userManager;
+            _emailSender = emailSender;
         }
         
         public IActionResult Index()
@@ -37,6 +42,23 @@ namespace indicium_webapp.Controllers
             ViewBag.LoggedInUser = await GetCurrentUserAsync();
 
             return View();
+        }
+
+        [Route("/contact"), ValidateRecaptcha, HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Contact(ContactViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Contactformulier is verstuurd.");
+                
+                var emailaddress = _emailSender.Options.SmtpUsername;
+                var staticEmailadress = "svindicium@gmail.com";
+                await _emailSender.SendEmailAsync(staticEmailadress, model.Subject, "Van:" + model.Email + "<br/>Bericht:" + model.Message);
+
+                ModelState.AddModelError(string.Empty, "Contactformulier is verstuurd.");
+            }
+
+            return View(model);
         }
 
         [Route("/statuten")]

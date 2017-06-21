@@ -11,84 +11,82 @@
 
 <h2>Inschrijven voor @ActivityName</h2>
 
-<form asp-action="guest" asp-route-id="@Model.Activity.ActivityID">
-    <div class="form-horizontal">
-        <h4>Activiteit</h4>
-        <hr />
-        
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        
-        <h5>Persoonsgegevens:</h5>
-        <div class="form-group">
-            <label asp-for="Guest.FirstName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Guest.FirstName" class="form-control" />
-                <span asp-validation-for="Guest.FirstName" class="text-danger"></span>
-            </div>
+<form asp-action="guest" asp-route-id="@Model.Activity.ActivityID" class="form-horizontal">
+    <h4>Activiteit</h4>
+    <hr />
+    
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    
+    <h5>Persoonsgegevens:</h5>
+    <div class="form-group">
+        <label asp-for="Guest.FirstName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Guest.FirstName" class="form-control" />
+            <span asp-validation-for="Guest.FirstName" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Guest.LastName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Guest.LastName" class="form-control" />
-                <span asp-validation-for="Guest.LastName" class="text-danger"></span>
-            </div>
-        </div>      
-        <div class="form-group">
-            <label asp-for="Guest.Email" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Guest.Email" class="form-control" />
-                <span asp-validation-for="Guest.Email" class="text-danger"></span>
-            </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Guest.LastName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Guest.LastName" class="form-control" />
+            <span asp-validation-for="Guest.LastName" class="text-danger"></span>
         </div>
+    </div>      
+    <div class="form-group">
+        <label asp-for="Guest.Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Guest.Email" class="form-control" />
+            <span asp-validation-for="Guest.Email" class="text-danger"></span>
+        </div>
+    </div>
 
-        <h5>Activiteitgegevens:</h5>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Name)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Name)</p>
-            </div>
+    <h5>Activiteitgegevens:</h5>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Name)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Name)</p>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Description)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Description)</p>
-            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.Description)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.Description)</p>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.StartDateTime)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.StartDateTime)</p>
-            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.StartDateTime)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.StartDateTime)</p>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.EndDateTime)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.EndDateTime)</p>
-            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.EndDateTime)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.EndDateTime)</p>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.ActivityType)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.ActivityType.Name)</p>
-            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.ActivityType)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.ActivityType.Name)</p>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.NeedsSignUp)</label>
-            <div class="col-md-10">
-                <p class="form-control-static">@Html.DisplayFor(model => model.Activity.NeedsSignUp)</p>
-            </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">@Html.DisplayNameFor(model => model.Activity.NeedsSignUp)</label>
+        <div class="col-md-10">
+            <p class="form-control-static">@Html.DisplayFor(model => model.Activity.NeedsSignUp)</p>
         </div>
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <recaptcha />
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <recaptcha />
         </div>
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Inschrijving bevestigen" class="btn btn-default" />
-            </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Inschrijving bevestigen" class="btn btn-default" />
         </div>
     </div>
 </form>

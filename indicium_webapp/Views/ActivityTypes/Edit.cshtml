@@ -15,53 +15,50 @@
 
 <h2>Activiteittype bewerken</h2>
 
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>Activiteittype</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="ActivityTypeID" />
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+<form asp-action="Edit" class="form-horizontal">
+    <h4>Activiteittype</h4>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="BackgroundColor" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <div id="cp1" class="input-group color-picker">
-                    <input asp-for="BackgroundColor" type="text" class="form-control"/>
-                    <span class="input-group-addon"><i></i></span>
-                </div>
-                <span asp-validation-for="BackgroundColor" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="BackgroundColor" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <div id="cp1" class="input-group color-picker">
+                <input asp-for="BackgroundColor" type="text" class="form-control"/>
+                <span class="input-group-addon"><i></i></span>
             </div>
+            <span asp-validation-for="BackgroundColor" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="BorderColor" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <div id="cp2" class="input-group color-picker">
-                    <input asp-for="BorderColor" type="text" class="form-control" />
-                    <span class="input-group-addon"><i></i></span>
-                </div>
-                <span asp-validation-for="BorderColor" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="BorderColor" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <div id="cp2" class="input-group color-picker">
+                <input asp-for="BorderColor" type="text" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
             </div>
+            <span asp-validation-for="BorderColor" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="TextColor" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <div id="cp3" class="input-group color-picker">
-                    <input asp-for="TextColor" type="text" class="form-control" />
-                    <span class="input-group-addon"><i></i></span>
-                </div>
-                <span asp-validation-for="TextColor" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TextColor" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <div id="cp3" class="input-group color-picker">
+                <input asp-for="TextColor" type="text" class="form-control" />
+                <span class="input-group-addon"><i></i></span>
             </div>
+            <span asp-validation-for="TextColor" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Opslaan" class="btn btn-default" />
-            </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Opslaan" class="btn btn-default" />
         </div>
     </div>
 </form>
