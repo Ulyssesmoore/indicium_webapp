@@ -145,6 +145,17 @@ namespace indicium_webapp.Controllers
             {
                 try
                 {
+                    if (!model.NeedsSignUp)
+                    {
+                        var signUps = _context.SignUp.Where(signUp => signUp.ActivityID == model.ActivityID && (signUp.ApplicationUserID == GetCurrentUserAsync().Id || signUp.GuestID != null));
+                        foreach (var signup in signUps)
+                        {
+                            _context.SignUp.Remove(signup);
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+                    
                     _context.Update(CreateActivity(model));
                     await _context.SaveChangesAsync();
                 }
@@ -225,6 +236,11 @@ namespace indicium_webapp.Controllers
         private bool ActivityTypeExists(int id)
         {
             return _context.Activity.Any(activity => activity.ActivityTypeID == id);
+        }
+
+        private ApplicationUser GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(User).Result;
         }
 
         private Activity CreateActivity(ActivityViewModel model)
