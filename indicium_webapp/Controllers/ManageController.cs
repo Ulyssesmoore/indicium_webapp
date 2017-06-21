@@ -61,34 +61,35 @@ namespace indicium_webapp.Controllers
                 : message == ManageMessageId.ChangePhoneNumberSuccess ? "Je telefoonnummer is met succes gewijzigd."
                 : "";
 
-            var user = await GetCurrentUserAsync();
+            var applicationUserResult = await _context.ApplicationUser
+                .Include(applicationUser => applicationUser.Commissions)
+                    .ThenInclude(commission => commission.Commission)
+                .SingleOrDefaultAsync(applicationUser => applicationUser.Id == GetCurrentUserAsync().Result.Id);
 
-            if (user == null)
+            if (applicationUserResult == null)
             {
                 return View("Error");
             }
 
             var model = new IndexViewModel
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                AddressCity = user.AddressCity,
-                AddressPostalCode = user.AddressPostalCode,
-                AddressNumber = user.AddressNumber,
-                AddressStreet = user.AddressStreet,
-                AddressCountry = user.AddressCountry,
-                PhoneNumber = user.PhoneNumber,
-                StartdateStudy = user.StartdateStudy,
-                StudyType = user.StudyType,
-                Sex = user.Sex,
-                Birthday = user.Birthday.ToString("dd MMMM yyyy", new CultureInfo("nl-NL")),
-                StudentNumber = user.StudentNumber.ToString()
+                FirstName = applicationUserResult.FirstName,
+                LastName = applicationUserResult.LastName,
+                Email = applicationUserResult.Email,
+                AddressCity = applicationUserResult.AddressCity,
+                AddressPostalCode = applicationUserResult.AddressPostalCode,
+                AddressNumber = applicationUserResult.AddressNumber,
+                AddressStreet = applicationUserResult.AddressStreet,
+                AddressCountry = applicationUserResult.AddressCountry,
+                PhoneNumber = applicationUserResult.PhoneNumber,
+                StartdateStudy = applicationUserResult.StartdateStudy,
+                StudyType = applicationUserResult.StudyType,
+                Sex = applicationUserResult.Sex,
+                Birthday = applicationUserResult.Birthday.ToString("dd MMMM yyyy", new CultureInfo("nl-NL")),
+                StudentNumber = applicationUserResult.StudentNumber.ToString(),
+                Commissions = applicationUserResult.Commissions
             };
             
-            var loggedInUser = await GetCurrentUserAsync();
-            ViewBag.Roles = await _userManager.GetRolesAsync(loggedInUser);
-
             return View(model);
         }
 
@@ -149,11 +150,13 @@ namespace indicium_webapp.Controllers
                 user.Status = Status.Uitgeschreven;
                 await _signInManager.SignOutAsync();
 
-                // Insert automatic email to the users emailaddress
-
                 // Saves changes
                 _context.Update(user);
                 await _context.SaveChangesAsync();
+
+                // Send automatic email to the users emailaddress
+                await _emailSender.SendEmailAsync(user.Email, "Bevestiging uitschrijving",
+                    "Je bent uitgeschreven!");
 
                 // User has no business in the application anymore so they will be redirected to the homepage. 
                 return RedirectToAction(nameof(HomeController.Index), "Home");

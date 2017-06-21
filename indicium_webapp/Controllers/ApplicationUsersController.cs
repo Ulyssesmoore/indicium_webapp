@@ -12,6 +12,7 @@ using indicium_webapp.Models;
 using System.Globalization;
 using indicium_webapp.Models.InterfaceItemModels;
 using indicium_webapp.Models.ViewModels.AccountViewModels;
+using indicium_webapp.Services;
 
 namespace indicium_webapp.Controllers
 {
@@ -20,11 +21,15 @@ namespace indicium_webapp.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ApplicationUsersController(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: ApplicationUsers
@@ -73,7 +78,10 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            var applicationUserResult = await _context.ApplicationUser
+                .Include(applicationUser => applicationUser.Commissions)
+                    .ThenInclude(commission => commission.Commission)
+                .SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
             
             if (applicationUserResult == null)
             {
@@ -81,6 +89,8 @@ namespace indicium_webapp.Controllers
             }
 
             ViewBag.Roles = await _userManager.GetRolesAsync(applicationUserResult);
+            ViewBag.Commissions = applicationUserResult.Commissions;
+            ViewBag.UserEmailConfirmed = applicationUserResult.EmailConfirmed;
 
             return View(CreateApplicationUserViewModel(applicationUserResult));
         }
@@ -129,6 +139,9 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
+            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(user => user.Id == id);
+            var oldStatus = applicationUserResult.Status;
+
             if (ModelState.IsValid)
             {
                 try
@@ -137,6 +150,12 @@ namespace indicium_webapp.Controllers
                     
                     _context.Update(CreateApplicationUser(model));
                     await _context.SaveChangesAsync();
+
+                    if (oldStatus != applicationUser.Status)
+                    {
+                        await _emailSender.SendEmailAsync(applicationUserResult.Email, "Status gewijzigd",
+                            "Je status is gewijzigd naar: " + applicationUser.Status);
+                    }
 
                     foreach (var role in model.Roles.ToList())
                     {
@@ -190,7 +209,7 @@ namespace indicium_webapp.Controllers
             var applicationUsersResult = await users.AsNoTracking()
                 .Where(applicationUser => applicationUser.Status == Status.Nieuw)
                 .ToListAsync();
-
+            
             return View(applicationUsersResult.Select(CreateApplicationUserViewModel));
         }
         
@@ -198,12 +217,19 @@ namespace indicium_webapp.Controllers
         [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Approve(string id)
         {
-            if (id == null)
+            ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            
+            if (id == null || applicationUserResult.Id != id)
             {
                 return NotFound();
             }
-
-            await ApproveApplicationUser(id, Status.Lid);
+            
+            if (!applicationUserResult.EmailConfirmed)
+            {
+                return Forbid();
+            }
+            
+            await ApproveApplicationUser(applicationUserResult, Status.Lid);
             
             return RedirectToAction("Approval");
         }
@@ -212,36 +238,37 @@ namespace indicium_webapp.Controllers
         [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Disapprove(string id)
         {
-            if (id == null)
+            ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            
+            if (id == null || applicationUserResult.Id != id)
             {
                 return NotFound();
             }
 
-            await ApproveApplicationUser(id, Status.Afgekeurd);
+            await ApproveApplicationUser(applicationUserResult, Status.Afgekeurd);
             
             return RedirectToAction("Approval");
         }
 
-        private async Task<bool> ApproveApplicationUser(string id, Status status)
+        private async Task ApproveApplicationUser(ApplicationUser applicationUser, Status status)
         {
-            var result = false;
-            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);            
-
-            try
+            if (applicationUser.Status != status)
             {
-                applicationUserResult.Status = status;
+                try
+                {
+                    applicationUser.Status = status;
 
-                _context.Update(applicationUserResult);
-                await _context.SaveChangesAsync();
+                    _context.Update(applicationUser);
+                    await _context.SaveChangesAsync();
 
-                result = true;
+                    await _emailSender.SendEmailAsync(applicationUser.Email, "Status gewijzigd",
+                        "Je status is gewijzigd naar: " + status);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return result;
         }
         
         private bool ApplicationUserExists(string id)
@@ -270,7 +297,7 @@ namespace indicium_webapp.Controllers
 
             return applicationUser;
         }
-        
+
         private ApplicationUserViewModel CreateApplicationUserViewModel(ApplicationUser applicationUser)
         {
             return new ApplicationUserViewModel

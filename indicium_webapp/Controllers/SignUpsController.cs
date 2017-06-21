@@ -176,7 +176,7 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            if (activityResult.NeedsSignUp == false)
+            if (!activityResult.NeedsSignUp)
             {
                 return Forbid();
             }
@@ -206,6 +206,8 @@ namespace indicium_webapp.Controllers
                 {
                     _context.Add(CreateGuestSignUp(activityResult.ActivityID, model));
                     await _context.SaveChangesAsync();
+
+                    await _emailSender.SendCalendarInviteAsync(model.Guest.Email, activityResult);
 
                     return RedirectToAction("Calendar", "Activities", new { Message = ActivityMessageId.GuestSignUpSuccess });
                 }
