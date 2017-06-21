@@ -54,7 +54,7 @@ namespace indicium_webapp.Controllers
             ViewData["StatusMessage"] =
                 message == ManageMessageId.ChangePasswordSuccess ? "Je wachtwoord is veranderd."
                 : message == ManageMessageId.Error ? "Er heeft een fout plaatsgevonden."
-                : message == ManageMessageId.ChangeEmailSuccess ? "Je e-mailadres is met succes gewijzigd."
+                : message == ManageMessageId.ChangeEmailSuccess ? "Er is een e-mail gestuurd ter bevestiging."
                 : message == ManageMessageId.ChangePersonalInformationSuccess ? "Je persoonlijke gegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
@@ -193,19 +193,13 @@ namespace indicium_webapp.Controllers
                 try
                 {
                     // Generates a token, overwrites values in currently logged in user to match the new data
-                    var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.Email);
-                    await _userManager.ChangeEmailAsync(user, model.Email, token);
-                    user.UserName = model.Email;
-                    await _userManager.UpdateNormalizedEmailAsync(user);
-                    await _userManager.UpdateNormalizedUserNameAsync(user);
+                    var email = model.Email.ToLower();
+                    var token = await _userManager.GenerateChangeEmailTokenAsync(user, email);
+                    user.NewEmail = email;
 
                     // Saves changes
                     _context.Update(user);
                     await _context.SaveChangesAsync();
-
-                    // Relogs user to refresh the _LoginPatial.cshtml
-                    await _signInManager.SignOutAsync();
-                    await _signInManager.SignInAsync(user, false);
 
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangeEmailSuccess });
                 }
