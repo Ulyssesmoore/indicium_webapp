@@ -54,11 +54,17 @@ namespace indicium_webapp.Controllers
         [HttpGet, AllowAnonymous, Route("inloggen")]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            if (GetCurrentUserAsync().Result == null)
+            {
+                // Clear the existing external cookie to ensure a clean login process
+                await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+                ViewData["ReturnUrl"] = returnUrl;
+                return View();
+            } else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
         }
 
         //
@@ -75,13 +81,15 @@ namespace indicium_webapp.Controllers
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
-                
-                if (result.Succeeded) {
-                    if (applicationUser.Status == Status.Lid || applicationUser.Status == Status.Alumni) {
+
+                if (result.Succeeded)
+                {
+                    if (applicationUser.Status == Status.Lid || applicationUser.Status == Status.Alumni)
+                    {
                         _logger.LogInformation(1, "User logged in.");
                         return RedirectToLocal(returnUrl);
                     }
-                    else if(applicationUser.Status == Status.Nieuw)
+                    else if (applicationUser.Status == Status.Nieuw)
                     {
                         await _signInManager.SignOutAsync();
                         _logger.LogWarning(2, "User account not approved.");
@@ -117,23 +125,29 @@ namespace indicium_webapp.Controllers
         [HttpGet, AllowAnonymous, Route("registreren")]
         public IActionResult Register(string returnUrl = null)
         {
-            RegisterViewModel model = new RegisterViewModel();
-
-            var checkBoxListItems = new List<CheckBoxListItem>();
-            foreach (Commission commission in _context.Commission.ToListAsync().Result)
+            if (GetCurrentUserAsync().Result == null)
             {
-                checkBoxListItems.Add(new CheckBoxListItem()
+                RegisterViewModel model = new RegisterViewModel();
+
+                var checkBoxListItems = new List<CheckBoxListItem>();
+                foreach (Commission commission in _context.Commission.ToListAsync().Result)
                 {
-                    ID = commission.CommissionID.ToString(),
-                    Display = commission.Name + " - " + commission.Description,
-                    IsChecked = false
-                });
+                    checkBoxListItems.Add(new CheckBoxListItem()
+                    {
+                        ID = commission.CommissionID.ToString(),
+                        Display = commission.Name + " - " + commission.Description,
+                        IsChecked = false
+                    });
+                }
+
+                model.Commissions = checkBoxListItems;
+
+                ViewData["ReturnUrl"] = returnUrl;
+                return View(model); 
+            } else
+            {
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
-
-            model.Commissions = checkBoxListItems;
-
-            ViewData["ReturnUrl"] = returnUrl;
-            return View(model);
         }
 
         //
@@ -145,7 +159,8 @@ namespace indicium_webapp.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     StudentNumber = Convert.ToInt32(model.StudentNumber),
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -199,10 +214,10 @@ namespace indicium_webapp.Controllers
                     _logger.LogInformation(3, "Gebruiker heeft een nieuw account aangemaakt met wachtwoord en rol.");
                     ModelState.AddModelError(string.Empty, "Gefeliciteerd u bent geregistreerd. Goedkeuring door de secretaris kan echter nog even duren. Er is " +
                         "een E-mail verstuurd naar het opgegeven adres. Voor u kunt inloggen, moet u deze bevestigen.");
-                                    
+
                     return View("login");
                 }
-                AddErrors(result);              
+                AddErrors(result);
             }
 
             model.Commissions = createCommissionCheckBoxList(); // We need to recreate the list for whatever reason.
@@ -222,7 +237,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /account/bevestig-email
-        [HttpGet, AllowAnonymous, Route("bevestig-email")]        
+        [HttpGet, AllowAnonymous, Route("bevestig-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -240,7 +255,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/wachtwoord-vergeten
-        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten")]        
+        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten")]
         public IActionResult ForgotPassword()
         {
             return View();
@@ -248,7 +263,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/wachtwoord-vergeten
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("wachtwoord-vergeten")]        
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("wachtwoord-vergeten")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -276,7 +291,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/wachtwoord-vergeten-bevestiging
-        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten-bevestiging")]        
+        [HttpGet, AllowAnonymous, Route("wachtwoord-vergeten-bevestiging")]
         public IActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -284,7 +299,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/reset-wachtwoord
-        [HttpGet, AllowAnonymous, Route("reset-wachtwoord")]        
+        [HttpGet, AllowAnonymous, Route("reset-wachtwoord")]
         public IActionResult ResetPassword(string code = null)
         {
             return code == null ? View("Error") : View();
@@ -292,7 +307,7 @@ namespace indicium_webapp.Controllers
 
         //
         // POST: /account/reset-wachtwoord
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("reset-wachtwoord")]        
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken, Route("reset-wachtwoord")]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -316,7 +331,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/reset-wachtwoord-bevestiging
-        [HttpGet, AllowAnonymous, Route("reset-wachtwoord-bevestiging")]        
+        [HttpGet, AllowAnonymous, Route("reset-wachtwoord-bevestiging")]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -324,7 +339,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /account/geen-toegang
-        [HttpGet, AllowAnonymous, Route("geen-toegang")]        
+        [HttpGet, AllowAnonymous, Route("geen-toegang")]
         public IActionResult AccessDenied()
         {
             return View();
@@ -368,6 +383,10 @@ namespace indicium_webapp.Controllers
             }
         }
 
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(User);
+        }
         #endregion
     }
 }
