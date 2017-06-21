@@ -43,7 +43,8 @@ namespace indicium_webapp.Controllers
             ChangePersonalInformationSuccess,
             ChangeAddressInformationSuccess,
             ChangePhoneNumberSuccess,
-            Error
+            Error,
+            EmailTakenError
         }
 
         //
@@ -59,6 +60,7 @@ namespace indicium_webapp.Controllers
                 : message == ManageMessageId.ChangeEducationalInformationSuccess ? "Je studiegegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangeAddressInformationSuccess ? "Je adresgegevens zijn met succes gewijzigd."
                 : message == ManageMessageId.ChangePhoneNumberSuccess ? "Je telefoonnummer is met succes gewijzigd."
+                : message == ManageMessageId.EmailTakenError ? "Dit emailadres is al in gebruik"
                 : "";
 
             var applicationUserResult = await _context.ApplicationUser
@@ -188,12 +190,21 @@ namespace indicium_webapp.Controllers
                 return View(model);
             }
             var user = await GetCurrentUserAsync();
+            
+
             if (user != null)
             {
+                
                 try
                 {
                     // Generates a token, overwrites values in currently logged in user to match the new data
                     var email = model.Email.ToLower();
+
+                    if (_context.ApplicationUser.Any(u => u.NormalizedUserName == email.ToUpper()))
+                    {
+                        return RedirectToAction(nameof(Index), new { Message = ManageMessageId.EmailTakenError });
+                    }
+
                     var token = await _userManager.GenerateChangeEmailTokenAsync(user, email);
 
                     var callbackUrl = Url.Action(nameof(ConfirmEmail), "Manage",
