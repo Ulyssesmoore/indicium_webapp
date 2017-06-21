@@ -12,7 +12,7 @@ using indicium_webapp.Models.ViewModels.AccountViewModels;
 
 namespace indicium_webapp.Controllers
 {
-    [Route("/rollen"), Authorize(Roles = "Secretaris")]
+    [Route("rollen"), Authorize(Roles = "Secretaris")]
     public class ApplicationRolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,8 +31,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /rollen/bewerken?id=1
-        [Route("/bewerken")]
+        // GET: /rollen/bewerken/{id}
+        [Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -50,10 +50,10 @@ namespace indicium_webapp.Controllers
             return View(CreateApplicationRoleViewModel(applicationRoleResult));
         }
 
-        // POST: /rollen/bewerken?id=1
+        // POST: /rollen/bewerken/{id}
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(string id, ApplicationRoleViewModel model)
         {
             if (id != model.Id)

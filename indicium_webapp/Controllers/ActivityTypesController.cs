@@ -32,7 +32,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /activiteit-types/aanmaken
-        [Route("/aanmaken")]
+        [Route("aanmaken")]
         public IActionResult Create()
         {
             return View();
@@ -41,7 +41,7 @@ namespace indicium_webapp.Controllers
         // POST: /activiteit-types/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("aanmaken")]
         public async Task<IActionResult> Create(ActivityTypeViewModel model)
         {
             if (ModelState.IsValid)
@@ -55,8 +55,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /activiteit-types/bewerken?id=1
-        [Route("/bewerken")]
+        // GET: /activiteit-types/bewerken/{id}
+        [Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,10 +74,10 @@ namespace indicium_webapp.Controllers
             return View(CreateActivityTypeViewModel(activitytypeResult));
         }
 
-        // POST: /activiteit-types/bewerken?id=1
+        // POST: /activiteit-types/bewerken/{id}
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int id, ActivityTypeViewModel model)
         {
             if (id != model.ActivityTypeID)
@@ -108,8 +108,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /activiteit-types/verwijderen?id=1
-        [Route("/verwijderen")]
+        // GET: /activiteit-types/verwijderen/{id}
+        [Route("verwijderen/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,8 +127,8 @@ namespace indicium_webapp.Controllers
             return View(CreateActivityTypeViewModel(activityTypeResult));
         }
 
-        // POST: /activiteit-types/verwijderen?id=1
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
+        // POST: /activiteit-types/verwijderen/{id}
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("verwijderen/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var activityTypeResult = await _context.ActivityType.SingleOrDefaultAsync(activityType => activityType.ActivityTypeID == id);

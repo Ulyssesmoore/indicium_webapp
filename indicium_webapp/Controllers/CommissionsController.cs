@@ -31,8 +31,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /commissies/details?id=1
-        [Route("/details")]
+        // GET: /commissies/details/{id}
+        [Route("details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -65,7 +65,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /commissies/aanmaken
-        [Route("/aanmaken")]
+        [Route("aanmaken")]
         public IActionResult Create()
         {
             return View();
@@ -74,7 +74,7 @@ namespace indicium_webapp.Controllers
         // POST: /commissies/aanmaken
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/aanmaken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("aanmaken")]
         public async Task<IActionResult> Create(CommissionViewModel model)
         {
             if (ModelState.IsValid)
@@ -88,8 +88,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /commissies/bewerken?id=1
-        [Route("/bewerken")]
+        // GET: /commissies/bewerken/{id}
+        [Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -107,10 +107,10 @@ namespace indicium_webapp.Controllers
             return View(CreateCommissionViewModel(commissionResult));
         }
 
-        // POST: /commissies/bewerken?id=1
+        // POST: /commissies/bewerken/{id}
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost, ValidateAntiForgeryToken, Route("/bewerken")]
+        [HttpPost, ValidateAntiForgeryToken, Route("bewerken/{id}")]
         public async Task<IActionResult> Edit(int id, CommissionViewModel model)
         {
             if (id != model.CommissionID)
@@ -141,8 +141,8 @@ namespace indicium_webapp.Controllers
             return View(model);
         }
 
-        // GET: /commissies/verwijderen?id=1
-        [Route("/verwijderen")]
+        // GET: /commissies/verwijderen/{id}
+        [Route("verwijderen/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,8 +160,8 @@ namespace indicium_webapp.Controllers
             return View(CreateCommissionViewModel(commissionResult));
         }
 
-        // POST: /commissies/verwijderen?id=1
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("/verwijderen")]
+        // POST: /commissies/verwijderen/{id}
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Route("verwijderen/{id}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var commissionResult = await _context.Commission.SingleOrDefaultAsync(commission => commission.CommissionID == id);
@@ -173,7 +173,7 @@ namespace indicium_webapp.Controllers
         }
 
         // GET: /commissies/aanvragen
-        [Route("/aanvragen")]
+        [Route("aanvragen")]
         public async Task<IActionResult> Approval()
         {
             var commissionsResult = await _context.Commission.ToListAsync();
@@ -207,8 +207,8 @@ namespace indicium_webapp.Controllers
             return View(commissionViewModels);
         }
 
-        // POST: /commissies/aanvraag-goedkeuren?id=1
-        [Route("/aanvraag-goedkeuren")]
+        // POST: /commissies/aanvraag-goedkeuren/{id}
+        [Route("aanvraag-goedkeuren/{id}")]
         public async Task<IActionResult> ApproveMember(int? id)
         {
             if (id == null)
@@ -244,8 +244,8 @@ namespace indicium_webapp.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: /commissies/aanvraag-afkeuren?id=1
-        [Route("/aanvraag-afkeuren")]
+        // POST: /commissies/aanvraag-afkeuren/{id}
+        [Route("aanvraag-afkeuren/{id}")]
         public async Task<IActionResult> DisapproveMember(int? id)
         {
             if (id == null)
