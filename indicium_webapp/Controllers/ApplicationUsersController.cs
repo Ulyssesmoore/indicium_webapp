@@ -217,12 +217,19 @@ namespace indicium_webapp.Controllers
         [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Approve(string id)
         {
-            if (id == null)
+            ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            
+            if (id == null || applicationUserResult.Id != id)
             {
                 return NotFound();
             }
-
-            await ApproveApplicationUser(id, Status.Lid);
+            
+            if (!applicationUserResult.EmailConfirmed)
+            {
+                return Forbid();
+            }
+            
+            await ApproveApplicationUser(applicationUserResult, Status.Lid);
             
             return RedirectToAction("Approval");
         }
@@ -231,30 +238,30 @@ namespace indicium_webapp.Controllers
         [HttpPost, Authorize(Roles = "Secretaris")]
         public async Task<IActionResult> Disapprove(string id)
         {
-            if (id == null)
+            ApplicationUser applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            
+            if (id == null || applicationUserResult.Id != id)
             {
                 return NotFound();
             }
 
-            await ApproveApplicationUser(id, Status.Afgekeurd);
+            await ApproveApplicationUser(applicationUserResult, Status.Afgekeurd);
             
             return RedirectToAction("Approval");
         }
 
-        private async Task ApproveApplicationUser(string id, Status status)
+        private async Task ApproveApplicationUser(ApplicationUser applicationUser, Status status)
         {
-            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);            
-
-            if (applicationUserResult.Status != status)
+            if (applicationUser.Status != status)
             {
                 try
                 {
-                    applicationUserResult.Status = status;
+                    applicationUser.Status = status;
 
-                    _context.Update(applicationUserResult);
+                    _context.Update(applicationUser);
                     await _context.SaveChangesAsync();
 
-                    await _emailSender.SendEmailAsync(applicationUserResult.Email, "Status gewijzigd",
+                    await _emailSender.SendEmailAsync(applicationUser.Email, "Status gewijzigd",
                         "Je status is gewijzigd naar: " + status);
                 }
                 catch (DbUpdateConcurrencyException)

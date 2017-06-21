@@ -176,7 +176,7 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            if (activityResult.NeedsSignUp == false)
+            if (!activityResult.NeedsSignUp)
             {
                 return Forbid();
             }
