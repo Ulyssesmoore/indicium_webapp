@@ -32,8 +32,6 @@ namespace indicium_webapp.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-
-
         }
 
         // GET: /inschrijvingen

@@ -10,16 +10,20 @@ namespace indicium_webapp.Models.ViewModels.HomeViewModels
     {
         public int ContactID { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Naam")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mailadres")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Onderwerp")]
         public string Subject { get; set; }
 
+        [Required(ErrorMessage = "{0} is verplicht.")]
         [Display(Name = "Bericht")]
         public string Message { get; set; }
 
