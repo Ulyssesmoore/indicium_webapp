@@ -230,7 +230,7 @@ namespace indicium_webapp.Controllers
 
         //
         // GET: /profiel/bevestig-email
-        [HttpGet, Route("bevestig-email")]
+        [HttpGet, Route("bevestig-email"), AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -244,14 +244,20 @@ namespace indicium_webapp.Controllers
                 System.Diagnostics.Debug.WriteLine("Fout 2");
                 return View("Error");
             }
+            if (user.NewEmail == null)
+            {
+                return View("Error");
+            }
             Boolean result;
             try
             {
+               
                 // Changes data according to the new email
                 await _userManager.ChangeEmailAsync(user, user.NewEmail, code);
                 user.UserName = user.NewEmail;
                 await _userManager.UpdateNormalizedUserNameAsync(user);
                 user.NewEmail = null;
+                
                 
                 // Saves changes
                 _context.Update(user);
