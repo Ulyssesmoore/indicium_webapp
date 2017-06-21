@@ -223,30 +223,31 @@ namespace indicium_webapp.Controllers
         [HttpGet, Route("bevestig-email")]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            //if (userId == null || code == null)
-            //{
-            //    return View("Error");
-            //}
-            //var user = await _userManager.FindByIdAsync(userId);
-            //var user = GetCurrentUserAsync();
-            //if (user == null)
-            //{
-            //    return View("Error");
-            //}
-            //var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
 
+            if (result.Succeeded) {
+                await _userManager.ChangeEmailAsync(user, user.NewEmail, code);
+                user.UserName = user.NewEmail;
+                await _userManager.UpdateNormalizedEmailAsync(user);
+                await _userManager.UpdateNormalizedUserNameAsync(user);
 
-            //await _userManager.ChangeEmailAsync(user, model.Email, token);
-            //user.UserName = model.Email;
-            //await _userManager.UpdateNormalizedEmailAsync(user);
-            //await _userManager.UpdateNormalizedUserNameAsync(user);
+                // Relogs user to refresh the _LoginPatial.cshtml
+                await _signInManager.SignOutAsync();
+                await _signInManager.SignInAsync(user, false);
+            }
 
-            //// Relogs user to refresh the _LoginPatial.cshtml
-            //await _signInManager.SignOutAsync();
-            //await _signInManager.SignInAsync(user, false);
+            
 
-            //return View(result.Succeeded ? "ConfirmEmail" : "Error");
-            throw new NotImplementedException();
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         //
