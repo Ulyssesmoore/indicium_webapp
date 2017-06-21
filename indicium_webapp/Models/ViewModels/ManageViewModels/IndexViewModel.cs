@@ -10,6 +10,11 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
 {
     public class IndexViewModel
     {
+        public IndexViewModel()
+        {
+            Commissions = new HashSet<CommissionMember>();
+        }
+        
         [Display(Name = "Voornaam")]
         public string FirstName { get; set; }
 
@@ -57,8 +62,8 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         [Display(Name = "Telefoonnummer")]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Rollen")]
-        public IEnumerable<CheckBoxListItem> Roles { get; set; }
+        [Display(Name = "Commissies")]
+        public IEnumerable<CommissionMember> Commissions { get; set; }
 
     }
 }

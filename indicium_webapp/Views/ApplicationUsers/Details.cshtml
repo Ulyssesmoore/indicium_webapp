@@ -4,11 +4,29 @@
     ViewData["Title"] = "Persoonsgegevens details";
 }
 
+@section Styles {
+    <style type="text/css">
+        dl dd ul {
+            list-style: none;
+            margin-bottom: 0px;
+            padding-left: 0px;
+        }
+    </style>
+}
+
 <h2>Persoonsgegevens details</h2>
 
 <div>
     <h4>Gebruiker</h4>
     <hr />
+
+    @if (!ViewBag.UserEmailConfirmed)
+    {
+        <div class="alert alert-warning" role="alert">
+            E-mailadres is nog niet bevestigd.
+        </div>
+    }
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -117,15 +135,29 @@
                 }
             </ul>
         </dd>
+        <dt>
+            Commissies
+        </dt>
+        <dd>
+            <ul>
+                @foreach (var commission in ViewBag.Commissions)
+                {
+                    <li>@commission.Commission.Name</li>
+                }
+            </ul>
+        </dd>
     </dl>
 </div>
 
 <div>
-    @if (this.User.IsInRole("Secretaris") && Model.Status == Status.Nieuw)
+    @if (User.IsInRole("Secretaris") && Model.Status == Status.Nieuw)
     {
-        <form asp-area="" asp-action="approve" asp-route-id="@Model.Id" method="post" style="display: inline-block">
-            <button type="submit" class="btn btn-success">Goedkeuren</button>
-        </form>
+        @if (ViewBag.UserEmailConfirmed)
+        {
+            <form asp-area="" asp-action="approve" asp-route-id="@Model.Id" method="post" style="display: inline-block">
+                <button type="submit" class="btn btn-success">Goedkeuren</button>
+            </form>
+        }
         <form asp-area="" asp-action="disapprove" asp-route-id="@Model.Id" method="post" style="display: inline-block">
             <button type="submit" class="btn btn-danger">Afkeuren</button>
         </form>

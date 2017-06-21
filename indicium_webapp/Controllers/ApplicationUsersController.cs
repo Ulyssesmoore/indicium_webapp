@@ -78,7 +78,10 @@ namespace indicium_webapp.Controllers
                 return NotFound();
             }
 
-            var applicationUserResult = await _context.ApplicationUser.SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
+            var applicationUserResult = await _context.ApplicationUser
+                .Include(applicationUser => applicationUser.Commissions)
+                    .ThenInclude(commission => commission.Commission)
+                .SingleOrDefaultAsync(applicationUser => applicationUser.Id == id);
             
             if (applicationUserResult == null)
             {
@@ -86,6 +89,8 @@ namespace indicium_webapp.Controllers
             }
 
             ViewBag.Roles = await _userManager.GetRolesAsync(applicationUserResult);
+            ViewBag.Commissions = applicationUserResult.Commissions;
+            ViewBag.UserEmailConfirmed = applicationUserResult.EmailConfirmed;
 
             return View(CreateApplicationUserViewModel(applicationUserResult));
         }
@@ -204,7 +209,7 @@ namespace indicium_webapp.Controllers
             var applicationUsersResult = await users.AsNoTracking()
                 .Where(applicationUser => applicationUser.Status == Status.Nieuw)
                 .ToListAsync();
-
+            
             return View(applicationUsersResult.Select(CreateApplicationUserViewModel));
         }
         
@@ -285,7 +290,7 @@ namespace indicium_webapp.Controllers
 
             return applicationUser;
         }
-        
+
         private ApplicationUserViewModel CreateApplicationUserViewModel(ApplicationUser applicationUser)
         {
             return new ApplicationUserViewModel

@@ -13,7 +13,7 @@
                 <ul class="dropdown-menu">
                     <li><a asp-area="" asp-controller="manage" asp-action="index" title="Manage">Gegevens bekijken</a></li>
                     <li><a asp-area="" asp-controller="signups" asp-action="index">Inschrijvingen beheren</a></li>
-                    @if (this.User.IsInRole("Bestuur") || this.User.IsInRole("Secretaris"))
+                    @if (User.IsInRole("Bestuur") || User.IsInRole("Secretaris"))
                     {
                         <li role="separator" class="divider"></li>
                         <li class="dropdown-header">Administratie</li>
@@ -21,7 +21,7 @@
                         <li><a asp-controller="activities" asp-action="index">Activiteiten beheren</a></li>
                         <li><a asp-controller="activityTypes" asp-action="index">Activiteit-types beheren</a></li>
                         <li><a asp-controller="commissions" asp-action="index">Commissies beheren</a></li>
-                        @if (this.User.IsInRole("Secretaris"))
+                        @if (User.IsInRole("Secretaris"))
                         {
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Secretariaat</li>

@@ -17,6 +17,7 @@ namespace indicium_webapp.Models.ViewModels.ManageViewModels
         public StudyType StudyType { get; set; }
 
         [Required(ErrorMessage = "{0} is verplicht.")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Het {0} mag alleen bestaan uit nummers.")]
         [Display(Name = "Beginjaar studie")]
         public int StartdateStudy { get; set; }
     }
