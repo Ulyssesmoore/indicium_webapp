@@ -106,6 +106,12 @@
             $('#userTable').DataTable({
                 searching: false,
                 pageLength: 25,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Dutch.json"
+                },
+                columnDefs: [
+                    {orderable: false, targets: 8}
+                ]
             });
         });
     </script>
