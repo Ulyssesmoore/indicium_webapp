@@ -98,6 +98,9 @@ namespace indicium_webapp.Controllers
                 return RedirectToAction("Index");
             }
 
+            var activityTypesResult = _context.ActivityType.ToListAsync().Result;
+            ViewBag.ActivityTypes = new SelectList(activityTypesResult, "ActivityTypeID", "Name");
+
             return View(model);
         }
 
@@ -159,6 +162,20 @@ namespace indicium_webapp.Controllers
 
                 return RedirectToAction("Index");
             }
+
+            var activityResult = await _context.Activity
+                .Include(activity => activity.ActivityType)
+                .SingleOrDefaultAsync(activity => activity.ActivityID == id);
+            
+            var activityTypeResult = _context.ActivityType.SingleOrDefault(activityType => activityType.ActivityTypeID == activityResult.ActivityTypeID);
+            
+            if (activityResult == null)
+            {
+                return NotFound();
+            }
+            
+            var activityTypesResult = _context.ActivityType.ToListAsync().Result;
+            ViewBag.ActivityTypes = new SelectList(activityTypesResult, "ActivityTypeID", "Name", activityTypeResult.ActivityTypeID);
 
             return View(model);
         }
