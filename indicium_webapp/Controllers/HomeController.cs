@@ -48,9 +48,7 @@ namespace indicium_webapp.Controllers
         public async Task<IActionResult> Contact(ContactViewModel model)
         {
             if (ModelState.IsValid)
-            {
-                ModelState.AddModelError(string.Empty, "Contactformulier is verstuurd.");
-                
+            {                
                 var emailaddress = _emailSender.Options.SmtpUsername;
                 var staticEmailadress = "svindicium@gmail.com";
                 await _emailSender.SendEmailAsync(staticEmailadress, model.Subject, "Van:" + model.Email + "<br/>Bericht:" + model.Message);
