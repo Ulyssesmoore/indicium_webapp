@@ -51,7 +51,7 @@ namespace indicium_webapp.Controllers
             {                
                 var emailaddress = _emailSender.Options.SmtpUsername;
                 var staticEmailadress = "svindicium@gmail.com";
-                await _emailSender.SendEmailAsync(staticEmailadress, model.Subject, "Van:" + model.Email + "<br/>Bericht:" + model.Message);
+                await _emailSender.SendEmailAsync(staticEmailadress, model.Subject, "Van: " + model.Email + "<br/>Bericht: " + model.Message);
 
                 ModelState.AddModelError(string.Empty, "Contactformulier is verstuurd.");
             }
