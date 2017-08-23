@@ -32,7 +32,7 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -41,13 +41,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Indicium</a>
+                <a id="mainLogo" asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img src="/images/logo_kleur_witletter.svg"></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="home" asp-action="index">Home</a></li>
-                    <li><a asp-area="" asp-controller="home" asp-action="about">Informatie</a></li>
-                    <li><a asp-area="" asp-controller="activities" asp-action="calendar">Activiteitenkalender</a></li>
+                    <li><a asp-area="" asp-controller="home" asp-action="about">Bestuur</a></li>
+                    <li><a asp-area="" asp-controller="activities" asp-action="calendar">Activiteiten</a></li>
+                    <li><a asp-area="" asp-controller="vacancy" asp-action="index">Vacaturebank</a></li>
+                    <li><a asp-area="" asp-controller="activities" asp-action="calendar">Sponsoren</a></li>
                     <li><a asp-area="" asp-controller="home" asp-action="statuten">Statuten</a></li>
                     <li><a asp-area="" asp-controller="home" asp-action="contact">Contact</a></li>
                 </ul>
@@ -55,11 +56,11 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <div id="mainContent" class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2017 - Indicium</p>
+        <footer id="mainFooter">
+            <p>S.V. Indicium @String.Format("{0:yyyy}", DateTime.Today) - Daltonlaan 200 lokaal 2.81 - bestuur@indicium.hu</p>
         </footer>
     </div>
 

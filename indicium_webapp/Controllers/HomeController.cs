@@ -65,6 +65,12 @@ namespace indicium_webapp.Controllers
             return View();
         }
 
+        [Route("/bestuur")]
+        public IActionResult Board()
+        {
+            return View();
+        }
+
         public IActionResult Error()
         {
             return View();
