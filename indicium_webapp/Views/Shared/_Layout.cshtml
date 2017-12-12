@@ -49,15 +49,16 @@
                         daarom kleurt aanmelden en login nog niet mee
 
                         daarintegen kan het wel laten zien hoe het ook kan
-                        -->
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="home" asp-action="about">Bestuur</a></li>
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="activities" asp-action="calendar">Activiteiten</a></li>
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="vacancy" asp-action="index">Vacaturebank</a></li>
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="vacancy" asp-action="index">Sponsoren</a></li> <!--temp solution page not created-->
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="home" asp-action="statuten">Statuten</a></li>
-                    <li><a style="color:black; font-size:180%; font-family:Constantia" asp-area="" asp-controller="home" asp-action="contact">Contact</a></li>
+                       -->
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="home" asp-action="about">Bestuur</a></li>
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="activities" asp-action="calendar">Activiteiten</a></li>
+                    <li><a style="color:black; font-size:180%;" href="http://www.introict.wordpress.com/" target="_blank">Intro ICT</a></li>
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="vacancy" asp-action="index">Vacaturebank</a></li>
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="vacancy" asp-action="index">Sponsoren</a></li> <!--temp solution page not created-->
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="home" asp-action="statuten">Statuten</a></li>
+                    <li><a style="color:black; font-size:180%;" asp-area="" asp-controller="home" asp-action="contact">Contact</a></li>
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
+                <!-- @await Html.PartialAsync("_LoginPartial") -->
             </div>
         </div>
     </nav>
